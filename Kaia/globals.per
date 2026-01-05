@@ -1,0 +1,130 @@
+(defrule
+    (true)
+    =>
+    (set-goal g-resign no)
+    (set-goal g-max-town-size yes)
+    (set-goal g-ready-to-attack yes) ; launch first attack asap
+    (set-strategic-number sn-do-not-scale-for-difficulty-level 1) ; stop scaling
+    (set-strategic-number sn-consecutive-idle-unit-limit 1) ; gives a new task faster after idling
+    (set-strategic-number sn-dropsite-separation-distance 5) ; min distance between drop sites
+    (set-strategic-number sn-enable-patrol-attack 1) ; retargets against nearby sighted units immediately
+    (set-strategic-number sn-wall-targeting-mode 1) ; attack walls
+    (set-strategic-number sn-gather-defense-units 1) ; gather soldiers near town center
+    (set-strategic-number sn-enable-research-queue 1) ; allow queueing of research when sn-enable-training-queue is enabled
+    (set-strategic-number sn-enable-training-queue 4) ; allow additional units to be queued at each building
+    (set-strategic-number sn-cap-civilian-builders 200) ; allow more civilians to build; dont use when having a teammate, it sends civs across the map to forward build castles.
+    (set-strategic-number sn-scale-minimum-attack-group-size 0) ; prevents the group to become to big and never be sent
+    (set-strategic-number sn-enable-offensive-priority 1) ; enables attacking by priority
+    (set-strategic-number sn-maximum-hunt-drop-distance 10) ; prevent hunting all over the map
+    (disable-self)
+)
+
+(defrule
+    (current-age == dark-age)
+    =>
+    ; (set-strategic-number sn-maximum-town-size max-town-size-dark-age)
+    (set-strategic-number sn-minimum-town-size min-town-size-dark-age)
+    (set-strategic-number sn-wood-gatherer-percentage 50)
+    (set-strategic-number sn-food-gatherer-percentage 50)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-total-number-explorers 1)
+	(set-strategic-number sn-number-explore-groups 1)
+    (set-strategic-number sn-maximum-wood-drop-distance 30)
+    (set-strategic-number sn-maximum-food-drop-distance 30)
+    (set-strategic-number sn-maximum-gold-drop-distance 30)
+    (set-strategic-number sn-maximum-stone-drop-distance 30)
+    (disable-self)
+)
+
+(defrule
+    (current-age == feudal-age)
+    =>
+    ; (set-strategic-number sn-maximum-town-size max-town-size-feudal-age)
+    (set-strategic-number sn-minimum-town-size min-town-size-feudal-age)
+    (set-strategic-number sn-wood-gatherer-percentage 25)
+    (set-strategic-number sn-food-gatherer-percentage 25)
+    (set-strategic-number sn-gold-gatherer-percentage 25)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-total-number-explorers 2)
+	(set-strategic-number sn-number-explore-groups 2)
+    (set-strategic-number sn-maximum-wood-drop-distance 40)
+    (set-strategic-number sn-maximum-food-drop-distance 40)
+    (set-strategic-number sn-maximum-gold-drop-distance 40)
+    (set-strategic-number sn-maximum-stone-drop-distance 40)
+    (disable-self)
+)
+
+(defrule
+    (current-age == castle-age)
+    =>
+    ; (set-strategic-number sn-maximum-town-size max-town-size-castle-age)
+    (set-strategic-number sn-minimum-town-size min-town-size-castle-age)
+    (set-strategic-number sn-wood-gatherer-percentage 25)
+    (set-strategic-number sn-food-gatherer-percentage 35)
+    (set-strategic-number sn-gold-gatherer-percentage 25)
+    (set-strategic-number sn-stone-gatherer-percentage 15)
+    (set-strategic-number sn-maximum-wood-drop-distance 60)
+    (set-strategic-number sn-maximum-food-drop-distance 60)
+    (set-strategic-number sn-maximum-gold-drop-distance 60)
+    (set-strategic-number sn-maximum-stone-drop-distance 60)
+    (disable-self)
+)
+
+(defrule
+    (current-age == imperial-age)
+    =>
+    ; (set-strategic-number sn-maximum-town-size max-town-size-imperial-age)
+    (set-strategic-number sn-minimum-town-size min-town-size-imperial-age)
+    (set-strategic-number sn-maximum-wood-drop-distance -1)
+    (set-strategic-number sn-maximum-food-drop-distance -1)
+    (set-strategic-number sn-maximum-gold-drop-distance -1)
+    (set-strategic-number sn-maximum-stone-drop-distance -1)
+    (disable-self)
+)
+
+; increase max camp distance over time
+(defrule (game-time > 0   ) => (set-strategic-number sn-camp-max-distance 25 )(disable-self))
+(defrule (game-time > 300 ) => (set-strategic-number sn-camp-max-distance 30 )(disable-self))
+(defrule (game-time > 600 ) => (set-strategic-number sn-camp-max-distance 35 )(disable-self))
+(defrule (game-time > 1200) => (set-strategic-number sn-camp-max-distance 40 )(disable-self))
+(defrule (game-time > 2400) => (set-strategic-number sn-camp-max-distance 50 )(disable-self))
+(defrule (game-time > 3600) => (set-strategic-number sn-camp-max-distance 75 )(disable-self))
+(defrule (game-time > 4800) => (set-strategic-number sn-camp-max-distance 100)(disable-self))
+
+(defrule
+    (wood-amount > 10000)
+    (food-amount > 10000)
+    (gold-amount > 5000)
+    (stone-amount > 2500)
+    (game-time < 30)
+    =>
+    (set-goal g-deathmatch yes)
+    (set-goal g-max-town-size yes)
+    (chat-local-to-self "g-max-town-size enabled")
+    (disable-self)
+)
+(defrule (goal g-max-town-size yes) (game-time > 0) => (set-strategic-number sn-maximum-town-size 6))
+(defrule (goal g-max-town-size yes) (game-time > 30) => (set-strategic-number sn-maximum-town-size 8))
+(defrule (goal g-max-town-size yes) (game-time > 60) => (set-strategic-number sn-maximum-town-size 12))
+(defrule (goal g-max-town-size yes) (game-time > 90) => (set-strategic-number sn-maximum-town-size 14))
+(defrule (goal g-max-town-size yes) (game-time > 120) => (set-strategic-number sn-maximum-town-size 15))
+(defrule (goal g-max-town-size yes) (game-time > 180) => (set-strategic-number sn-maximum-town-size 16))
+(defrule (goal g-max-town-size yes) (game-time > 240) => (set-strategic-number sn-maximum-town-size 17))
+(defrule (goal g-max-town-size yes) (game-time > 300) => (set-strategic-number sn-maximum-town-size 18))
+(defrule (goal g-max-town-size yes) (game-time > 360) => (set-strategic-number sn-maximum-town-size 19))
+(defrule (goal g-max-town-size yes) (game-time > 420) => (set-strategic-number sn-maximum-town-size 20))
+(defrule (goal g-max-town-size yes) (game-time > 480) => (set-strategic-number sn-maximum-town-size 21))
+(defrule (goal g-max-town-size yes) (game-time > 540) => (set-strategic-number sn-maximum-town-size 22))
+(defrule (goal g-max-town-size yes) (game-time > 500) => (set-strategic-number sn-maximum-town-size 23))
+(defrule (goal g-max-town-size yes) (game-time > 560) => (set-strategic-number sn-maximum-town-size 24))
+(defrule (goal g-max-town-size yes) (game-time > 620) => (set-strategic-number sn-maximum-town-size 25))
+(defrule (goal g-max-town-size yes) (game-time > 680) => (set-strategic-number sn-maximum-town-size 26))
+(defrule (goal g-max-town-size yes) (game-time > 740) => (set-strategic-number sn-maximum-town-size 27))
+(defrule (goal g-max-town-size yes) (game-time > 800) => (set-strategic-number sn-maximum-town-size 28))
+(defrule (goal g-max-town-size yes) (game-time > 860) => (set-strategic-number sn-maximum-town-size 29))
+(defrule (goal g-max-town-size yes) (game-time > 720) => (set-strategic-number sn-maximum-town-size 30))
+(defrule (goal g-max-town-size yes) (game-time > 780) => (set-strategic-number sn-maximum-town-size 31))
+(defrule (goal g-max-town-size yes) (game-time > 840) => (set-strategic-number sn-maximum-town-size 32))
+(defrule (goal g-max-town-size yes) (game-time > 1500) => (set-strategic-number sn-maximum-town-size 36))
+(defrule (goal g-max-town-size yes) (game-time > 2500) => (set-strategic-number sn-maximum-town-size 40))

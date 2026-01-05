@@ -1,0 +1,378 @@
+(defrule
+    (true)
+    =>
+    (set-strategic-number sn-enable-new-building-system 1) ; use the new building system
+    (up-assign-builders c: farm c: 4)
+    (up-assign-builders c: house c: 2)
+    (up-assign-builders c: town-center-foundation c: 3)
+    (up-assign-builders c: mill c: 1)
+    (up-assign-builders c: mining-camp c: 1)
+    (up-assign-builders c: lumber-camp c: 1)
+    (up-assign-builders c: dock c: 1)
+    (up-assign-builders c: barracks c: 2)
+    (up-assign-builders c: archery-range c: 1)
+    (up-assign-builders c: stable c: 1)
+    (up-assign-builders c: blacksmith c: 1)
+    (up-assign-builders c: market c: 1)
+    (up-assign-builders c: stone-wall-line c: 1)
+    (up-assign-builders c: watch-tower c: 1)
+    (up-assign-builders c: guard-tower c: 1)
+    (up-assign-builders c: keep c: 1)
+    (up-assign-builders c: donjon c: 1)
+    (up-assign-builders c: gate c: 1)
+    (up-assign-builders c: monastery c: 1)
+    (up-assign-builders c: university c: 1)
+    (up-assign-builders c: siege-workshop c: 1)
+    (up-assign-builders c: castle c: 5)
+    (up-assign-builders c: krepost c: 5)
+    (up-assign-builders c: bombard-tower c: 1)
+    (up-assign-builders c: feitoria c: 5)
+    (up-assign-builders c: wonder c: 100)
+    (disable-self)
+)
+
+; town center if it doesnt exist
+(defrule
+    (building-type-count-total town-center == 0)
+    (up-pending-objects c: town-center == 0)
+    (civilian-population > 0)
+    (can-build-with-escrow town-center)
+    =>
+    (up-release-escrow)
+    (build town-center)
+)
+
+; build houses
+(defrule
+    (current-age == dark-age)
+    (building-type-count-total house < num-houses-dark-age)
+    (up-pending-objects c: house <= 3)
+    (can-build house)
+    =>
+    (build house)
+)
+; (defrule
+;     (current-age == feudal-age)
+;     (building-type-count-total house < num-houses-feudal-age)
+;     (up-pending-objects c: house <= 3)
+;     (can-build house)
+;     =>
+;     (build house)
+; )
+; (defrule
+;     (current-age == castle-age)
+;     (building-type-count-total house < num-houses-castle-age)
+;     (up-pending-objects c: house <= 3)
+;     (can-build house)
+;     =>
+;     (build house)
+; )
+; (defrule
+;     (current-age == imperial-age)
+;     (building-type-count-total house < num-houses-imperial-age)
+;     (up-pending-objects c: house <= 3)
+;     (can-build house)
+;     =>
+;     (build house)
+; )
+(defrule
+    ; (current-age == imperial-age)
+    (housing-headroom < 10)
+    (population-headroom > 3)
+    (wood-amount > 140)
+    (up-pending-objects c: house <= 2)
+    (can-build house)
+    =>
+    (build house)
+)
+(defrule
+    (goal g-deathmatch yes)
+    (game-time > 30)
+    (wood-amount > 4000)
+    (building-type-count-total house < 10)
+    (can-build house)
+    =>
+    (build house)
+)
+(defrule
+    (goal g-deathmatch yes)
+    (game-time > 60)
+    (wood-amount > 4000)
+    (building-type-count-total house < 20)
+    (current-age >= feudal-age)
+    (can-build house)
+    =>
+    (build house)
+)
+(defrule
+    (goal g-deathmatch yes)
+    (game-time > 120)
+    (wood-amount > 4000)
+    (building-type-count-total house < 40)
+    (current-age >= castle-age)
+    (can-build house)
+    =>
+    (build house)
+)
+
+
+; build lumber-camp
+(defrule
+    (up-pending-objects c: lumber-camp == 0)
+    (can-build-with-escrow lumber-camp)
+    (resource-found wood)
+    (or
+        (dropsite-min-distance wood > 3)
+        (building-type-count-total lumber-camp < 3) ; force 3 lumber camps at the start
+    )
+    =>
+    (release-escrow wood)
+    (build lumber-camp)
+)
+
+; build mining-camp for gold
+(defrule
+    (current-age >= feudal-age)
+    (up-pending-objects c: mining-camp == 0)
+    (can-build mining-camp)
+    (resource-found gold)
+    (dropsite-min-distance gold > 3)
+    =>
+    (build mining-camp)
+)
+
+; build mining camp for stone
+(defrule
+    (current-age >= castle-age)
+    (up-pending-objects c: mining-camp == 0)
+    (can-build mining-camp)
+    (resource-found stone)
+    (dropsite-min-distance stone > 3)
+    =>
+    (build mining-camp)
+)
+
+; build mill
+(defrule
+    (building-type-count-total mill < 1)
+    (up-pending-objects c: mill == 0)
+    (can-build mill)
+    => 
+    (build mill)
+)
+
+; build farms
+(defrule
+    (current-age == dark-age)
+    (building-type-count-total farm < num-farms-dark-age)
+    (up-pending-objects c: farm <= 3)
+    (can-build farm)
+    =>
+    (build farm)
+)
+(defrule
+    (current-age == feudal-age)
+    (building-type-count-total farm < num-farms-feudal-age)
+    (up-pending-objects c: farm <= 3)
+    (can-build farm)
+    =>
+    (build farm)
+)
+(defrule
+    (current-age == castle-age)
+    (building-type-count-total farm < num-farms-castle-age)
+    (up-pending-objects c: farm <= 3)
+    (can-build farm)
+    =>
+    (build farm)
+)
+(defrule
+    (current-age == imperial-age)
+    (building-type-count-total farm < num-farms-imperial-age)
+    (up-pending-objects c: farm <= 3)
+    (can-build farm)
+    =>
+    (build farm)
+)
+
+; build barracks
+(defrule
+    (current-age < castle-age)
+    (building-type-count-total barracks == 0)
+    (up-pending-objects c: barracks == 0)
+    (can-build barracks)
+    =>
+    (build barracks)
+)
+(defrule
+    (current-age >= castle-age)
+    (building-type-count-total barracks < 2)
+    (up-pending-objects c: barracks <= 1)
+    (can-build barracks)
+    =>
+    (build barracks)
+)
+(defrule
+    (current-age >= imperial-age)
+    (building-type-count-total barracks < 3)
+    (up-pending-objects c: barracks <= 1)
+    (can-build barracks)
+    =>
+    (build barracks)
+)
+(defrule
+    (goal g-deathmatch yes)
+    (wood-amount > 10000)
+    (building-type-count-total barracks < 6)
+    (up-pending-objects c: barracks < 6)
+    (can-build barracks)
+    =>
+    (build barracks)
+)
+
+; build archery range
+(defrule
+    (building-type-count-total archery-range == 0)
+    (up-pending-objects c: archery-range == 0)
+    (can-build archery-range)
+    =>
+    (build archery-range)
+)
+(defrule
+    (current-age >= imperial-age)
+    (building-type-count-total archery-range < 3)
+    (up-pending-objects c: archery-range <= 1)
+    (can-build archery-range)
+    =>
+    (build archery-range)
+)
+(defrule
+    (goal g-deathmatch yes)
+    (wood-amount > 10000)
+    (building-type-count-total archery-range < 6)
+    (up-pending-objects c: archery-range < 6)
+    (can-build archery-range)
+    =>
+    (build archery-range)
+)
+
+; build blacksmith
+(defrule
+    (building-type-count-total blacksmith < 1)
+    (up-pending-objects c: blacksmith == 0)
+    (can-build blacksmith)
+    =>
+    (build blacksmith)
+)
+
+; build market
+(defrule
+    (building-type-count-total market == 0)
+    (up-pending-objects c: market == 0)
+    (can-build market)
+    =>
+    (build market)
+)
+
+; build stable
+(defrule
+    (building-type-count-total stable == 0)
+    (up-pending-objects c: stable == 0)
+    (can-build stable)
+    =>
+    (build stable)
+)
+(defrule
+    (current-age >= imperial-age)
+    (building-type-count-total stable < 3)
+    (up-pending-objects c: stable == 0)
+    (can-build stable)
+    =>
+    (build stable)
+)
+(defrule
+    (goal g-deathmatch yes)
+    (wood-amount > 10000)
+    (building-type-count-total stable < 6)
+    (up-pending-objects c: stable < 6)
+    (can-build stable)
+    =>
+    (build stable)
+)
+
+; build castle
+(defrule
+    (building-type-count-total castle == 0)
+    (up-pending-objects c: castle == 0)
+    (can-build-with-escrow castle)
+    =>
+    (release-escrow stone)
+    (build castle)
+)
+
+; build siege workshop
+(defrule
+    (building-type-count-total siege-workshop < 1)
+    (up-pending-objects c: siege-workshop == 0)
+    (can-build siege-workshop)
+    =>
+    (build siege-workshop)
+)
+(defrule
+    (current-age >= imperial-age)
+    (building-type-count-total siege-workshop < 2)
+    (up-pending-objects c: siege-workshop == 0)
+    (can-build siege-workshop)
+    =>
+    (build siege-workshop)
+)
+
+; build monastary
+(defrule 
+    (building-type-count-total monastery == 0)
+    (up-pending-objects c: monastery == 0)
+    (can-build monastery)
+    =>
+    (build monastery)
+)
+
+; more town centers
+(defrule
+    (building-type-count-total town-center < 2)
+    (up-pending-objects c: town-center == 0)
+    (current-age >= castle-age)
+    (can-build town-center)
+    =>
+    (build town-center)
+)
+(defrule
+    (goal g-deathmatch yes)
+    (wood-amount > 4000)
+    (food-amount > 4000)
+    (gold-amount > 4000)
+    (building-type-count-total town-center < 3)
+    (up-pending-objects c: town-center < 3)
+    (can-build town-center)
+    =>
+    (build town-center)
+)
+
+; university
+(defrule 
+    (building-type-count-total university == 0)
+    (up-pending-objects c: university == 0)
+    (can-build university)
+    =>
+    (build university)
+)
+
+; stone sink by building castles
+(defrule
+    (building-type-count-total castle > 0)
+    (up-pending-objects c: castle == 0)
+    (stone-amount > 1300)
+    (can-build castle)
+    =>
+    (build-forward castle)
+    ; (build castle)
+)

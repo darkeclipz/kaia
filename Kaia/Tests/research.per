@@ -1,0 +1,401 @@
+; age progression
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow feudal-age)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research feudal-age)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow castle-age)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (release-escrow gold)
+    (research castle-age)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow imperial-age)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (release-escrow gold)
+    (research imperial-age)
+)
+
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-conscription) ; military buildings 33% faster (except siege workshop)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-conscription)
+)
+
+; town center
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-wheel-barrow)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-wheel-barrow)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-hand-cart)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-hand-cart)
+)
+
+; mill
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-horse-collar)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-horse-collar)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-heavy-plow)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-heavy-plow)
+)
+
+; lumber camp
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-double-bit-axe)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-double-bit-axe)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-two-man-saw)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-two-man-saw)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-bow-saw)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-bow-saw)
+)
+
+; mining camp
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-gold-mining)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-gold-mining)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-gold-shaft-mining)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-gold-shaft-mining)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-stone-mining)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-stone-mining)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-stone-shaft-mining)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-stone-shaft-mining)
+)
+
+; blacksmith
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-forging)
+    =>
+    (release-escrow food)
+    (research ri-forging)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-scale-barding)
+    =>
+    (release-escrow food)
+    (research ri-scale-barding)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-scale-barding)
+    =>
+    (release-escrow food)
+    (research ri-scale-barding)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-chain-barding)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-chain-barding)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-iron-casting)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-iron-casting)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-scale-mail)
+    =>
+    (release-escrow food)
+    (research ri-scale-mail)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-chain-mail)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-chain-mail)
+)
+
+; barracks
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-man-at-arms)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-man-at-arms)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-long-swordsman)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-long-swordsman)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-two-handed-swordsman)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-two-handed-swordsman)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-pikeman)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-pikeman)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-halberdier)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-halberdier)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-arson)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-arson)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-squires)
+    =>
+    (release-escrow food)
+    (research ri-squires)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-gambesons)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-gambesons)
+)
+
+; archery range
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-crossbow)
+    (unit-type-count-total archer-line > 2)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-crossbow)
+)
+
+; stable
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-bloodlines)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-bloodlines)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-husbandry)
+    =>
+    (release-escrow food)
+    (research ri-husbandry)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-cavalier)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-cavalier)
+)
+
+; monastery
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-fervor)
+    =>
+    (release-escrow gold)
+    (research ri-fervor)
+)
+
+; siege workshop
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-capped-ram)
+    (unit-type-count-total battering-ram-line > 0)
+    =>
+    (release-escrow food)
+    (research ri-capped-ram)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-onager)
+    (unit-type-count-total mangonel-line > 0)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-onager)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-heavy-scorpion)
+    (unit-type-count-total scorpion-line > 0)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-heavy-scorpion)
+)
+
+; castle
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-chivalry) ; stables 40% faster
+    =>
+    (release-escrow wood)
+    (release-escrow gold)
+    (research ri-chivalry)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-hoardings) ; castle +1000hp
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-hoardings)
+)
+
+; university
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-masonry)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-masonry)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-fortified-wall)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-fortified-wall)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-murder-holes)
+    =>
+    (release-escrow food)
+    (release-escrow stone)
+    (research ri-murder-holes)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-guard-tower)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-guard-tower)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-chemistry)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-chemistry)
+)
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-ballistics)
+    =>
+    (release-escrow wood)
+    (release-escrow gold)
+    (research ri-ballistics)
+)
+
+(defrule
+    (goal g-enable-research yes)
+    (can-research-with-escrow ri-siege-engineers)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-siege-engineers)
+)

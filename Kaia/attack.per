@@ -1,0 +1,74 @@
+(defrule
+    (true)
+    =>
+    (set-goal g-ready-to-attack yes)
+    (set-strategic-number sn-group-form-distance 8)
+    (set-strategic-number sn-group-commander-selection-method 2)
+    (set-strategic-number sn-percent-attack-soldiers 100)
+    (set-strategic-number sn-attack-group-gather-spacing 1)
+)
+
+(defrule
+    (timer-triggered t-start-attack)
+    =>
+    (disable-timer t-start-attack)
+    (set-goal g-ready-to-attack yes)
+)
+
+(defrule
+    (timer-triggered t-stop-attack)
+    =>
+    (disable-timer t-stop-attack)
+    ; (set-strategic-number sn-number-attack-groups 0)
+    (set-goal g-ready-to-attack no)
+    (enable-timer t-start-attack start-attack-interval)
+    (up-reset-attack-now)
+)
+
+; early game wave
+(defrule
+    (goal g-ready-to-attack yes)
+    (current-age >= feudal-age)
+    (soldier-count >= 16)
+    => 
+    (set-strategic-number sn-group-form-distance 8)
+    (set-strategic-number sn-percent-attack-soldiers 100)
+    (set-strategic-number sn-minimum-attack-group-size 16)
+    (set-strategic-number sn-maximum-attack-group-size 24)
+    ; (set-strategic-number sn-number-attack-groups 1)
+    (set-strategic-number sn-attack-group-gather-spacing 1)
+    (set-goal g-ready-to-attack no)
+    (enable-timer t-stop-attack stop-attack-interval)
+    (attack-now)
+    (disable-self)
+)
+
+; attack once a group has assembled
+(defrule ; small
+    (goal g-ready-to-attack yes)
+    (soldier-count > 60)
+    (current-age >= castle-age)
+    (civilian-population >= num-villagers-castle-age)
+    (or 
+        (unit-type-count-total battering-ram-line >= 2)
+        (unit-type-count-total trebuchet >= 1)
+    )
+    (or 
+        (unit-type-count-total scorpion-line >= 2)
+        (unit-type-count-total mangonel-line >= 2)
+    )
+    =>
+	(set-strategic-number sn-minimum-attack-group-size 40)
+	(set-strategic-number sn-maximum-attack-group-size 200)
+    ; (set-strategic-number sn-number-attack-groups 1)
+    (set-goal g-ready-to-attack no)
+    (enable-timer t-stop-attack stop-attack-interval)
+    (attack-now)
+)
+
+(defrule
+    (soldier-count < 20)
+    (strategic-number sn-number-attack-groups > 0)
+    =>
+    (set-strategic-number sn-number-attack-groups 0)
+)

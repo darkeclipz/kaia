@@ -1,0 +1,70 @@
+; buy resources for a town center if it is destroyed
+(defrule
+    (building-type-count-total town-center == 0)
+    (up-pending-objects c: town-center == 0)
+    (civilian-population >= 1)
+    (gold-amount > 1000)
+    (can-sell-commodity gold)
+    =>
+    (buy-commodity stone)
+    (buy-commodity wood)
+    (buy-commodity wood)
+    (buy-commodity wood)
+    (up-release-escrow)
+)
+
+; buy wood if it is very low
+(defrule
+    (gold-amount > 2500)
+    (wood-amount < 200)
+    (can-buy-commodity wood)
+    =>
+    (buy-commodity wood)
+)
+
+; sell excessive wood
+(defrule
+    (gold-amount < 250)
+    (wood-amount > 3000)
+    (can-sell-commodity wood)
+    =>
+    (sell-commodity wood)
+)
+
+; buy food if it is very low
+(defrule
+    (gold-amount > 2500)
+    (food-amount < 200)
+    (can-buy-commodity food)
+    =>
+    (buy-commodity food)
+)
+
+; sell excessive food
+(defrule
+    (gold-amount < 250)
+    (food-amount > 3000)
+    (can-sell-commodity food)
+    =>
+    (sell-commodity food)
+)
+
+; buy stone if it is very low
+(defrule
+    (gold-amount > 2500)
+    (wood-amount > 1000)
+    (food-amount > 1000)
+    (stone-amount < 200)
+    (can-buy-commodity stone)
+    =>
+    (buy-commodity stone)
+)
+
+; sell excessive stone
+(defrule
+    (gold-amount < 250)
+    (stone-amount > 3000)
+    (can-sell-commodity stone)
+    =>
+    (sell-commodity stone)
+)

@@ -1,0 +1,291 @@
+; train villagers
+; (defrule
+;     (current-age == dark-age)
+;     (can-train villager)
+;     (civilian-population < num-villagers-dark-age)
+;     (up-pending-objects c: villager < 2)
+;     (not (can-research feudal-age))
+;     ; (up-compare-goal villager-count g:< g-total-villagers)
+;     =>
+;     (train villager)
+; )
+; (defrule
+;     (current-age == feudal-age)
+;     (can-train villager)
+;     (civilian-population < num-villagers-feudal-age)
+;     (up-pending-objects c: villager < 1)
+;     (not (can-research castle-age))
+;     =>
+;     (train villager)
+; )
+; (defrule
+;     (current-age == castle-age)
+;     (can-train villager)
+;     (civilian-population < num-villagers-castle-age)
+;     (up-pending-objects c: villager < 1)
+;     (not (can-research imperial-age))
+;     =>
+;     (train villager)
+; )
+(defrule
+    ; (current-age == imperial-age)
+    (can-train villager)
+    (civilian-population < num-villagers-imperial-age)
+    (up-pending-objects c: villager == 0)
+    (building-type-count-total town-center == 1)
+    =>
+    (train villager)
+)
+(defrule
+    ; (current-age == imperial-age)
+    (can-train villager)
+    (civilian-population < num-villagers-imperial-age)
+    (up-pending-objects c: villager < 2)
+    (building-type-count-total town-center == 2)
+    =>
+    (train villager)
+)
+(defrule
+    ; (current-age == imperial-age)
+    (can-train villager)
+    (civilian-population < num-villagers-imperial-age)
+    (up-pending-objects c: villager < 3)
+    (building-type-count-total town-center >= 3)
+    =>
+    (train villager)
+)
+(defrule
+    (goal g-deathmatch yes)
+    (food-amount > 4000)
+    (can-train villager)
+    (civilian-population < 50)
+    (up-pending-objects c: villager < 1)
+    =>
+    (train villager)
+)
+
+; focus on villagers if a lot are killed
+(defrule
+    (current-age >= feudal-age)
+    (civilian-population < num-villagers-feudal-age)
+    (can-train-with-escrow villager)
+    (up-pending-objects c: villager < 2)
+    =>
+    (up-release-escrow)
+    (train villager)
+)
+
+; scout cavalry
+(defrule
+    (unit-type-count-total scout-cavalry-line == 0)
+    (can-train scout-cavalry-line)
+    (up-pending-objects c: scout-cavalry-line == 0)
+    =>
+    (train scout-cavalry-line)
+)
+
+; train monk
+(defrule
+    (current-age == castle-age)
+    (unit-type-count-total monk == 0)
+    (can-train monk)
+    (up-pending-objects c: monk == 0)
+    =>
+    (train monk)
+)
+(defrule
+    (current-age >= imperial-age)
+    (unit-type-count-total monk < 3)
+    (can-train monk)
+    (up-pending-objects c: monk == 0)
+    =>
+    (train monk)
+)
+
+; train militia
+(defrule
+    (current-age < castle-age)
+    (unit-type-count-total militiaman-line < 8)
+    (up-pending-objects c: militiaman-line < 2)
+    (food-amount > 120)
+    (gold-amount > 40)
+    (can-train militiaman-line)
+    =>
+    (train militiaman-line)
+)
+(defrule
+    (current-age >= castle-age)
+    (unit-type-count-total militiaman-line < 24)
+    (up-pending-objects c: militiaman-line < 2)
+    (food-amount > 120)
+    (gold-amount > 40)
+    (can-train militiaman-line)
+    =>
+    (train militiaman-line)
+)
+(defrule
+    (goal g-deathmatch yes)
+    (up-pending-objects c: militiaman-line < 12)
+    (food-amount > 4000)
+    (gold-amount > 4000)
+    (can-train militiaman-line)
+    =>
+    (train militiaman-line)
+)
+
+; train spearman
+(defrule
+    (current-age < castle-age)
+    (unit-type-count-total spearman-line < 4)
+    (up-pending-objects c: spearman-line < 2)
+    (food-amount > 140)
+    (wood-amount > 200)
+    (can-train spearman-line)
+    =>
+    (train spearman-line)
+)
+(defrule
+    (current-age >= castle-age)
+    (unit-type-count-total spearman-line < 24)
+    (up-pending-objects c: spearman-line < 2)
+    (food-amount > 140)
+    (wood-amount > 200)
+    (can-train spearman-line)
+    =>
+    (train spearman-line)
+)
+(defrule
+    (goal g-deathmatch yes)
+    (food-amount > 4000)
+    (wood-amount > 4000)
+    (up-pending-objects c: spearman-line < 12)
+    (can-train spearman-line)
+    =>
+    (train spearman-line)
+)
+
+; archers
+(defrule
+    (current-age < castle-age)
+    (unit-type-count-total archer-line < 4)
+    (up-pending-objects c: archer-line == 0)
+    (wood-amount > 50)
+    (gold-amount > 90)
+    (can-train archer-line)
+    =>
+    (train archer-line)
+)
+(defrule
+    (current-age >= castle-age)
+    (unit-type-count-total archer-line < 8)
+    (up-pending-objects c: archer-line == 0)
+    (wood-amount > 50)
+    (gold-amount > 90)
+    (can-train archer-line)
+    =>
+    (train archer-line)
+)
+(defrule
+    (goal g-deathmatch yes)
+    (up-pending-objects c: archer-line < 12)
+    (wood-amount > 4000)
+    (gold-amount > 4000)
+    (can-train archer-line)
+    =>
+    (train archer-line)
+)
+
+; train knights
+(defrule
+    (unit-type-count-total knight-line < 12)
+    (up-pending-objects c: knight-line == 0)
+    (food-amount > 120)
+    (gold-amount > 150)
+    (can-train knight)
+    =>
+    (train knight-line)
+)
+(defrule
+    (goal g-deathmatch yes)
+    (up-pending-objects c: knight-line < 12)
+    (food-amount > 4000)
+    (gold-amount > 4000)
+    (can-train knight)
+    =>
+    (train knight-line)
+)
+
+; train knights when having excessive resources
+(defrule
+    (unit-type-count-total knight-line < 50)
+    (up-pending-objects c: knight-line == 0)
+    (food-amount > 1000)
+    (gold-amount > 1000)
+    (can-train knight)
+    =>
+    (train knight-line)
+)
+
+; train cavalry archer
+(defrule
+    (unit-type-count-total cavalry-archer-line < 12)
+    (up-pending-objects c: cavalry-archer-line == 0)
+    (food-amount > 80)
+    (gold-amount > 120)
+    (can-train cavalry-archer-line)
+    =>
+    (train cavalry-archer-line)
+)
+
+; cavalry archer when having excessive resources
+(defrule
+    (unit-type-count-total cavalry-archer-line < 24)
+    (up-pending-objects c: cavalry-archer-line == 0)
+    (food-amount > 1000)
+    (gold-amount > 1000)
+    (can-train cavalry-archer-line)
+    =>
+    (train cavalry-archer-line)
+)
+
+; train battering rams
+(defrule
+    (unit-type-count-total battering-ram-line < 3)
+    (up-pending-objects c: battering-ram-line == 0)
+    (wood-amount > 320)
+    (gold-amount > 150)
+    (can-train battering-ram-line)
+    =>
+    (train battering-ram-line)
+)
+
+; train mangonel
+(defrule
+    (unit-type-count-total mangonel-line < 3)
+    (up-pending-objects c: mangonel-line == 0)
+    (wood-amount > 320)
+    (gold-amount > 150)
+    (can-train mangonel-line)
+    =>
+    (train mangonel-line)
+)
+
+; train scorpion
+(defrule
+    (unit-type-count-total scorpion-line < 3)
+    (up-pending-objects c: scorpion-line == 0)
+    (wood-amount > 320)
+    (gold-amount > 150)
+    (can-train scorpion-line)
+    =>
+    (train scorpion-line)
+)
+
+; train trebuchet
+(defrule
+    (unit-type-count-total trebuchet < 3)
+    (up-pending-objects c: trebuchet == 0)
+    (can-train trebuchet)
+    =>
+    (train trebuchet)
+)
