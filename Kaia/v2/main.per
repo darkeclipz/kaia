@@ -20,6 +20,7 @@
 (defconst g-train-scorpion-line 105)
 (defconst g-train-mangonel-line 106)
 (defconst g-train-skirmisher-line 107)
+(defconst g-train-spearman-line 108)
 (defconst g-train-monk 108) ; it always trains 1 monk
 (defconst g-train-reset 199) ; reset training to whatever
 (defconst g-has-melee-units 200)
@@ -33,6 +34,7 @@
 ; triggers
 (defconst t-start-attack 1)
 (defconst t-stop-attack 2)
+(defconst t-one-minute 3)
 
 ; parameters
 (defconst num-villagers-dark-age 25)
@@ -98,6 +100,7 @@
 (load "Kaia\v2\gather")
 (load "Kaia\v2\drop")
 (load "Kaia\v2\town-size")
+(load "Kaia\v2\camp-size")
 (load "Kaia\v2\escrow")
 (load "Kaia\v2\trade")
 (load "Kaia\v2\research")
@@ -105,6 +108,7 @@
 (load "Kaia\v2\train\villager")
 (load "Kaia\v2\train\monk")
 (load "Kaia\v2\train\militiaman-line")
+(load "Kaia\v2\train\spearman-line")
 (load "Kaia\v2\train\archer-line")
 (load "Kaia\v2\train\knight-line")
 (load "Kaia\v2\train\battering-ram-line")
@@ -152,6 +156,7 @@
     (set-goal g-resign yes)
     (set-goal g-wall yes)
     (enable-timer t-start-attack attack-interval) ; every 5 min
+    (enable-timer t-one-minute 60)
     (disable-self)
 )
 
@@ -162,6 +167,7 @@
     ; train based on unique units and counter units?
     ; reset this every 5 min?
     (set-goal g-train-militiaman-line no)
+    (set-goal g-train-spearman-line no)
     (set-goal g-train-archer-line no)
     (set-goal g-train-knight-line yes)
     (set-goal g-train-battering-ram-line yes)
@@ -192,3 +198,4 @@
     (up-reset-attack-now)
     (set-strategic-number sn-number-attack-groups 0)
 )
+

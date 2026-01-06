@@ -13,7 +13,7 @@
 (defrule
     (goal g-build yes)
 (or (goal g-train-militiaman-line yes)
-    (goal g-train-spearman-line))
+    (goal g-train-spearman-line yes))
     (can-build barracks)
     (building-type-count-total barracks < num-barracks-imperial-age)
     (up-pending-objects c: barracks < 2)
