@@ -38,7 +38,7 @@
 (defrule (unit-type-count-total skirmisher-line >= min-units-required-for-upgrade) => (set-goal g-has-archers yes))
 
 ; check siege
-(defrule (unit-type-count-total battering-ram-line >= min-units-required-for-upgrade) => (set-goal g-has-siege yes))
-(defrule (unit-type-count-total scorpion-line >= min-units-required-for-upgrade) => (set-goal g-has-siege yes))
-(defrule (unit-type-count-total mangonel-line >= min-units-required-for-upgrade) => (set-goal g-has-siege yes))
-(defrule (unit-type-count-total trebuchet >= min-units-required-for-upgrade) => (set-goal g-has-siege yes))
+(defrule (unit-type-count-total battering-ram-line >= min-siege-required-for-upgrade) => (set-goal g-has-siege yes))
+(defrule (unit-type-count-total scorpion-line >= min-siege-required-for-upgrade) => (set-goal g-has-siege yes))
+(defrule (unit-type-count-total mangonel-line >= min-siege-required-for-upgrade) => (set-goal g-has-siege yes))
+(defrule (unit-type-count-total trebuchet >= min-siege-required-for-upgrade) => (set-goal g-has-siege yes))
