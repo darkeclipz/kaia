@@ -21,7 +21,7 @@
 (defconst g-train-mangonel-line 106)
 (defconst g-train-skirmisher-line 107)
 (defconst g-train-spearman-line 108)
-(defconst g-train-monk 108) ; it always trains 1 monk
+(defconst g-train-monk 109) ; it always trains 1 monk
 (defconst g-train-reset 199) ; reset training to whatever
 (defconst g-has-melee-units 200)
 (defconst g-has-cavalry 201)
@@ -83,18 +83,18 @@
     (set-strategic-number sn-cap-civilian-builders 200) ; allow all civilians to build at the same time
     (set-strategic-number sn-scale-minimum-attack-group-size 0) ; fixes that min > max, which breaks attack groups
     (set-strategic-number sn-maximum-hunt-drop-distance 10) ; prevent hunting all over the map
-    (set-strategic-number sn-dropsite-separation-distance 6) ; prevent tons of mining camps
+    (set-strategic-number sn-dropsite-separation-distance 3) ; prevent tons of mining camps
     (set-strategic-number sn-initial-exploration-required 0) ; can build immediately
     (set-strategic-number sn-total-number-explorers 1)
 	(set-strategic-number sn-number-explore-groups 1)
     (set-strategic-number sn-object-repair-level 14335) ; https://airef.github.io/strategic-numbers/sn-details.html#sn-object-repair-level
     (set-strategic-number sn-defer-dropsite-update 1) ; if camp is build at enemy; only "sacrafice" one villager    (set-strategic-number sn-group-commander-selection-method 2)
     (set-strategic-number sn-percent-attack-soldiers 100)
-    (set-strategic-number sn-group-form-distance 4)
-    (set-strategic-number sn-attack-group-gather-spacing 1)
-    (set-strategic-number sn-minimum-attack-group-size 24)
-	(set-strategic-number sn-maximum-attack-group-size 500)
     (set-strategic-number sn-number-attack-groups 0)
+    (set-strategic-number sn-minimum-attack-group-size minimum-attack-group-size)
+	(set-strategic-number sn-maximum-attack-group-size maximum-attack-group-size)
+    (set-strategic-number sn-attack-group-gather-spacing 1)
+    (set-strategic-number sn-group-form-distance 4)
     (disable-self)
 )
 
@@ -107,16 +107,17 @@
 (load "Kaia\v2\research")
 (load "Kaia\v2\resign")
 (load "Kaia\v2\train\villager")
-(load "Kaia\v2\train\monk")
 (load "Kaia\v2\train\militiaman-line")
 (load "Kaia\v2\train\spearman-line")
 (load "Kaia\v2\train\archer-line")
+(load "Kaia\v2\train\skirmisher-line")
+(load "Kaia\v2\train\scout-cavalry-line")
 (load "Kaia\v2\train\knight-line")
+(load "Kaia\v2\train\monk")
 (load "Kaia\v2\train\battering-ram-line")
-(load "Kaia\v2\train\trebuchet")
 (load "Kaia\v2\train\scorpion-line")
 (load "Kaia\v2\train\mangonel-line")
-(load "Kaia\v2\train\skirmisher-line")
+(load "Kaia\v2\train\trebuchet")
 (load "Kaia\v2\build\queue")
 (load "Kaia\v2\build\town-center")
 (load "Kaia\v2\build\house")
@@ -176,8 +177,8 @@
     (set-goal g-train-scorpion-line no)
     (set-goal g-train-mangonel-line no)
     (set-goal g-train-skirmisher-line no)
-    (set-goal g-train-reset no)
     (set-goal g-train-monk yes)
+    (set-goal g-train-reset no)
 )
 
 ; attack enemy

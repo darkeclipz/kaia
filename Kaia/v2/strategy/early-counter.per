@@ -15,13 +15,24 @@
     (current-age <= feudal-age)
 (or (players-unit-type-count any-enemy knight-line > 3)
 (or (players-unit-type-count any-enemy scout-cavalry-line > 3)
-    (players-unit-type-count any-enemy camel > 3)))
+    (players-unit-type-count any-enemy camel-line > 3)))
     (unit-type-count-total spearman-line < 8)
     (up-pending-objects c: spearman-line < 2)
     (can-train spearman-line)
     =>
     (train spearman-line)
+)
+
+(defrule
+    (town-under-attack)
+    (current-age <= feudal-age)
+(or (players-unit-type-count any-enemy knight-line > 8)
+(or (players-unit-type-count any-enemy scout-cavalry-line > 8)
+    (players-unit-type-count any-enemy camel-line > 8)))
+    =>
     (set-goal g-train-spearman-line yes)
+    (chat-local-to-self "training spearman to counter cavalry")
+    (disable-self)
 )
 
 (defrule
