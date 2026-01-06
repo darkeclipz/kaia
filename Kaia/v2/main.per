@@ -1,6 +1,7 @@
 ; TODO:
 ;   research tech
 ;   research unit upgrades only when there is a unit
+;   research last tech at university
 ;   build bombardment towers
 
 (defconst no 0)
@@ -71,43 +72,43 @@
     (disable-self)
 )
 
-(load "Kaia\gather")
-(load "Kaia\town-size")
-(load "Kaia\escrow")
-(load "Kaia\trade")
-(load "Kaia\research")
-(load "Kaia\resign")
-(load "Kaia\train\villager")
-(load "Kaia\train\monk")
-(load "Kaia\train\militiaman-line")
-(load "Kaia\train\archer-line")
-(load "Kaia\train\knight-line")
-(load "Kaia\train\battering-ram-line")
-(load "Kaia\train\trebuchet")
-(load "Kaia\train\scorpion-line")
-(load "Kaia\train\mangonel-line")
-(load "Kaia\train\skirmisher-line")
-(load "Kaia\build\queue")
-(load "Kaia\build\town-center")
-(load "Kaia\build\house")
-(load "Kaia\build\mill")
-(load "Kaia\build\farm")
-(load "Kaia\build\lumber-camp")
-(load "Kaia\build\mining-camp")
-(load "Kaia\build\barracks")
-(load "Kaia\build\blacksmith")
-(load "Kaia\build\archery-range")
-(load "Kaia\build\stable")
-(load "Kaia\build\siege-workshop")
-(load "Kaia\build\market")
-(load "Kaia\build\monastery")
-(load "Kaia\build\university")
-(load "Kaia\build\castle")
-(load "Kaia\build\watch-tower")
-(load "Kaia\build\wall")
-(load "Kaia\strategy\feudal-rush")
-(load "Kaia\strategy\fast-castle")
-(load "Kaia\strategy\fast-imperial")
+(load "Kaia\v2\gather")
+(load "Kaia\v2\town-size")
+(load "Kaia\v2\escrow")
+(load "Kaia\v2\trade")
+(load "Kaia\v2\research")
+(load "Kaia\v2\resign")
+(load "Kaia\v2\train\villager")
+(load "Kaia\v2\train\monk")
+(load "Kaia\v2\train\militiaman-line")
+(load "Kaia\v2\train\archer-line")
+(load "Kaia\v2\train\knight-line")
+(load "Kaia\v2\train\battering-ram-line")
+(load "Kaia\v2\train\trebuchet")
+(load "Kaia\v2\train\scorpion-line")
+(load "Kaia\v2\train\mangonel-line")
+(load "Kaia\v2\train\skirmisher-line")
+(load "Kaia\v2\build\queue")
+(load "Kaia\v2\build\town-center")
+(load "Kaia\v2\build\house")
+(load "Kaia\v2\build\mill")
+(load "Kaia\v2\build\farm")
+(load "Kaia\v2\build\lumber-camp")
+(load "Kaia\v2\build\mining-camp")
+(load "Kaia\v2\build\barracks")
+(load "Kaia\v2\build\blacksmith")
+(load "Kaia\v2\build\archery-range")
+(load "Kaia\v2\build\stable")
+(load "Kaia\v2\build\siege-workshop")
+(load "Kaia\v2\build\market")
+(load "Kaia\v2\build\monastery")
+(load "Kaia\v2\build\university")
+(load "Kaia\v2\build\castle")
+(load "Kaia\v2\build\watch-tower")
+(load "Kaia\v2\build\wall")
+(load "Kaia\v2\strategy\feudal-rush")
+(load "Kaia\v2\strategy\fast-castle")
+(load "Kaia\v2\strategy\fast-imperial")
 
 (defrule
     (true)
@@ -144,12 +145,17 @@
 
 ; attack enemy
 (defrule
-    (true)
+    (military-population > 200)
     =>
-    (set-strategic-number sn-number-attack-groups 8) ; 20
-    (set-strategic-number sn-minimum-attack-group-size 100) ; 24
+    (set-strategic-number sn-number-attack-groups 50) ; 20
+    (set-strategic-number sn-minimum-attack-group-size 24) ; 24
     (set-strategic-number sn-maximum-attack-group-size 500)
-    (disable-self)
+)
+
+(defrule
+    (military-population < 50)
+    =>
+    (set-strategic-number sn-number-attack-groups 0)
 )
 
 ; stop attacking if timer triggers
