@@ -20,6 +20,7 @@
     (dropsite-min-distance stone > 3)
     (up-pending-objects c: mining-camp == 0)
     (unit-type-count-total villager >= 20)
+    (current-age >= castle-age)
     =>
     (build mining-camp)
     (up-modify-sn sn-camp-max-distance c:+ 3)

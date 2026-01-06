@@ -1,13 +1,35 @@
-; ; fast castle age
-; (defrule
-;     (goal g-fast-castle yes)
-;     (current-age >= castle-age)
-;     =>
-;     ; (set-strategic-number sn-camp-max-distance 24)
-;     ; (set-strategic-number sn-town-center-placement mining-camp)
-;     (chat-local-to-self "fast castle: reached castle age")
-;     (disable-self)
-; )
+; enable fast castle if there are a lot of resources, e.g. deathmatch
+(defrule
+    (game-time < 30)
+    (food-amount > 10000)
+    (wood-amount > 10000)
+    (gold-amount > 5000)
+    (stone-amount > 2500)
+    =>
+    (set-goal g-fast-castle yes)
+    (chat-local-to-self "fast castle: enabled (excessive resources detected)")
+    (disable-self)
+)
+
+; research feudal asap
+(defrule
+    (goal g-fast-castle yes)
+    (can-research-with-escrow feudal-age)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research feudal-age)
+)
+
+; research castle asap
+(defrule
+    (goal g-fast-castle yes)
+    (can-research-with-escrow castle-age)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research castle-age)
+)
 
 ; fast castle; buy max 400 stone if needed
 (defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
@@ -15,7 +37,7 @@
 (defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
 (defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
 
-; fast castle: build town center
+; build 4 town centers
 (defrule
     (goal g-fast-castle yes)
     (building-type-count-total town-center < 3)
@@ -25,7 +47,7 @@
     (build town-center)
 )
 
-; fast castle complete
+; done
 (defrule
     (goal g-fast-castle yes)
     (current-age >= castle-age)

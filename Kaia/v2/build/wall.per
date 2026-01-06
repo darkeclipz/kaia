@@ -1,27 +1,56 @@
 (defrule
     (true)
     =>
-    (enable-wall-placement 2)
+    (enable-wall-placement wall-perimeter)
+    (set-strategic-number sn-gate-type-for-wall 0) ; stone = 0, palaside = 1
     (disable-self)
 )
 
 (defrule
     (goal g-wall yes)
     (current-age == imperial-age)
-    (can-build-wall 2 stone-wall-line)
-    (wall-completed-percentage 2 < 100)
+    (can-build-wall wall-perimeter stone-wall-line)
+    (wall-completed-percentage wall-perimeter < 100)
     (building-type-count-total watch-tower >= 4)
     (building-type-count-total university >= 1)
     (building-type-count-total monastery >= 1)
     (building-type-count-total town-center >= 2)
     =>
-    (build-wall 2 stone-wall-line)
+    (build-wall wall-perimeter stone-wall-line)
 )
 
 (defrule
     (goal g-wall yes)
-    (can-build-gate 2)
-    (building-type-count-total gate < 4)
+    (can-build-gate wall-perimeter)
+    (wall-completed-percentage wall-perimeter >= 20)
+    (building-type-count-total gate < 1)
     =>
-    (build-gate 2)
+    (build-gate wall-perimeter)
+)
+
+(defrule
+    (goal g-wall yes)
+    (can-build-gate wall-perimeter)
+    (wall-completed-percentage wall-perimeter >= 45)
+    (building-type-count-total gate < 2)
+    =>
+    (build-gate wall-perimeter)
+)
+
+(defrule
+    (goal g-wall yes)
+    (can-build-gate wall-perimeter)
+    (wall-completed-percentage wall-perimeter >= 70)
+    (building-type-count-total gate < 3)
+    =>
+    (build-gate wall-perimeter)
+)
+
+(defrule
+    (goal g-wall yes)
+    (can-build-gate wall-perimeter)
+    (wall-completed-percentage wall-perimeter >= 95)
+    (building-type-count-total gate < 5)
+    =>
+    (build-gate wall-perimeter)
 )

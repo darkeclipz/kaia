@@ -1,5 +1,6 @@
 (defrule
     (goal g-build yes)
+    (goal g-train-knight-line yes)
     (can-build stable)
     (building-type-count-total stable == 0)
     (up-pending-objects c: stable == 0)
@@ -9,8 +10,9 @@
 
 (defrule
     (goal g-build yes)
+    (goal g-train-knight-line yes)
     (can-build stable)
-    (building-type-count-total stable < 6)
+    (building-type-count-total stable < num-stable-imperial-age)
     (up-pending-objects c: stable < 2)
     (or
         (current-age >= imperial-age)

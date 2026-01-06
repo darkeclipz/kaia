@@ -1,31 +1,34 @@
+; research feudal age
 (defrule
-    (goal g-fast-imperial yes)
+    (goal g-research yes)
     (can-research-with-escrow feudal-age)
+    (unit-type-count-total villager >= min-villagers-dark-age)
     =>
     (release-escrow food)
     (release-escrow wood)
     (research feudal-age)
 )
 
+; research castle age
 (defrule
-    (goal g-fast-imperial yes)
+    (goal g-research yes)
     (can-research-with-escrow castle-age)
+    (unit-type-count-total villager >= min-villagers-feudal-age)
     =>
     (release-escrow food)
     (release-escrow wood)
+    (release-escrow gold)
     (research castle-age)
 )
 
+; research imperial age
 (defrule
-    (goal g-fast-imperial yes)
+    (goal g-research yes)
     (can-research-with-escrow imperial-age)
+    (unit-type-count-total villager >= min-villagers-castle-age)
     =>
     (release-escrow food)
     (release-escrow wood)
     (release-escrow gold)
     (research imperial-age)
-    (set-goal g-fast-imperial no)
 )
-
-; perhaps we want to start queueing villagers asap in the castle ages once we can build a TC
-; it takes forever to also complete the imperial age

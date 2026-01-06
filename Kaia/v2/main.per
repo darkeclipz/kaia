@@ -1,11 +1,7 @@
-; TODO:
-;   research tech
-;   research unit upgrades only when there is a unit
-;   research last tech at university
-;   build bombardment towers
-
 (defconst no 0)
 (defconst yes 1)
+
+; goals
 (defconst g-build 1)
 (defconst g-train 2)
 (defconst g-research 3)
@@ -24,23 +20,52 @@
 (defconst g-train-scorpion-line 105)
 (defconst g-train-mangonel-line 106)
 (defconst g-train-skirmisher-line 107)
-(defconst t-stop-attack 1)
-(defconst t-feudal-rush-done 2)
-(defconst t-fast-castle-done 3)
+(defconst g-train-monk 108) ; it always trains 1 monk
+(defconst g-train-reset 199) ; reset training to whatever
+(defconst g-has-melee-units 200)
+(defconst g-has-cavalry 201)
+(defconst g-has-infantry 202)
+(defconst g-has-ranged-units 203)
+(defconst g-has-archers 204)
+(defconst g-has-siege 205)
+(defconst g-has-ships 206)
 
+; triggers
+(defconst t-start-attack 1)
+(defconst t-stop-attack 2)
+
+; parameters
 (defconst num-villagers-dark-age 25)
 (defconst num-villagers-feudal-age 25)
 (defconst num-villagers-castle-age 50)
 (defconst num-villagers-imperial-age 100)
-
-(defconst min-food-needed-for-training 500)
-(defconst min-wood-needed-for-training 500)
-(defconst min-gold-needed-for-training 500)
-
 (defconst min-villagers-dark-age 12)
 (defconst min-villagers-feudal-age 25)
 (defconst min-villagers-castle-age 40)
 (defconst min-villagers-imperial-age 100)
+(defconst min-gold-needed-for-training 200) ; 500
+(defconst min-food-needed-for-training 200) ; 500
+(defconst min-wood-needed-for-training 200) ; 500
+(defconst min-gold-needed-for-trading-excess-resources 250) ; should be higher then min-x-needed-for-training
+(defconst min-units-required-for-upgrade 3)
+(defconst num-barracks-imperial-age 6)
+(defconst num-archery-range-imperial-age 6)
+(defconst num-stable-imperial-age 6)
+(defconst num-siege-workshop-imperial-age 2)
+(defconst attack-interval 300)
+(defconst attack-groups 10)
+(defconst minimum-attack-group-size 28)
+(defconst maximum-attack-group-size 50)
+(defconst maximum-military-size 200)
+(defconst minimum-military-size 50)
+(defconst wall-perimeter 2)
+(defconst max-monks 24)
+
+(defconst 1min 60)
+(defconst 2min 120)
+(defconst 3min 180)
+(defconst 4min 240)
+(defconst 5min 300)
 
 (defrule
     (true)
@@ -50,7 +75,7 @@
     (set-strategic-number sn-enable-patrol-attack 1) ; retarget against nearby sighted units
     (set-strategic-number sn-wall-targeting-mode 1) ; attack walls
     (set-strategic-number sn-gather-defense-units 1) ; gather soldiers near town center
-    (set-strategic-number sn-enable-training-queue 15) ; number of units that can be queue'd at a building
+    (set-strategic-number sn-enable-training-queue 15) ; number of units that can be queued at a building
     (set-strategic-number sn-enable-research-queue 1) ; allows technologies to be queued too
     (set-strategic-number sn-cap-civilian-builders 200) ; allow all civilians to build at the same time
     (set-strategic-number sn-scale-minimum-attack-group-size 0) ; fixes that min > max, which breaks attack groups
@@ -67,8 +92,6 @@
     (set-strategic-number sn-minimum-attack-group-size 24)
 	(set-strategic-number sn-maximum-attack-group-size 500)
     (set-strategic-number sn-number-attack-groups 0)
-    ; (enable-wall-placement 1)
-    ; (set-strategic-number sn-gate-type-for-wall 1) ; stone = 0, palaside = 1
     (disable-self)
 )
 
@@ -106,6 +129,10 @@
 (load "Kaia\v2\build\castle")
 (load "Kaia\v2\build\watch-tower")
 (load "Kaia\v2\build\wall")
+(load "Kaia\v2\technology\has")
+(load "Kaia\v2\technology\age")
+(load "Kaia\v2\technology\barracks")
+(load "Kaia\v2\technology\blacksmith")
 (load "Kaia\v2\strategy\feudal-rush")
 (load "Kaia\v2\strategy\fast-castle")
 (load "Kaia\v2\strategy\fast-imperial")
@@ -117,45 +144,42 @@
     ; (set-goal g-fast-castle yes)
     (set-goal g-build yes)
     (set-goal g-train yes)
+    (set-goal g-train-reset yes)
     (set-goal g-research yes)
     (set-goal g-trade yes)
     (set-goal g-resign yes)
     (set-goal g-wall yes)
-    (set-goal g-train-militiaman-line yes)
-    (set-goal g-train-archer-line yes)
+    (enable-timer t-start-attack attack-interval) ; every 5 min
+    (disable-self)
+)
+
+(defrule
+    (goal g-train-reset yes)
+    =>
+    (chat-local-to-self "reset training goals")
+    ; train based on unique units and counter units?
+    ; reset this every 5 min?
+    (set-goal g-train-militiaman-line no)
+    (set-goal g-train-archer-line no)
     (set-goal g-train-knight-line yes)
     (set-goal g-train-battering-ram-line yes)
     (set-goal g-train-trebuchet yes)
-    (set-goal g-train-scorpion-line yes)
-    (set-goal g-train-mangonel-line yes)
-    (set-goal g-train-skirmisher-line yes)
-)
-
-; fast imperial
-(defrule
-    (game-time < 30)
-    (food-amount > 10000)
-    (wood-amount > 10000)
-    (gold-amount > 5000)
-    (stone-amount > 2500)
-    =>
-    (set-goal g-fast-imperial yes)
-    (disable-self)
+    (set-goal g-train-scorpion-line no)
+    (set-goal g-train-mangonel-line no)
+    (set-goal g-train-skirmisher-line no)
+    (set-goal g-train-reset no)
+    (set-goal g-train-monk yes)
 )
 
 ; attack enemy
 (defrule
-    (military-population > 200)
+    (timer-triggered t-start-attack)
+    (military-population >= minimum-military-size)
     =>
-    (set-strategic-number sn-number-attack-groups 50) ; 20
-    (set-strategic-number sn-minimum-attack-group-size 24) ; 24
-    (set-strategic-number sn-maximum-attack-group-size 500)
-)
-
-(defrule
-    (military-population < 50)
-    =>
-    (set-strategic-number sn-number-attack-groups 0)
+    (set-strategic-number sn-number-attack-groups attack-groups)
+    (set-strategic-number sn-minimum-attack-group-size minimum-attack-group-size)
+    (set-strategic-number sn-maximum-attack-group-size maximum-attack-group-size)
+    (enable-timer t-stop-attack 120)
 )
 
 ; stop attacking if timer triggers

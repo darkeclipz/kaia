@@ -15,6 +15,7 @@
 
 ; buy wood if it is very low
 (defrule
+    (goal g-trade yes)
     (gold-amount > 2500)
     (wood-amount < 200)
     (can-buy-commodity wood)
@@ -24,7 +25,8 @@
 
 ; sell excessive wood
 (defrule
-    (gold-amount < min-gold-needed-for-training)
+    (goal g-trade yes)
+    (gold-amount < min-gold-needed-for-trading-excess-resources)
     (wood-amount > 5000)
     (can-sell-commodity wood)
     =>
@@ -33,6 +35,7 @@
 
 ; buy food if it is very low
 (defrule
+    (goal g-trade yes)
     (gold-amount > 2500)
     (food-amount < 200)
     (can-buy-commodity food)
@@ -42,7 +45,8 @@
 
 ; sell excessive food
 (defrule
-    (gold-amount < min-wood-needed-for-training)
+    (goal g-trade yes)
+    (gold-amount < min-gold-needed-for-trading-excess-resources)
     (food-amount > 5000)
     (can-sell-commodity food)
     =>
@@ -51,6 +55,7 @@
 
 ; buy stone if it is very low
 (defrule
+    (goal g-trade yes)
     (gold-amount > 2500)
     (wood-amount > 1000)
     (food-amount > 1000)
@@ -62,8 +67,9 @@
 
 ; sell excessive stone
 (defrule
-    (gold-amount < 250)
-    (stone-amount > 3000)
+    (goal g-trade yes)
+    (gold-amount < min-gold-needed-for-trading-excess-resources)
+    (stone-amount > 2500)
     (can-sell-commodity stone)
     =>
     (sell-commodity stone)

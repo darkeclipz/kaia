@@ -1,34 +1,3 @@
-; age progression
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow feudal-age)
-    (unit-type-count-total villager >= min-villagers-dark-age)
-    =>
-    (release-escrow food)
-    (release-escrow wood)
-    (research feudal-age)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow castle-age)
-    (unit-type-count-total villager >= min-villagers-feudal-age)
-    =>
-    (release-escrow food)
-    (release-escrow wood)
-    (release-escrow gold)
-    (research castle-age)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow imperial-age)
-    (unit-type-count-total villager >= min-villagers-castle-age)
-    =>
-    (release-escrow food)
-    (release-escrow wood)
-    (release-escrow gold)
-    (research imperial-age)
-)
-
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-conscription) ; military buildings 33% faster (except siege workshop)
@@ -134,189 +103,6 @@
     (research ri-stone-shaft-mining)
 )
 
-; blacksmith
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-forging)
-    =>
-    (release-escrow food)
-    (research ri-forging)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-scale-barding)
-    =>
-    (release-escrow food)
-    (research ri-scale-barding)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-scale-barding)
-    =>
-    (release-escrow food)
-    (research ri-scale-barding)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-chain-barding)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-chain-barding)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-plate-barding)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-plate-barding)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-iron-casting)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-iron-casting)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-scale-mail)
-    =>
-    (release-escrow food)
-    (research ri-scale-mail)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-chain-mail)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-chain-mail)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-plate-mail)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-plate-mail)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-blast-furnace)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-blast-furnace)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-blast-furnace)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-blast-furnace)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-fletching)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-fletching)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-padded-archer-armor)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-padded-archer-armor)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-elite-skirmisher)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-elite-skirmisher)
-)
-
-; barracks
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-man-at-arms)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-man-at-arms)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-long-swordsman)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-long-swordsman)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-two-handed-swordsman)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-two-handed-swordsman)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-champion)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-champion)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-pikeman)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-pikeman)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-halberdier)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-halberdier)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-arson)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-arson)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-squires)
-    =>
-    (release-escrow food)
-    (research ri-squires)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-gambesons)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-gambesons)
-)
-
 ; archery range
 (defrule
     (goal g-research yes)
@@ -383,6 +169,7 @@
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-fervor)
+    (unit-type-count-total monk > 0) ; train monk first so we can start walking
     =>
     (release-escrow gold)
     (research ri-fervor)
@@ -462,6 +249,7 @@
 )
 (defrule
     (goal g-research yes)
+    (building-type-count-total stone-wall-line > 0)
     (can-research-with-escrow ri-fortified-wall)
     =>
     (release-escrow food)
@@ -470,6 +258,7 @@
 )
 (defrule
     (goal g-research yes)
+    (building-type-count-total watch-tower > 0)
     (can-research-with-escrow ri-murder-holes)
     =>
     (release-escrow food)
@@ -492,6 +281,8 @@
     (release-escrow gold)
     (research ri-chemistry)
 )
+; must have for scorpion-line
+; must have for ranged units
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-ballistics)
@@ -500,7 +291,6 @@
     (release-escrow gold)
     (research ri-ballistics)
 )
-
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-siege-engineers)

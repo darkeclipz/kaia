@@ -9,8 +9,11 @@
 
 (defrule
     (goal g-build yes)
+(or (goal g-train-battering-ram-line yes)
+(or (goal g-train-mangonel-line yes)
+    (goal g-train-scorpion-line yes)))
     (can-build siege-workshop)
-    (building-type-count-total siege-workshop < 2)
+    (building-type-count-total siege-workshop < num-siege-workshop-imperial-age)
     (up-pending-objects c: siege-workshop < 2)
     (or
         (current-age >= imperial-age)
