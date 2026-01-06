@@ -26,6 +26,7 @@
 (defrule (unit-type-count-total militiaman-line >= min-units-required-for-upgrade) => (set-goal g-has-infantry yes))
 (defrule (unit-type-count-total archer-line >= min-units-required-for-upgrade) => (set-goal g-has-infantry yes))
 (defrule (unit-type-count-total skirmisher-line >= min-units-required-for-upgrade) => (set-goal g-has-infantry yes))
+(defrule (unit-type-count-total spearman-line >= min-units-required-for-upgrade) => (set-goal g-has-infantry yes))
 
 ; check ranged units
 (defrule (unit-type-count-total archer-line >= min-units-required-for-upgrade) => (set-goal g-has-ranged-units yes))

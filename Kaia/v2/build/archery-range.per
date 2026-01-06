@@ -1,7 +1,5 @@
 (defrule
     (goal g-build yes)
-(or (goal g-train-archer-line yes)
-    (goal g-train-skirmisher-line yes))
     (can-build archery-range)
     (building-type-count-total archery-range == 0)
     (up-pending-objects c: archery-range == 0)

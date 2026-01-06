@@ -1,0 +1,45 @@
+(defrule
+    (town-under-attack)
+    (current-age <= feudal-age)
+(or (players-unit-type-count any-enemy archer-line > 3)
+    (players-unit-type-count any-enemy militiaman-line > 3))
+    (unit-type-count-total militiaman-line < 8)
+    (up-pending-objects c: militiaman-line < 2)
+    (can-train militiaman-line)
+    =>
+    (train militiaman-line)
+)
+
+(defrule
+    (town-under-attack)
+    (current-age <= feudal-age)
+(or (players-unit-type-count any-enemy knight-line > 3)
+(or (players-unit-type-count any-enemy scout-cavalry-line > 3)
+    (players-unit-type-count any-enemy camel > 3)))
+    (unit-type-count-total spearman-line < 8)
+    (up-pending-objects c: spearman-line < 2)
+    (can-train spearman-line)
+    =>
+    (train spearman-line)
+    (set-goal g-train-spearman-line yes)
+)
+
+(defrule
+    (town-under-attack)
+    (current-age <= feudal-age)
+    (unit-type-count-total archer-line < 4)
+    (up-pending-objects c: archer-line < 2)
+    =>
+    (train archer-line)
+)
+
+(defrule
+    (town-under-attack)
+    (current-age <= feudal-age)
+    (players-unit-type-count any-enemy skirmisher-line > 3)
+    (unit-type-count-total scout-cavalry-line < 4)
+    (up-pending-objects c: scout-cavalry-line < 2)
+    (can-train scout-cavalry-line)
+    =>
+    (train scout-cavalry-line)
+)

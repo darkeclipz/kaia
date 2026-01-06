@@ -34,3 +34,10 @@
     =>
     (release-escrow stone)
 )
+
+(defrule
+    (game-time > 1800)
+    (town-under-attack)
+    =>
+    (up-release-escrow)
+)
