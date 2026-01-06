@@ -1,5 +1,27 @@
 (defrule
     (timer-triggered t-one-minute)
+    (game-time > 900)
     =>
     (up-modify-sn sn-camp-max-distance c:+ 1)
+)
+
+(defrule
+    (current-age == dark-age)
+    =>
+    (set-strategic-number sn-camp-max-distance 15)
+    (disable-self)
+)
+
+(defrule
+    (current-age == feudal-age)
+    =>
+    (set-strategic-number sn-camp-max-distance 20)
+    (disable-self)
+)
+
+(defrule
+    (current-age == castle-age)
+    =>
+    (set-strategic-number sn-camp-max-distance 25)
+    (disable-self)
 )
