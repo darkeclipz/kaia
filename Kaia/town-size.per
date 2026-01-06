@@ -1,0 +1,32 @@
+(defrule
+    (true)
+    =>
+    (set-strategic-number sn-camp-max-distance 25) ; default = 25
+    (set-strategic-number sn-minimum-town-size 8) ; default = 12
+    (set-strategic-number sn-maximum-town-size 14) ; default = 20
+    (disable-self)
+)
+
+(defrule
+    (current-age == castle-age)
+    =>
+    (set-strategic-number sn-minimum-town-size 14) ; default = 12
+    (set-strategic-number sn-maximum-town-size 18) ; default = 20
+    (disable-self)
+)
+
+(defrule
+    (current-age == imperial-age)
+    =>
+    (set-strategic-number sn-minimum-town-size 18) ; default = 12
+    (set-strategic-number sn-maximum-town-size 24) ; default = 20
+    (disable-self)
+)
+
+(defrule
+    (game-time > 1200) ; 20 min
+    =>
+    (set-strategic-number sn-minimum-town-size 24) ; default = 12
+    (set-strategic-number sn-maximum-town-size 28) ; default = 20
+    (disable-self)
+)

@@ -1,0 +1,21 @@
+(defrule
+    (goal g-build yes)
+    (can-build castle)
+    (building-type-count-total castle == 0)
+    (up-pending-objects c: castle == 0)
+    (building-type-count-total town-center >= 2)
+    =>
+    (build castle)
+)
+
+(defrule
+    (goal g-build yes)
+    (can-build castle)
+    (stone-amount > 1100) 
+    (building-type-count-total castle > 0)
+    (building-type-count-total castle < 6)
+    (up-pending-objects c: castle == 0)
+    (unit-type-count-total villager >= 45)
+    =>
+    (build-forward castle)
+)

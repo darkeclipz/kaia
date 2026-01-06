@@ -1,0 +1,12 @@
+(defrule
+    (goal g-build yes)
+    (building-type-count-total mill == 0)
+    (up-pending-objects c: mill == 0)
+    (can-build mill)
+    (or
+        (resource-found food) ; ensure we found berries
+        (game-time > 60) ; in case none found
+    )
+    =>
+    (build mill)
+)

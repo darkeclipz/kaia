@@ -1,0 +1,21 @@
+(defrule
+    (goal g-build yes)
+    (can-build siege-workshop)
+    (building-type-count-total siege-workshop == 0)
+    (up-pending-objects c: siege-workshop == 0)
+    =>
+    (build siege-workshop)
+)
+
+(defrule
+    (goal g-build yes)
+    (can-build siege-workshop)
+    (building-type-count-total siege-workshop < 2)
+    (up-pending-objects c: siege-workshop < 2)
+    (or
+        (current-age >= imperial-age)
+        (wood-amount > 2500)
+    )
+    =>
+    (build siege-workshop)
+)

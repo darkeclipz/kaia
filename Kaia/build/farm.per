@@ -1,0 +1,22 @@
+(defrule
+    (goal g-build yes)
+    (or 
+        (building-type-count-total lumber-camp > 0)
+        (game-time > 30)
+    )
+    (or 
+        (unit-type-count-total villager > 15)
+        (or 
+            (game-time > 600)
+            (and 
+                (game-time > 30) 
+                (not(resource-found food))
+            )
+        )
+    )
+    (idle-farm-count < 3)
+    (up-pending-objects c: farm < 3)
+    (can-build farm)
+    =>
+    (build farm)
+)

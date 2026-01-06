@@ -1,0 +1,12 @@
+(defrule
+    (goal g-build yes)
+    (building-type-count-total mill > 0)
+    (can-build-with-escrow lumber-camp)
+    (resource-found wood)
+    (dropsite-min-distance wood > 3)
+    (up-pending-objects c: lumber-camp == 0)
+    =>
+    (release-escrow wood)
+    (build lumber-camp)
+    (up-modify-sn sn-camp-max-distance c:+ 3)
+)

@@ -1,0 +1,26 @@
+; gold
+(defrule
+    (goal g-build yes)
+    (can-build-with-escrow mining-camp)
+    (resource-found gold)
+    (dropsite-min-distance gold > 3)
+    (up-pending-objects c: mining-camp == 0)
+    (unit-type-count-total villager >= 20)
+    =>
+    (release-escrow wood)
+    (build mining-camp)
+    (up-modify-sn sn-camp-max-distance c:+ 3)
+)
+
+; stone
+(defrule
+    (goal g-build yes)
+    (can-build mining-camp)
+    (resource-found stone)
+    (dropsite-min-distance stone > 3)
+    (up-pending-objects c: mining-camp == 0)
+    (unit-type-count-total villager >= 20)
+    =>
+    (build mining-camp)
+    (up-modify-sn sn-camp-max-distance c:+ 3)
+)

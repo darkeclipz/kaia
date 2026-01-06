@@ -1,0 +1,9 @@
+(defrule
+    (goal g-build yes)
+    (housing-headroom < 4) ; = current-housing-capacity - population
+    (population-headroom > 3) ; = population-cap - current-housing-capacity
+    (up-pending-objects c: house < 2) ; allow 2 houses to be build at the same time
+    (can-build house)
+    =>
+    (build house)
+)

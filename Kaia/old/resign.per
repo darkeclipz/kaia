@@ -1,15 +1,15 @@
 ; resign if population drops to 0
 (defrule 
-    (goal g-resign yes)
+    (goal g-resign no)
 	(game-time > 900)
     (civilian-population == 0)
 	 => 
-    (set-goal g-resigning yes)
+    (set-goal g-resign yes)
 )
 
 ; resign if all military buildings are destroyed
 (defrule
-    (goal g-resign yes)
+    (goal g-resign no)
     (or (game-time > 1800) 
         (current-age >= castle-age))
     (building-type-count-total barracks == 0)
@@ -19,37 +19,37 @@
     (building-type-count-total castle == 0)
     (building-type-count-total town-center == 0)
     =>
-    (set-goal g-resigning yes)
+    (set-goal g-resign yes)
 )
 
 ; delete all military buildings
 (defrule 
-    (goal g-resigning yes)
+    (goal g-resign yes)
     (building-type-count-total barracks > 0)
     =>
     (delete-building barracks)
     (delete-building barracks)
 )
 (defrule 
-    (goal g-resigning yes)
+    (goal g-resign yes)
     (building-type-count-total archery-range > 0)
     =>
     (delete-building archery-range)
 )
 (defrule 
-    (goal g-resigning yes)
+    (goal g-resign yes)
     (building-type-count-total stable > 0)
     =>
     (delete-building stable)
 )
 (defrule 
-    (goal g-resigning yes)
+    (goal g-resign yes)
     (building-type-count-total siege-workshop > 0)
     =>
     (delete-building siege-workshop)
 )
 (defrule 
-    (goal g-resigning yes)
+    (goal g-resign yes)
     (building-type-count-total watch-tower > 0)
     =>
     (delete-building watch-tower)
@@ -58,14 +58,14 @@
     (delete-building watch-tower)
 )
 (defrule 
-    (goal g-resigning yes)
+    (goal g-resign yes)
     (building-type-count-total castle > 0)
     =>
     (delete-building castle)
     (delete-building castle)
 )
 (defrule 
-    (goal g-resigning yes)
+    (goal g-resign yes)
     (building-type-count-total town-center > 0)
     =>
     (delete-building town-center)
@@ -73,7 +73,7 @@
 
 ; resign
 (defrule
-    (goal g-resigning yes)
+    (goal g-resign yes)
     (building-type-count-total barracks == 0)
     (building-type-count-total archery-range == 0)
     (building-type-count-total stable == 0)
@@ -83,6 +83,6 @@
     (building-type-count-total watch-tower == 0)
     =>
     (resign)
-    (set-goal g-resigning no)
+    (set-goal g-resign no)
     (disable-self)
 )

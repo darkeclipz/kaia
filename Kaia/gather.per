@@ -1,0 +1,67 @@
+(defrule
+    (true)
+    =>
+    (set-strategic-number sn-wood-gatherer-percentage 25)
+    (set-strategic-number sn-food-gatherer-percentage 75)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (chat-local-to-self "gather 25/75/0/0")
+    (disable-self)
+)
+
+(defrule
+    (civilian-population >= 10)
+    =>
+    (set-strategic-number sn-wood-gatherer-percentage 50)
+    (set-strategic-number sn-food-gatherer-percentage 50)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (chat-local-to-self "gather 50/50/0/0")
+    (disable-self)
+)
+
+(defrule
+    (civilian-population >= 20)
+    =>
+    (set-strategic-number sn-wood-gatherer-percentage 40)
+    (set-strategic-number sn-food-gatherer-percentage 40)
+    (set-strategic-number sn-gold-gatherer-percentage 20)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (chat-local-to-self "gather 40/40/20/0")
+    (disable-self)
+)
+
+(defrule
+    (civilian-population >= 20)
+    (current-age >= castle-age)
+    =>
+    (set-strategic-number sn-wood-gatherer-percentage 25)
+    (set-strategic-number sn-food-gatherer-percentage 40)
+    (set-strategic-number sn-gold-gatherer-percentage 20)
+    (set-strategic-number sn-stone-gatherer-percentage 15)
+    (chat-local-to-self "gather 25/40/20/15")
+    (disable-self)
+)
+
+; increase max camp size over time
+; (defrule
+;     (game-time > 900)
+;     =>
+;     (set-strategic-number sn-camp-max-distance 37)
+;     (chat-local-to-self "sn-camp-max-distance = 37")
+;     (disable-self)
+; )
+; (defrule
+;     (game-time > 1800)
+;     =>
+;     (set-strategic-number sn-camp-max-distance 50)
+;     (chat-local-to-self "sn-camp-max-distance = 50")
+;     (disable-self)
+; )
+; (defrule
+;     (game-time > 3600)
+;     =>
+;     (set-strategic-number sn-camp-max-distance 100)
+;     (chat-local-to-self "sn-camp-max-distance = 100")
+;     (disable-self)
+; )

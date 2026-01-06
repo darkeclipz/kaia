@@ -1,0 +1,47 @@
+; stack X% escrow
+(defrule
+    (true)
+    =>
+    (set-escrow-percentage wood 30)
+    (set-escrow-percentage food 30)
+    (set-escrow-percentage gold 30)
+    (set-escrow-percentage stone 30)
+    (up-release-escrow)
+    (disable-self)
+)
+
+; release overflow
+(defrule
+    (escrow-amount wood >= 1200)
+    =>
+    (release-escrow wood)
+)
+
+(defrule
+    (escrow-amount food >= 1200)
+    =>
+    (release-escrow food)
+)
+
+(defrule
+    (escrow-amount gold >= 1200)
+    =>
+    (release-escrow gold)
+)
+
+(defrule
+    (escrow-amount stone >= 1200)
+    =>
+    (release-escrow stone)
+)
+
+; release overflow at once
+; (defrule
+;     (or (or (escrow-amount wood >= 1200) 
+;             (escrow-amount food >= 1200))
+;         (or (escrow-amount gold >= 1200)
+;             (escrow-amount stone >= 1200))
+;     )
+;     =>
+;     (up-release-escrow)
+; )

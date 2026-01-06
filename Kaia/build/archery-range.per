@@ -1,0 +1,21 @@
+(defrule
+    (goal g-build yes)
+    (can-build archery-range)
+    (building-type-count-total archery-range == 0)
+    (up-pending-objects c: archery-range == 0)
+    =>
+    (build archery-range)
+)
+
+(defrule
+    (goal g-build yes)
+    (can-build archery-range)
+    (building-type-count-total archery-range < 6)
+    (up-pending-objects c: archery-range < 2)
+    (or
+        (current-age >= imperial-age)
+        (wood-amount > 2500)
+    )
+    =>
+    (build archery-range)
+)

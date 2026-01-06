@@ -1,0 +1,37 @@
+; ; fast castle age
+; (defrule
+;     (goal g-fast-castle yes)
+;     (current-age >= castle-age)
+;     =>
+;     ; (set-strategic-number sn-camp-max-distance 24)
+;     ; (set-strategic-number sn-town-center-placement mining-camp)
+;     (chat-local-to-self "fast castle: reached castle age")
+;     (disable-self)
+; )
+
+; fast castle; buy max 400 stone if needed
+(defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
+(defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
+(defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
+(defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
+
+; fast castle: build town center
+(defrule
+    (goal g-fast-castle yes)
+    (building-type-count-total town-center < 3)
+    (up-pending-objects c: town-center < 2)
+    (can-build town-center)
+    =>
+    (build town-center)
+)
+
+; fast castle complete
+(defrule
+    (goal g-fast-castle yes)
+    (current-age >= castle-age)
+    (building-type-count-total town-center >= 3)
+    =>
+    (set-goal g-fast-castle no)
+    (chat-local-to-self "fast castle: complete")
+    (disable-self)
+)

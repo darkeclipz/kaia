@@ -1,0 +1,21 @@
+(defrule
+    (goal g-build yes)
+    (can-build stable)
+    (building-type-count-total stable == 0)
+    (up-pending-objects c: stable == 0)
+    =>
+    (build stable)
+)
+
+(defrule
+    (goal g-build yes)
+    (can-build stable)
+    (building-type-count-total stable < 6)
+    (up-pending-objects c: stable < 2)
+    (or
+        (current-age >= imperial-age)
+        (wood-amount > 2500)
+    )
+    =>
+    (build stable)
+)

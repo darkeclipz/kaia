@@ -1,0 +1,8 @@
+(defrule
+    (goal g-build yes)
+    (can-build monastery)
+    (building-type-count-total monastery == 0)
+    (up-pending-objects c: monastery == 0)
+    =>
+    (build monastery)
+)

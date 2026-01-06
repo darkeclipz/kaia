@@ -1,0 +1,29 @@
+(defrule
+    (true)
+    =>
+    (set-strategic-number sn-town-center-placement 0)
+    (disable-self)
+)
+
+(defrule
+    (goal g-build yes)
+    (building-type-count-total town-center == 0)
+    (up-pending-objects c: town-center == 0)
+    (can-build-with-escrow town-center)
+    =>
+    (up-release-escrow)
+    (build town-center)
+)
+
+(defrule
+    (goal g-build yes)
+    (or
+        (current-age >= imperial-age)
+        (stone-amount > 2500)
+    )
+    (building-type-count-total town-center < 4)
+    (up-pending-objects c: town-center < 2)
+    (can-build town-center)
+    =>
+    (build town-center)
+)

@@ -1,0 +1,34 @@
+(defrule
+    (goal g-build yes)
+    (current-age == feudal-age)
+    (building-type-count-total watch-tower < 2)
+    (can-build watch-tower)
+    =>
+    (build watch-tower)
+)
+
+(defrule
+    (goal g-build yes)
+    (current-age == castle-age)
+    (building-type-count-total watch-tower < 4)
+    (or
+        (stone-amount > 1000)
+        (building-type-count-total town-center >= 2)
+    )
+    (can-build watch-tower)
+    =>
+    (build watch-tower)
+)
+
+(defrule
+    (goal g-build yes)
+    (current-age == imperial-age)
+    (building-type-count-total watch-tower < 14)
+    (or
+        (stone-amount > 1000)
+        (building-type-count-total town-center >= 3)
+    )
+    (can-build watch-tower)
+    =>
+    (build watch-tower)
+)

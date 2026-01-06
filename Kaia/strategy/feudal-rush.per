@@ -1,0 +1,52 @@
+; feudal rush: two archery ranges
+(defrule
+    (goal g-feudal-rush yes)
+    (can-build archery-range)
+    (building-type-count-total archery-range < 2)
+    (up-pending-objects c: archery-range < 2)
+    =>
+    (build archery-range)
+)
+
+; feudal rush: start training militiaman
+(defrule
+    (goal g-feudal-rush yes)
+    =>
+    (set-goal g-train-militiaman-line yes)
+    (disable-self)
+)
+
+; feudal rush: attack with 4 militiaman
+(defrule
+    (goal g-feudal-rush yes)
+    (unit-type-count-total militiaman-line >= 4)
+    =>
+    ; (attack-now)
+    (set-strategic-number sn-minimum-attack-group-size 1)
+	(set-strategic-number sn-maximum-attack-group-size 4)
+    (set-strategic-number sn-number-attack-groups 4)
+
+    (enable-timer t-stop-attack 120)
+    (set-goal g-train-militiaman-line no)
+    (set-goal g-train-archer-line yes)
+    (chat-local-to-self "feudal rush: first wave")
+    (disable-self)
+)
+
+; feudal rush: atttack with 6 archers
+(defrule
+    (goal g-feudal-rush yes)
+    (unit-type-count-total archer-line >= 6)
+    =>
+    ; (attack-now)
+    (set-strategic-number sn-minimum-attack-group-size 1)
+	(set-strategic-number sn-maximum-attack-group-size 6)
+    (set-strategic-number sn-number-attack-groups 6)
+
+    (enable-timer t-stop-attack 120)
+    (set-goal g-train-archer-line no)
+    (set-goal g-feudal-rush no)
+    (chat-local-to-self "feudal rush: second wave")
+    (chat-local-to-self "feudal rush: completed")
+    (disable-self)
+)

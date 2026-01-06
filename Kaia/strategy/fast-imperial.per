@@ -1,0 +1,28 @@
+(defrule
+    (goal g-fast-imperial yes)
+    (can-research-with-escrow feudal-age)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research feudal-age)
+)
+
+(defrule
+    (goal g-fast-imperial yes)
+    (can-research-with-escrow castle-age)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research castle-age)
+)
+
+(defrule
+    (goal g-fast-imperial yes)
+    (can-research-with-escrow imperial-age)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (release-escrow gold)
+    (research imperial-age)
+    (set-goal g-fast-imperial no)
+)

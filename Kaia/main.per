@@ -1,0 +1,162 @@
+; TODO:
+;   research tech
+;   research unit upgrades only when there is a unit
+;   build bombardment towers
+
+(defconst no 0)
+(defconst yes 1)
+(defconst g-build 1)
+(defconst g-train 2)
+(defconst g-research 3)
+(defconst g-trade 4)
+(defconst g-resign 5)
+(defconst g-resigning 6)
+(defconst g-wall 7)
+(defconst g-feudal-rush 20)
+(defconst g-fast-castle 21)
+(defconst g-fast-imperial 22)
+(defconst g-train-militiaman-line 100)
+(defconst g-train-archer-line 101)
+(defconst g-train-knight-line 102)
+(defconst g-train-battering-ram-line 103)
+(defconst g-train-trebuchet 104)
+(defconst g-train-scorpion-line 105)
+(defconst g-train-mangonel-line 106)
+(defconst g-train-skirmisher-line 107)
+(defconst t-stop-attack 1)
+(defconst t-feudal-rush-done 2)
+(defconst t-fast-castle-done 3)
+
+(defconst num-villagers-dark-age 25)
+(defconst num-villagers-feudal-age 25)
+(defconst num-villagers-castle-age 50)
+(defconst num-villagers-imperial-age 100)
+
+(defconst min-food-needed-for-training 500)
+(defconst min-wood-needed-for-training 500)
+(defconst min-gold-needed-for-training 500)
+
+(defconst min-villagers-dark-age 12)
+(defconst min-villagers-feudal-age 25)
+(defconst min-villagers-castle-age 40)
+(defconst min-villagers-imperial-age 100)
+
+(defrule
+    (true)
+    =>
+    (set-strategic-number sn-do-not-scale-for-difficulty-level 1) ; stop scaling
+    (set-strategic-number sn-consecutive-idle-unit-limit 1) ; gives a new task faster
+    (set-strategic-number sn-enable-patrol-attack 1) ; retarget against nearby sighted units
+    (set-strategic-number sn-wall-targeting-mode 1) ; attack walls
+    (set-strategic-number sn-gather-defense-units 1) ; gather soldiers near town center
+    (set-strategic-number sn-enable-training-queue 15) ; number of units that can be queue'd at a building
+    (set-strategic-number sn-enable-research-queue 1) ; allows technologies to be queued too
+    (set-strategic-number sn-cap-civilian-builders 200) ; allow all civilians to build at the same time
+    (set-strategic-number sn-scale-minimum-attack-group-size 0) ; fixes that min > max, which breaks attack groups
+    (set-strategic-number sn-maximum-hunt-drop-distance 10) ; prevent hunting all over the map
+    (set-strategic-number sn-dropsite-separation-distance 6) ; prevent tons of mining camps
+    (set-strategic-number sn-initial-exploration-required 0) ; can build immediately
+    (set-strategic-number sn-total-number-explorers 1)
+	(set-strategic-number sn-number-explore-groups 1)
+    (set-strategic-number sn-object-repair-level 14335) ; https://airef.github.io/strategic-numbers/sn-details.html#sn-object-repair-level
+    (set-strategic-number sn-defer-dropsite-update 1) ; if camp is build at enemy; only "sacrafice" one villager    (set-strategic-number sn-group-commander-selection-method 2)
+    (set-strategic-number sn-percent-attack-soldiers 100)
+    (set-strategic-number sn-group-form-distance 4)
+    (set-strategic-number sn-attack-group-gather-spacing 1)
+    (set-strategic-number sn-minimum-attack-group-size 24)
+	(set-strategic-number sn-maximum-attack-group-size 500)
+    (set-strategic-number sn-number-attack-groups 0)
+    ; (enable-wall-placement 1)
+    ; (set-strategic-number sn-gate-type-for-wall 1) ; stone = 0, palaside = 1
+    (disable-self)
+)
+
+(load "Kaia\gather")
+(load "Kaia\town-size")
+(load "Kaia\escrow")
+(load "Kaia\trade")
+(load "Kaia\research")
+(load "Kaia\resign")
+(load "Kaia\train\villager")
+(load "Kaia\train\monk")
+(load "Kaia\train\militiaman-line")
+(load "Kaia\train\archer-line")
+(load "Kaia\train\knight-line")
+(load "Kaia\train\battering-ram-line")
+(load "Kaia\train\trebuchet")
+(load "Kaia\train\scorpion-line")
+(load "Kaia\train\mangonel-line")
+(load "Kaia\train\skirmisher-line")
+(load "Kaia\build\queue")
+(load "Kaia\build\town-center")
+(load "Kaia\build\house")
+(load "Kaia\build\mill")
+(load "Kaia\build\farm")
+(load "Kaia\build\lumber-camp")
+(load "Kaia\build\mining-camp")
+(load "Kaia\build\barracks")
+(load "Kaia\build\blacksmith")
+(load "Kaia\build\archery-range")
+(load "Kaia\build\stable")
+(load "Kaia\build\siege-workshop")
+(load "Kaia\build\market")
+(load "Kaia\build\monastery")
+(load "Kaia\build\university")
+(load "Kaia\build\castle")
+(load "Kaia\build\watch-tower")
+(load "Kaia\build\wall")
+(load "Kaia\strategy\feudal-rush")
+(load "Kaia\strategy\fast-castle")
+(load "Kaia\strategy\fast-imperial")
+
+(defrule
+    (true)
+    =>
+    ; (set-goal g-feudal-rush yes)
+    ; (set-goal g-fast-castle yes)
+    (set-goal g-build yes)
+    (set-goal g-train yes)
+    (set-goal g-research yes)
+    (set-goal g-trade yes)
+    (set-goal g-resign yes)
+    (set-goal g-wall yes)
+    (set-goal g-train-militiaman-line yes)
+    (set-goal g-train-archer-line yes)
+    (set-goal g-train-knight-line yes)
+    (set-goal g-train-battering-ram-line yes)
+    (set-goal g-train-trebuchet yes)
+    (set-goal g-train-scorpion-line yes)
+    (set-goal g-train-mangonel-line yes)
+    (set-goal g-train-skirmisher-line yes)
+)
+
+; fast imperial
+(defrule
+    (game-time < 30)
+    (food-amount > 10000)
+    (wood-amount > 10000)
+    (gold-amount > 5000)
+    (stone-amount > 2500)
+    =>
+    (set-goal g-fast-imperial yes)
+    (disable-self)
+)
+
+; attack enemy
+(defrule
+    (true)
+    =>
+    (set-strategic-number sn-number-attack-groups 8) ; 20
+    (set-strategic-number sn-minimum-attack-group-size 100) ; 24
+    (set-strategic-number sn-maximum-attack-group-size 500)
+    (disable-self)
+)
+
+; stop attacking if timer triggers
+(defrule
+    (timer-triggered t-stop-attack)
+    =>
+    (disable-timer t-stop-attack)
+    (up-reset-attack-now)
+    (set-strategic-number sn-number-attack-groups 0)
+)

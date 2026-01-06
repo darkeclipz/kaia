@@ -1,0 +1,8 @@
+(defrule
+    (goal g-build yes)
+    (can-build blacksmith)
+    (building-type-count-total blacksmith == 0)
+    (up-pending-objects c: blacksmith == 0)
+    =>
+    (build blacksmith)
+)
