@@ -21,6 +21,8 @@
 
 ; check cavalry
 (defrule (unit-type-count-total knight-line >= min-units-required-for-upgrade) => (set-goal g-has-cavalry yes))
+(defrule (unit-type-count-total scout-cavalry-line-line >= min-units-required-for-upgrade) => (set-goal g-has-cavalry yes))
+(defrule (unit-type-count-total cavalry-archer-line-line >= min-units-required-for-upgrade) => (set-goal g-has-cavalry yes))
 
 ; check infantry
 (defrule (unit-type-count-total militiaman-line >= min-units-required-for-upgrade) => (set-goal g-has-infantry yes))
@@ -31,11 +33,13 @@
 ; check ranged units
 (defrule (unit-type-count-total archer-line >= min-units-required-for-upgrade) => (set-goal g-has-ranged-units yes))
 (defrule (unit-type-count-total skirmisher-line >= min-units-required-for-upgrade) => (set-goal g-has-ranged-units yes))
-(defrule (unit-type-count-total scorpion-line >= min-units-required-for-upgrade) => (set-goal g-has-ranged-units yes))
+(defrule (unit-type-count-total scorpion-line >= min-siege-required-for-upgrade) => (set-goal g-has-ranged-units yes))
+(defrule (unit-type-count-total cavalry-archer-line >= min-units-required-for-upgrade) => (set-goal g-has-ranged-units yes))
 
 ; check archers
 (defrule (unit-type-count-total archer-line >= min-units-required-for-upgrade) => (set-goal g-has-archers yes))
 (defrule (unit-type-count-total skirmisher-line >= min-units-required-for-upgrade) => (set-goal g-has-archers yes))
+(defrule (unit-type-count-total cavalry-archer-line >= min-units-required-for-upgrade) => (set-goal g-has-archers yes))
 
 ; check siege
 (defrule (unit-type-count-total battering-ram-line >= min-siege-required-for-upgrade) => (set-goal g-has-siege yes))

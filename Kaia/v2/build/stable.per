@@ -3,6 +3,8 @@
     (can-build stable)
     (building-type-count-total stable == 0)
     (up-pending-objects c: stable == 0)
+(or (building-type-count-total town-center >= 2)
+    (wood-amount > 800))
     =>
     (build stable)
 )
@@ -13,10 +15,8 @@
     (can-build stable)
     (building-type-count-total stable < num-stable-imperial-age)
     (up-pending-objects c: stable < 2)
-    (or
-        (current-age >= imperial-age)
-        (wood-amount > 2500)
-    )
+(or (current-age >= imperial-age)
+    (wood-amount > 2500))
     =>
     (build stable)
 )

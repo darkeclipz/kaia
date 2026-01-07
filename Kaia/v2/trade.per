@@ -33,6 +33,16 @@
     (sell-commodity wood)
 )
 
+; sell excessive wood more aggressively later
+(defrule
+    (goal g-trade yes)
+    (game-time > 3600)
+    (wood-amount > 10000)
+    (can-sell-commodity wood)
+    =>
+    (sell-commodity wood)
+)
+
 ; buy food if it is very low
 (defrule
     (goal g-trade yes)
@@ -48,6 +58,16 @@
     (goal g-trade yes)
     (gold-amount < min-gold-needed-for-trading-excess-resources)
     (food-amount > 5000)
+    (can-sell-commodity food)
+    =>
+    (sell-commodity food)
+)
+
+; sell excessive food more aggressively later
+(defrule
+    (goal g-trade yes)
+    (game-time > 3600)
+    (food-amount > 10000)
     (can-sell-commodity food)
     =>
     (sell-commodity food)

@@ -10,8 +10,17 @@
 )
 
 (defrule
+    (current-age >= castle-age)
+    (gold-amount > 1500)
+    (up-pending-objects c: monk == 0)
+    (unit-type-count-total monk < 3)
+    (can-train monk)
+    =>
+    (train monk)
+)
+
+(defrule
     (goal g-train-monk yes)
-    (food-amount >= min-food-needed-for-training)
     (gold-amount >= min-gold-needed-for-training)
     (can-train militiaman-line)
     (up-pending-objects c: monk == 0)

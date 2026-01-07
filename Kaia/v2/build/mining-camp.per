@@ -5,11 +5,12 @@
     (resource-found gold)
     (dropsite-min-distance gold > 3)
     (up-pending-objects c: mining-camp == 0)
-    (unit-type-count-total villager >= 20)
+(or (unit-type-count-total villager >= 20)
+    (current-age >= feudal-age))
     =>
     (release-escrow wood)
     (build mining-camp)
-    (up-modify-sn sn-camp-max-distance c:+ 3)
+    (up-modify-sn sn-mining-camp-max-distance c:+ 4)
 )
 
 ; stone
@@ -19,9 +20,9 @@
     (resource-found stone)
     (dropsite-min-distance stone > 3)
     (up-pending-objects c: mining-camp == 0)
-    (unit-type-count-total villager >= 20)
-    (current-age >= castle-age)
+(or (unit-type-count-total villager >= 20)
+    (current-age >= castle-age))
     =>
     (build mining-camp)
-    (up-modify-sn sn-camp-max-distance c:+ 3)
+    (up-modify-sn sn-mining-camp-max-distance c:+ 4)
 )

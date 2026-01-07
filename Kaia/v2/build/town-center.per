@@ -15,6 +15,27 @@
     (build town-center)
 )
 
+(defrule 
+    (current-age == castle-age)
+    (stone-amount < 100)
+    (can-buy-commodity stone) 
+    => 
+    (buy-commodity stone)
+    (disable-self)
+)
+
+(defrule
+    (goal g-build yes)
+    (or
+        (current-age >= castle-age)
+        (stone-amount > 2500)
+    )
+    =>
+    (set-strategic-number sn-town-center-placement mining-camp)
+    (set-strategic-number sn-camp-max-distance 25)
+    (disable-self)
+)
+
 (defrule
     (goal g-build yes)
     (or
@@ -23,9 +44,27 @@
     )
     (building-type-count-total town-center < 3)
     (up-pending-objects c: town-center < 1)
-    (can-build town-center)
+    (can-build-with-escrow town-center)
     =>
+    (release-escrow wood)
+    (release-escrow stone)
     (build town-center)
+)
+
+(defrule
+    (goal g-build yes)
+    (building-type-count-total town-center == 3)
+    =>
+    (set-strategic-number sn-town-center-placement 0)
+    (disable-self)    
+)
+
+(defrule
+    (goal g-build yes)
+    (building-type-count-total town-center == 4)
+    =>
+    (set-strategic-number sn-town-center-placement 0)
+    (disable-self)    
 )
 
 (defrule
@@ -35,7 +74,7 @@
         (stone-amount > 2500)
     )
     (building-type-count-total town-center < 4)
-    (up-pending-objects c: town-center < 2)
+    (up-pending-objects c: town-center < 1)
     (can-build town-center)
     =>
     (build town-center)

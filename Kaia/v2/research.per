@@ -103,34 +103,6 @@
     (research ri-stone-shaft-mining)
 )
 
-; archery range
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-crossbow)
-    (unit-type-count-total archer-line > 2)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-crossbow)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-arbalester)
-    (unit-type-count-total archer-line > 2)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-arbalester)
-)
-(defrule
-    (goal g-research yes)
-    (can-research-with-escrow ri-thumb-ring)
-    (unit-type-count-total archer-line > 2)
-    =>
-    (release-escrow food)
-    (release-escrow gold)
-    (research ri-thumb-ring)
-)
 
 ; stable
 (defrule
@@ -163,6 +135,15 @@
     (release-escrow food)
     (release-escrow gold)
     (research ri-paladin)
+)
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow ri-light-cavalry)
+    (unit-type-count-total scout-cavalry-line >= min-units-required-for-upgrade)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-light-cavalry)
 )
 
 ; monastery

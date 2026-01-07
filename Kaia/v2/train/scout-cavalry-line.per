@@ -4,3 +4,27 @@
     =>
     (train scout-cavalry-line)
 )
+
+(defrule
+    (goal g-train-scout-cavalry-line yes)
+    (food-amount >= min-wood-needed-for-training)
+    (gold-amount < 2000)
+    (can-train scout-cavalry-line)
+    (or
+        (or 
+            (or 
+                (and(building-type-count-total stable == 1)(up-pending-objects c: scout-cavalry-line < 1))
+                (and(building-type-count-total stable == 2)(up-pending-objects c: scout-cavalry-line < 2))
+            )
+            (or
+                (and(building-type-count-total stable == 3)(up-pending-objects c: scout-cavalry-line < 3))
+                (and(building-type-count-total stable == 4)(up-pending-objects c: scout-cavalry-line < 4)))
+        )
+        (or
+            (and(building-type-count-total stable == 5)(up-pending-objects c: scout-cavalry-line < 5))
+            (and(building-type-count-total stable >= 6)(up-pending-objects c: scout-cavalry-line < 6))
+        )
+    )
+    =>
+    (train scout-cavalry-line)
+)

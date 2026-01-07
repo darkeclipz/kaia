@@ -2,6 +2,7 @@
     (goal g-build yes)
     (can-build monastery)
     (building-type-count-total monastery == 0)
+    (building-type-count-total town-center >= 2)
     (up-pending-objects c: monastery == 0)
     =>
     (build monastery)

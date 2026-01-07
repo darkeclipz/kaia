@@ -29,3 +29,19 @@
     (set-strategic-number sn-maximum-town-size 28) ; default = 20
     (disable-self)
 )
+
+(defrule
+    (game-time > 2400) ; 40 min
+    =>
+    (set-strategic-number sn-minimum-town-size 26) ; default = 12
+    (set-strategic-number sn-maximum-town-size 30) ; default = 20
+    (disable-self)
+)
+
+(defrule
+    (game-time > 3600) ; 60 min
+    =>
+    (set-strategic-number sn-minimum-town-size 28) ; default = 12
+    (set-strategic-number sn-maximum-town-size 33) ; default = 20
+    (disable-self)
+)

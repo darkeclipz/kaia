@@ -7,7 +7,9 @@
     (stone-amount > 2500)
     =>
     (set-goal g-fast-castle yes)
-    (chat-local-to-self "fast castle: enabled (excessive resources detected)")
+    (chat-local-to-self "fast castle: enabled")
+    (set-goal g-train-archer-line yes)
+    ; (set-goal g-knight-rush yes)
     (disable-self)
 )
 
@@ -31,29 +33,105 @@
     (research castle-age)
 )
 
+; mining camps before its full with other buildings
+(defrule
+    (goal g-fast-castle yes)
+    (goal g-build yes)
+(or (resource-found gold)
+    (resource-found stone))
+    (goal g-fast-castle yes)
+    (wood-amount > 2000)
+    (up-pending-objects c: mining-camp == 0)
+    (building-type-count-total mining-camp < 2)
+    (can-build mining-camp)
+    =>
+    (build mining-camp)
+    (up-modify-sn sn-mining-camp-max-distance c:+ 15)
+)
+
+; ; place town center next to gold or stone
+; (defrule
+;     (goal g-fast-castle yes)
+;     =>
+;     (set-strategic-number sn-town-center-placement mining-camp)
+;     (disable-self)
+; )
+
 ; fast castle; buy max 400 stone if needed
 (defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
 (defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
 (defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
 (defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
 
+; increase camp distance
+(defrule
+    (goal g-fast-castle yes)
+    (current-age == castle-age)
+    =>
+    (set-strategic-number sn-town-center-placement mining-camp)
+    (set-strategic-number sn-mining-camp-max-distance 20)
+    (disable-self)
+)
+
+; militiaman to defend
+(defrule
+    (goal g-fast-castle yes)
+    (unit-type-count-total militiaman-line < 8)
+    (up-pending-objects c: militiaman-line < 2)
+    (can-train militiaman-line)
+    =>
+    (train militiaman-line)
+)
+
+; upgrade militiaman asap
+(defrule
+    (goal g-fast-castle yes)
+    (can-research ri-man-at-arms)
+    =>
+    (research ri-man-at-arms)
+)
+
+; train archers to defend
+(defrule
+    (goal g-fast-castle yes)
+    (unit-type-count-total archer-line < 8)
+    (up-pending-objects c: archer-line < 2)
+    (can-train archer-line)
+    =>
+    (train archer-line)
+)
+
+; knight to defend
+(defrule
+    (goal g-fast-castle yes)
+    (unit-type-count-total knight-line < 8)
+    (up-pending-objects c: knight-line < 2)
+    (can-train knight-line)
+    =>
+    (train knight-line)
+)
+
 ; build 4 town centers
 (defrule
     (goal g-fast-castle yes)
     (building-type-count-total town-center < 3)
-    (up-pending-objects c: town-center < 2)
+    (up-pending-objects c: town-center == 0)
     (can-build town-center)
     =>
     (build town-center)
+    (up-modify-sn sn-mining-camp-max-distance c:+ 5)
 )
 
-; done
+; research imperial age
 (defrule
     (goal g-fast-castle yes)
-    (current-age >= castle-age)
-    (building-type-count-total town-center >= 3)
+    (can-research-with-escrow imperial-age)
     =>
+    (release-escrow food)
+    (release-escrow wood)
+    (release-escrow gold)
+    (research imperial-age)
     (set-goal g-fast-castle no)
+    (set-strategic-number sn-town-center-placement 0)
     (chat-local-to-self "fast castle: complete")
-    (disable-self)
 )

@@ -3,6 +3,8 @@
     (can-build archery-range)
     (building-type-count-total archery-range == 0)
     (up-pending-objects c: archery-range == 0)
+(or (building-type-count-total town-center >= 2)
+    (wood-amount > 800))
     =>
     (build archery-range)
 )

@@ -1,3 +1,6 @@
+; walls make it very hard for infantry to leave the town...
+; lets try to build only 65% of the walls
+
 (defrule
     (true)
     =>
@@ -10,11 +13,22 @@
     (goal g-wall yes)
     (current-age == imperial-age)
     (can-build-wall wall-perimeter stone-wall-line)
-    (wall-completed-percentage wall-perimeter < 100)
+    (wall-completed-percentage wall-perimeter <= 65)
     (building-type-count-total watch-tower >= 4)
     (building-type-count-total university >= 1)
     (building-type-count-total monastery >= 1)
     (building-type-count-total town-center >= 2)
+    (not (town-under-attack))
+    (unit-type-count-total villager >= 40)
+    =>
+    (build-wall wall-perimeter stone-wall-line)
+)
+
+(defrule
+    (goal g-wall yes)
+    (town-under-attack)
+    (can-build-wall wall-perimeter stone-wall-line)
+    (building-type-count-total stone-wall-line >= 10)
     =>
     (build-wall wall-perimeter stone-wall-line)
 )
@@ -22,35 +36,10 @@
 (defrule
     (goal g-wall yes)
     (can-build-gate wall-perimeter)
-    (wall-completed-percentage wall-perimeter >= 20)
-    (building-type-count-total gate < 1)
-    =>
-    (build-gate wall-perimeter)
-)
-
-(defrule
-    (goal g-wall yes)
-    (can-build-gate wall-perimeter)
-    (wall-completed-percentage wall-perimeter >= 45)
-    (building-type-count-total gate < 2)
-    =>
-    (build-gate wall-perimeter)
-)
-
-(defrule
-    (goal g-wall yes)
-    (can-build-gate wall-perimeter)
-    (wall-completed-percentage wall-perimeter >= 70)
-    (building-type-count-total gate < 3)
-    =>
-    (build-gate wall-perimeter)
-)
-
-(defrule
-    (goal g-wall yes)
-    (can-build-gate wall-perimeter)
-    (wall-completed-percentage wall-perimeter >= 95)
+    (wall-completed-percentage wall-perimeter < 100)
     (building-type-count-total gate < 5)
+    (not (town-under-attack))
+    (unit-type-count-total villager >= 40)
     =>
     (build-gate wall-perimeter)
 )

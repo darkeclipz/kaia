@@ -2,7 +2,7 @@
 (defrule 
     (goal g-resign yes)
 	(game-time > 900)
-    (civilian-population == 0)
+    (civilian-population < 5)
 	 => 
     (set-goal g-resigning yes)
 )

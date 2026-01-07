@@ -7,3 +7,24 @@
     =>
     (build house)
 )
+
+(defrule
+    (goal g-build yes)
+    (housing-headroom < 9) ; = current-housing-capacity - population
+    (population-headroom > 3) ; = population-cap - current-housing-capacity
+    (up-pending-objects c: house < 3) ; allow 2 houses to be build at the same time
+    (can-build house)
+    =>
+    (build house)
+)
+
+(defrule
+    (goal g-build yes)
+    (wood-amount > 5000)
+    (current-age >= castle-age)
+    (population-headroom > 8)
+    (up-pending-objects c: house < 2)
+    (can-build house)
+    =>
+    (build house)
+)

@@ -1,0 +1,23 @@
+(defrule
+    (goal g-train-cavalry-archer-line yes)
+    (food-amount >= min-wood-needed-for-training)
+    (gold-amount >= min-gold-needed-for-training)
+    (can-train cavalry-archer-line)
+    (or
+        (or 
+            (or 
+                (and(building-type-count-total archery-range == 1)(up-pending-objects c: cavalry-archer-line < 1))
+                (and(building-type-count-total archery-range == 2)(up-pending-objects c: cavalry-archer-line < 2))
+            )
+            (or
+                (and(building-type-count-total archery-range == 3)(up-pending-objects c: cavalry-archer-line < 3))
+                (and(building-type-count-total archery-range == 4)(up-pending-objects c: cavalry-archer-line < 4)))
+        )
+        (or
+            (and(building-type-count-total archery-range == 5)(up-pending-objects c: cavalry-archer-line < 5))
+            (and(building-type-count-total archery-range >= 6)(up-pending-objects c: cavalry-archer-line < 6))
+        )
+    )
+    =>
+    (train cavalry-archer-line)
+)

@@ -3,10 +3,9 @@
     (building-type-count-total mill == 0)
     (up-pending-objects c: mill == 0)
     (can-build mill)
-    (or
-        (resource-found food) ; ensure we found berries
-        (game-time > 90) ; in case none found
-    )
+    (or (resource-found food) ; ensure we found berries
+    (or (game-time > 90) ; in case none found
+        (wood-amount > 2000)))
     =>
     (build mill)
 )

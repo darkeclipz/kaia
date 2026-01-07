@@ -2,6 +2,7 @@
     (goal g-build yes)
     (can-build siege-workshop)
     (building-type-count-total siege-workshop == 0)
+    (building-type-count-total town-center >= 2)
     (up-pending-objects c: siege-workshop == 0)
     =>
     (build siege-workshop)

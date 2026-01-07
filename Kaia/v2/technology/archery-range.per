@@ -1,0 +1,43 @@
+; crossbow man
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total archer-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-crossbow)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-crossbow)
+)
+
+; arbalester
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total archer-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-arbalester)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-arbalester)
+)
+
+; heavy cavalry archer
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total cavalry-arche-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-heavy-cavalry-archer)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-heavy-cavalry-archer)
+)
+
+; thumb ring
+(defrule
+    (goal g-research yes)
+    (goal g-has-archers)
+    (can-research-with-escrow ri-thumb-ring)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-thumb-ring)
+)
