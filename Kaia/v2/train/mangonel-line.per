@@ -3,7 +3,7 @@
     (goal g-train-mangonel-line yes)
     (wood-amount >= min-wood-needed-for-training)
     (gold-amount >= min-gold-needed-for-training)
-    (population-headroom >= 5)
+    (housing-headroom >= 5)
     (or
         (and (current-age == castle-age)(unit-type-count-total mangonel-line < 4))
         (and (current-age >= imperial-age)(unit-type-count-total mangonel-line < 12))
