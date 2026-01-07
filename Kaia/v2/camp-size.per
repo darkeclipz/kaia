@@ -1,11 +1,18 @@
+; (defrule
+;     (timer-triggered t-five-minutes)
+;     (current-age >= imperial-age)
+;     (game-time > 2100)
+;     =>
+;     (up-modify-sn sn-camp-max-distance c:+ 1)
+;     (up-modify-sn sn-lumber-camp-max-distance c: +1)
+;     (up-modify-sn sn-mining-camp-max-distance c: +1)
+; )
+
 (defrule
-    (timer-triggered t-five-minutes)
-    (current-age >= imperial-age)
-    (game-time > 2100)
+    (true)
     =>
-    (up-modify-sn sn-camp-max-distance c:+ 1)
-    (up-modify-sn sn-lumber-camp-max-distance c: +1)
-    (up-modify-sn sn-mining-camp-max-distance c: +1)
+    (set-strategic-number sn-camp-max-distance 12)
+    (disable-self)
 )
 
 (defrule
@@ -16,26 +23,26 @@
     (disable-self)
 )
 
-(defrule
-    (current-age == feudal-age)
-    =>
-    (set-strategic-number sn-lumber-camp-max-distance 12)
-    (set-strategic-number sn-mining-camp-max-distance 12)
-    (disable-self)
-)
+; (defrule
+;     (current-age == feudal-age)
+;     =>
+;     (set-strategic-number sn-lumber-camp-max-distance 12)
+;     (set-strategic-number sn-mining-camp-max-distance 12)
+;     (disable-self)
+; )
 
-(defrule
-    (current-age == castle-age)
-    =>
-    (set-strategic-number sn-lumber-camp-max-distance 17)
-    (set-strategic-number sn-mining-camp-max-distance 17)
-    (disable-self)
-)
+; (defrule
+;     (current-age == castle-age)
+;     =>
+;     (set-strategic-number sn-lumber-camp-max-distance 17)
+;     (set-strategic-number sn-mining-camp-max-distance 17)
+;     (disable-self)
+; )
 
-(defrule
-    (current-age == imperial-age)
-    =>
-    (set-strategic-number sn-lumber-camp-max-distance 23)
-    (set-strategic-number sn-mining-camp-max-distance 23)
-    (disable-self)
-)
+; (defrule
+;     (current-age == imperial-age)
+;     =>
+;     (set-strategic-number sn-lumber-camp-max-distance 23)
+;     (set-strategic-number sn-mining-camp-max-distance 23)
+;     (disable-self)
+; )

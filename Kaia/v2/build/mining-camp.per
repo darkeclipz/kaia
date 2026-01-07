@@ -1,28 +1,14 @@
-; gold
 (defrule
     (goal g-build yes)
     (can-build-with-escrow mining-camp)
     (resource-found gold)
-    (dropsite-min-distance gold > 3)
+(or (dropsite-min-distance gold > 3)
+    (dropsite-min-distance stone > 3))
     (up-pending-objects c: mining-camp == 0)
 (or (unit-type-count-total villager >= 20)
     (current-age >= feudal-age))
     =>
     (release-escrow wood)
-    (build mining-camp)
-    (up-modify-sn sn-mining-camp-max-distance c:+ 5)
-)
-
-; stone
-(defrule
-    (goal g-build yes)
-    (can-build mining-camp)
-    (resource-found stone)
-    (dropsite-min-distance stone > 3)
-    (up-pending-objects c: mining-camp == 0)
-(or (unit-type-count-total villager >= 20)
-    (current-age >= castle-age))
-    =>
     (build mining-camp)
     (up-modify-sn sn-mining-camp-max-distance c:+ 5)
 )

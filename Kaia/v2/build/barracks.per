@@ -4,7 +4,8 @@
     (building-type-count-total barracks == 0)
     (up-pending-objects c: barracks == 0)
     (building-type-count-total mill > 0)
-    (building-type-count-total lumber-camp > 0)
+(or (building-type-count-total lumber-camp > 0)
+    (wood-amount > 2000))
     =>
     (build barracks)
 )

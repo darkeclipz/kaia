@@ -16,6 +16,8 @@
 (defconst g-fast-imperial 22)
 (defconst g-knight-rush 23)
 (defconst g-attacking 24)
+(defconst g-auto-town-size 25)
+(defconst g-forward-build-military 26)
 (defconst g-train-militiaman-line 100)
 (defconst g-train-archer-line 101)
 (defconst g-train-knight-line 102)
@@ -41,7 +43,7 @@
 (defconst t-one-minute 1)
 (defconst t-five-minutes 2)
 (defconst t-stop-attack 3)
-(defconst t-task-ungrouped-soldiers 4)
+(defconst t-retreat 4)
 
 ; parameters
 (defconst num-villagers-dark-age 25)
@@ -77,7 +79,7 @@
     (set-strategic-number sn-maximum-patrol-distance 5) ; don't walk too far off
     (set-strategic-number sn-wall-targeting-mode 1) ; attack walls
     (set-strategic-number sn-gather-defense-units 1) ; gather soldiers near town center
-    ; (set-strategic-number sn-task-ungrouped-soldiers 0) ; spread soldiers
+    ; (set-strategic-number sn-task-ungrouped-soldiers 0) ; spread soldiers; terrible
     (set-strategic-number sn-enable-training-queue 15) ; number of units that can be queued at a building
     (set-strategic-number sn-enable-research-queue 1) ; allows technologies to be queued too
     (set-strategic-number sn-cap-civilian-builders 200) ; allow all civilians to build at the same time
@@ -101,6 +103,7 @@
 (defrule
     (true)
     =>
+    (set-goal g-auto-town-size yes)
     (set-goal g-feudal-rush yes)
     (set-goal g-build yes)
     (set-goal g-train yes)
@@ -141,6 +144,7 @@
 (load "Kaia\v2\strategy\early-counter")
 (load "Kaia\v2\strategy\counter")
 (load "Kaia\v2\strategy\knight-rush")
+(load "Kaia\v2\strategy\retreat")
 (load "Kaia\v2\train\villager")
 (load "Kaia\v2\train\militiaman-line")
 (load "Kaia\v2\train\spearman-line")
@@ -207,3 +211,4 @@
 ;     (set-strategic-number sn-gather-defense-units 1)
 ;     (disable-timer t-task-ungrouped-soldiers)
 ; )
+

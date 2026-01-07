@@ -21,6 +21,12 @@
     (set-goal g-resigning yes)
 )
 
+(defrule 
+    (goal g-resigning yes)
+    (building-type-count-total market > 0)
+    =>
+    (delete-building market)
+)
 ; delete all military buildings
 (defrule 
     (goal g-resigning yes)

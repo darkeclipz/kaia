@@ -32,7 +32,7 @@
     )
     =>
     (set-strategic-number sn-town-center-placement mining-camp)
-    (set-strategic-number sn-camp-max-distance 25)
+    ; (set-strategic-number sn-mining-camp-max-distance 17)
     (disable-self)
 )
 
@@ -49,6 +49,7 @@
     (release-escrow wood)
     (release-escrow stone)
     (build town-center)
+    (up-modify-sn sn-mining-camp-max-distance c:+ 3)
 )
 
 (defrule
@@ -78,4 +79,5 @@
     (can-build town-center)
     =>
     (build town-center)
+    (up-modify-sn sn-mining-camp-max-distance c:+ 3)
 )

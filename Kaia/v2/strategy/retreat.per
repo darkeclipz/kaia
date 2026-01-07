@@ -1,0 +1,18 @@
+; ; retreat a bit every minute to pull them into our town
+; (defrule
+;     (timer-triggered t-one-minute)
+;     (current-age == imperial-age)
+;     =>
+;     (set-goal g-auto-town-size no)
+;     (set-goal g-attack no)
+;     (set-strategic-number sn-minimum-town-size 1)
+;     (set-strategic-number sn-maximum-town-size 15)
+;     (enable-timer t-retreat 3)
+; )
+; (defrule
+;     (timer-triggered t-retreat)
+;     =>
+;     (set-goal g-attack yes)
+;     (set-goal g-auto-town-size yes)
+;     (disable-timer t-retreat)
+; )
