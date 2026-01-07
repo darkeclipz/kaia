@@ -5,6 +5,7 @@
     (disable-timer t-stop-attack)
     (up-reset-attack-now)
     (set-strategic-number sn-number-attack-groups 0)
+    (set-strategic-number sn-percent-attack-soldiers 0)
     (set-goal g-attacking no)
     (chat-local-to-self "stop attack")
 )
@@ -15,6 +16,7 @@
     =>
     (up-reset-attack-now)
     (set-strategic-number sn-number-attack-groups 0)
+    (set-strategic-number sn-percent-attack-soldiers 0)
     (up-reset-target-priorities priority-offense 0)
     (set-goal g-attacking no)
 )

@@ -16,7 +16,6 @@
     (building-type-count-total archery-range == 0)
     (building-type-count-total stable == 0)
     (building-type-count-total siege-workshop == 0)
-    (building-type-count-total castle == 0)
     (building-type-count-total town-center == 0)
     =>
     (set-goal g-resigning yes)
@@ -50,25 +49,15 @@
 )
 (defrule 
     (goal g-resigning yes)
-    (building-type-count-total watch-tower > 0)
-    =>
-    (delete-building watch-tower)
-    (delete-building watch-tower)
-    (delete-building watch-tower)
-    (delete-building watch-tower)
-)
-(defrule 
-    (goal g-resigning yes)
-    (building-type-count-total castle > 0)
-    =>
-    (delete-building castle)
-    (delete-building castle)
-)
-(defrule 
-    (goal g-resigning yes)
     (building-type-count-total town-center > 0)
     =>
     (delete-building town-center)
+)
+(defrule 
+    (goal g-resigning yes)
+    (building-type-count-total monastery > 0)
+    =>
+    (delete-building monastery)
 )
 
 ; resign
@@ -78,9 +67,8 @@
     (building-type-count-total archery-range == 0)
     (building-type-count-total stable == 0)
     (building-type-count-total siege-workshop == 0)
-    (building-type-count-total castle == 0)
     (building-type-count-total town-center == 0)
-    (building-type-count-total watch-tower == 0)
+    (building-type-count-total monastery == 0)
     =>
     (resign)
     (set-goal g-resigning no)

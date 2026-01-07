@@ -16,18 +16,24 @@
 )
 
 ; train 4 militiaman
-(defrule (goal g-feudal-rush yes)(can-train militiaman-line) => (train militiaman-line)(disable-self))
-(defrule (goal g-feudal-rush yes)(can-train militiaman-line) => (train militiaman-line)(disable-self))
-(defrule (goal g-feudal-rush yes)(can-train militiaman-line) => (train militiaman-line)(disable-self))
-(defrule (goal g-feudal-rush yes)(can-train militiaman-line) => (train militiaman-line)(disable-self))
+(defrule
+    (goal g-feudal-rush yes)
+    (unit-type-count-total militiaman-line < 4)
+    (up-pending-objects c: militiaman-line == 0)
+    (can-train militiaman-line)
+    =>
+    (train militiaman-line)
+)
 
 ; train 6 archers
-(defrule (goal g-feudal-rush yes)(can-train archer-line) => (train archer-line)(disable-self))
-(defrule (goal g-feudal-rush yes)(can-train archer-line) => (train archer-line)(disable-self))
-(defrule (goal g-feudal-rush yes)(can-train archer-line) => (train archer-line)(disable-self))
-(defrule (goal g-feudal-rush yes)(can-train archer-line) => (train archer-line)(disable-self))
-(defrule (goal g-feudal-rush yes)(can-train archer-line) => (train archer-line)(disable-self))
-(defrule (goal g-feudal-rush yes)(can-train archer-line) => (train archer-line)(disable-self))
+(defrule
+    (goal g-feudal-rush yes)
+    (unit-type-count-total archer-line < 6)
+    (up-pending-objects c: archer-line == 0)
+    (can-train archer-line)
+    =>
+    (train archer-line)
+)
 
 ; attack
 (defrule
@@ -43,7 +49,6 @@
     (up-set-offense-priority c: villager c: 11)
     (enable-timer t-stop-attack 120)
     (set-goal g-feudal-rush no)
-    (chat-local-to-self "feudal rush: second wave")
-    (chat-local-to-self "feudal rush: completed")
+    (chat-local-to-self "feudal rush: complete")
     (disable-self)
 )

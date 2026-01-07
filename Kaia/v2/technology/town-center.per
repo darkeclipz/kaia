@@ -1,0 +1,15 @@
+(defrule
+    (can-research ri-loom)
+    (up-pending-objects c: villager == 0)
+    (current-age >= castle-age)
+    =>
+    (research ri-loom)
+)
+
+(defrule
+    (can-research ri-town-watch)
+    (up-pending-objects c: villager == 0)
+    (current-age >= castle-age)
+    =>
+    (research ri-town-watch)
+)

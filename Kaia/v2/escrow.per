@@ -28,8 +28,8 @@
 (defrule
     (current-age == castle-age)
     =>
-    (set-escrow-percentage food 75)
-    (set-escrow-percentage gold 75)
+    (set-escrow-percentage food 50) ; dont set too high; need food for villagers
+    (set-escrow-percentage gold 100) ; release all at once to prevent only one type of unit being trained
     (disable-self)
 )
 

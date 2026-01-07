@@ -20,3 +20,13 @@
     =>
     (build farm)
 )
+
+(defrule
+    (goal g-build yes)
+    (current-age == imperial-age)
+    (building-type-count-total farm < 10)
+    (up-pending-objects c: farm < 3)
+    (can-build farm)
+    =>
+    (build farm)
+)

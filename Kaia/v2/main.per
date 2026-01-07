@@ -41,6 +41,7 @@
 (defconst t-one-minute 1)
 (defconst t-five-minutes 2)
 (defconst t-stop-attack 3)
+(defconst t-task-ungrouped-soldiers 4)
 
 ; parameters
 (defconst num-villagers-dark-age 25)
@@ -73,8 +74,10 @@
     (set-strategic-number sn-do-not-scale-for-difficulty-level 1) ; stop scaling
     (set-strategic-number sn-consecutive-idle-unit-limit 1) ; gives a new task faster
     (set-strategic-number sn-enable-patrol-attack 1) ; retarget against nearby sighted units
+    (set-strategic-number sn-maximum-patrol-distance 5) ; don't walk too far off
     (set-strategic-number sn-wall-targeting-mode 1) ; attack walls
     (set-strategic-number sn-gather-defense-units 1) ; gather soldiers near town center
+    ; (set-strategic-number sn-task-ungrouped-soldiers 0) ; spread soldiers
     (set-strategic-number sn-enable-training-queue 15) ; number of units that can be queued at a building
     (set-strategic-number sn-enable-research-queue 1) ; allows technologies to be queued too
     (set-strategic-number sn-cap-civilian-builders 200) ; allow all civilians to build at the same time
@@ -88,8 +91,8 @@
     (set-strategic-number sn-defer-dropsite-update 1) ; if camp is build at enemy; only "sacrafice" one villager    (set-strategic-number sn-group-commander-selection-method 2)
     (set-strategic-number sn-percent-attack-soldiers 100)
     (set-strategic-number sn-number-attack-groups 0)
-    (set-strategic-number sn-attack-group-gather-spacing 1)
-    (set-strategic-number sn-group-form-distance 4)
+    (set-strategic-number sn-attack-group-gather-spacing 2)
+    (set-strategic-number sn-group-form-distance 8)
     (set-strategic-number sn-enable-offensive-priority 1)
     (disable-self)
 )
@@ -130,6 +133,7 @@
 (load "Kaia\v2\technology\castle")
 (load "Kaia\v2\technology\university")
 (load "Kaia\v2\technology\siege-workshop")
+(load "Kaia\v2\technology\town-center")
 (load "Kaia\v2\strategy\stop-attack")
 (load "Kaia\v2\strategy\attack")
 (load "Kaia\v2\strategy\feudal-rush")
@@ -187,3 +191,19 @@
     (set-goal g-train-monk no)
     (set-goal g-train-reset no)
 )
+
+; (defrule
+;     (timer-triggered t-one-minute)
+;     =>
+;     (set-strategic-number sn-task-ungrouped-soldiers 1)
+;     (set-strategic-number sn-gather-defense-units 0)
+;     (enable-timer t-task-ungrouped-soldiers 15)
+; )
+
+; (defrule
+;     (timer-triggered t-task-ungrouped-soldiers)
+;     =>
+;     (set-strategic-number sn-task-ungrouped-soldiers 0)
+;     (set-strategic-number sn-gather-defense-units 1)
+;     (disable-timer t-task-ungrouped-soldiers)
+; )
