@@ -39,6 +39,8 @@
     (set-strategic-number sn-minimum-attack-group-size 10)
 	(set-strategic-number sn-maximum-attack-group-size 10)
     (set-strategic-number sn-number-attack-groups 200)
+    (up-reset-target-priorities priority-offense 1)
+    (up-set-offense-priority c: villager c: 11)
     (enable-timer t-stop-attack 120)
     (set-goal g-feudal-rush no)
     (chat-local-to-self "feudal rush: second wave")

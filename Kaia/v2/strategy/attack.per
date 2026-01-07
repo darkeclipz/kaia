@@ -1,0 +1,14 @@
+(defrule
+    (goal g-attack yes)
+    (timer-triggered t-five-minutes)
+    (population-headroom < 25)
+    (not (town-under-attack))
+    =>
+    (set-strategic-number sn-minimum-attack-group-size 24)
+    (set-strategic-number sn-maximum-attack-group-size 40)
+    (set-strategic-number sn-number-attack-groups 10)
+    (set-goal g-train-reset yes)
+    (set-goal g-attacking yes)
+    (chat-local-to-self "attacking")
+    (enable-timer t-stop-attack 60)
+)

@@ -10,6 +10,7 @@
 (defconst g-resigning 6)
 (defconst g-wall 7)
 (defconst g-auto-stop-attack 8)
+(defconst g-attack 9)
 (defconst g-feudal-rush 20)
 (defconst g-fast-castle 21)
 (defconst g-fast-imperial 22)
@@ -37,11 +38,9 @@
 (defconst g-has-ships 206)
 
 ; triggers
-(defconst t-start-attack 1)
-(defconst t-stop-attack 2)
-(defconst t-one-minute 3)
-(defconst t-five-minutes 4)
-(defconst t-attack-all 5)
+(defconst t-one-minute 1)
+(defconst t-five-minutes 2)
+(defconst t-stop-attack 3)
 
 ; parameters
 (defconst num-villagers-dark-age 25)
@@ -67,12 +66,7 @@
 (defconst wall-perimeter 2)
 (defconst max-monks 24)
 
-(defconst 1min 60)
-(defconst 2min 120)
-(defconst 3min 180)
-(defconst 4min 240)
-(defconst 5min 300)
-
+; settings
 (defrule
     (true)
     =>
@@ -100,6 +94,7 @@
     (disable-self)
 )
 
+; init
 (defrule
     (true)
     =>
@@ -110,8 +105,8 @@
     (set-goal g-research yes)
     (set-goal g-trade yes)
     (set-goal g-resign yes)
-    (set-goal g-wall yes)
-    (enable-timer t-start-attack attack-interval) ; every 5 min
+    (set-goal g-wall no) ; blocks military if its big
+    (set-goal g-attack yes)
     (enable-timer t-one-minute 60)
     (enable-timer t-five-minutes 300)
     (disable-self)
@@ -123,7 +118,6 @@
 (load "Kaia\v2\camp-size")
 (load "Kaia\v2\escrow")
 (load "Kaia\v2\trade")
-(load "Kaia\v2\research")
 (load "Kaia\v2\resign")
 (load "Kaia\v2\technology\has")
 (load "Kaia\v2\technology\resource")
@@ -131,6 +125,13 @@
 (load "Kaia\v2\technology\barracks")
 (load "Kaia\v2\technology\blacksmith")
 (load "Kaia\v2\technology\archery-range")
+(load "Kaia\v2\technology\stable")
+(load "Kaia\v2\technology\monastery")
+(load "Kaia\v2\technology\castle")
+(load "Kaia\v2\technology\university")
+(load "Kaia\v2\technology\siege-workshop")
+(load "Kaia\v2\strategy\stop-attack")
+(load "Kaia\v2\strategy\attack")
 (load "Kaia\v2\strategy\feudal-rush")
 (load "Kaia\v2\strategy\fast-castle")
 (load "Kaia\v2\strategy\early-counter")
@@ -168,7 +169,6 @@
 (load "Kaia\v2\build\watch-tower")
 (load "Kaia\v2\build\wall")
 
-
 (defrule
     (goal g-train-reset yes)
     =>
@@ -186,30 +186,4 @@
     (set-goal g-train-cavalry-archer-line yes)
     (set-goal g-train-monk no)
     (set-goal g-train-reset no)
-)
-
-; attack
-(defrule
-    (timer-triggered t-five-minutes)
-    (population-headroom < 25)
-    (not (town-under-attack))
-    =>
-    (set-strategic-number sn-minimum-attack-group-size 24)
-    (set-strategic-number sn-maximum-attack-group-size 40)
-    (set-strategic-number sn-number-attack-groups 10)
-    (set-goal g-train-reset yes)
-    (set-goal g-attacking yes)
-    (chat-local-to-self "attacking")
-    (enable-timer t-stop-attack 60)
-)
-
-; stop attack
-(defrule
-    (timer-triggered t-stop-attack)
-    =>
-    (disable-timer t-stop-attack)
-    (up-reset-attack-now)
-    (set-strategic-number sn-number-attack-groups 0)
-    (set-goal g-attacking no)
-    (chat-local-to-self "stop attack")
 )

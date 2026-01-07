@@ -1,0 +1,48 @@
+(defrule
+    (goal g-research yes)
+    (goal g-has-cavalry yes)
+    (can-research-with-escrow ri-bloodlines)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-bloodlines)
+)
+
+(defrule
+    (goal g-research yes)
+    (goal g-has-cavalry yes)
+    (can-research-with-escrow ri-husbandry)
+    =>
+    (release-escrow food)
+    (research ri-husbandry)
+)
+
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total knight-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-cavalier)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-cavalier)
+)
+
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total knight-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-paladin)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-paladin)
+)
+
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow ri-light-cavalry)
+    (unit-type-count-total scout-cavalry-line >= min-units-required-for-upgrade)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-light-cavalry)
+)

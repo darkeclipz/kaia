@@ -1,0 +1,74 @@
+(defrule
+    (goal g-research yes)
+    (current-age == imperial-age)
+    (can-research-with-escrow ri-masonry)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-masonry)
+)
+
+(defrule
+    (goal g-research yes)
+    (current-age == imperial-age)
+    (building-type-count-total stone-wall-line > 0)
+    (can-research-with-escrow ri-fortified-wall)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-fortified-wall)
+)
+
+(defrule
+    (goal g-research yes)
+    (current-age == imperial-age)
+    (building-type-count-total watch-tower > 0)
+    (can-research-with-escrow ri-murder-holes)
+    =>
+    (release-escrow food)
+    (release-escrow stone)
+    (research ri-murder-holes)
+)
+
+(defrule
+    (goal g-research yes)
+    (current-age == imperial-age)
+    (building-type-count-total watch-tower >= 4)
+    (can-research-with-escrow ri-guard-tower)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-guard-tower)
+)
+
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow ri-chemistry)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-chemistry)
+)
+
+; must have for scorpion-line and ranged units
+(defrule
+    (goal g-research yes)
+(or (goal g-has-ranged-units yes)
+(or (unit-type-count-total scorpion-line > min-siege-required-for-upgrade)
+    (current-age == imperial-age)))
+    (can-research-with-escrow ri-ballistics)
+    =>
+    (release-escrow wood)
+    (release-escrow gold)
+    (research ri-ballistics)
+)
+
+(defrule
+    (goal g-research yes)
+    (current-age == imperial-age)
+    (can-research-with-escrow ri-siege-engineers)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-siege-engineers)
+)
