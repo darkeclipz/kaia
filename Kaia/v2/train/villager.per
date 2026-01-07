@@ -35,13 +35,3 @@
     =>
     (train villager)
 )
-
-(defrule
-    (current-age >= castle-age)
-    (civilian-population < 25)
-    (up-pending-objects c: villager < 4)
-    (can-train-with-escrow villager)
-    =>
-    (release-escrow food)
-    (train villager)
-)

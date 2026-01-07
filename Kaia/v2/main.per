@@ -30,6 +30,7 @@
 (defconst g-train-monk 109) ; it always trains 1 monk
 (defconst g-train-scout-cavalry-line 110)
 (defconst g-train-cavalry-archer-line 111)
+(defconst g-train-throwing-axeman-line 112)
 (defconst g-train-reset 199) ; reset training to whatever
 (defconst g-has-melee-units 200)
 (defconst g-has-cavalry 201)
@@ -58,7 +59,7 @@
 (defconst min-food-needed-for-training 200) ; 500
 (defconst min-wood-needed-for-training 200) ; 500
 (defconst min-gold-needed-for-trading-excess-resources 250) ; should be higher then min-x-needed-for-training
-(defconst min-units-required-for-upgrade 6)
+(defconst min-units-required-for-upgrade 8)
 (defconst min-siege-required-for-upgrade 4)
 (defconst num-barracks-imperial-age 6)
 (defconst num-archery-range-imperial-age 6)
@@ -158,6 +159,7 @@
 (load "Kaia\v2\train\scorpion-line")
 (load "Kaia\v2\train\mangonel-line")
 (load "Kaia\v2\train\trebuchet")
+(load "Kaia\v2\train\throwing-axeman-line")
 (load "Kaia\v2\build\queue")
 (load "Kaia\v2\build\town-center")
 (load "Kaia\v2\build\house")
@@ -195,6 +197,16 @@
     (set-goal g-train-monk no)
     (set-goal g-train-reset no)
 )
+
+#load-if-defined FRANKISH-CIV
+(defrule
+    (true)
+    =>
+    (set-goal g-train-cavalry-archer-line no)
+    (set-goal g-train-throwing-axeman-line yes)
+    (disable-self)
+)
+#end-if
 
 ; (defrule
 ;     (timer-triggered t-one-minute)

@@ -30,3 +30,15 @@
     (release-escrow wood)
     (research ri-hoardings)
 )
+
+; research elite throwing axeman
+(defrule
+    (goal g-research yes)
+    (current-age == imperial-age)
+    (unit-type-count-total throwing-axeman-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-elite-throwing-axeman)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-elite-throwing-axeman)
+)
