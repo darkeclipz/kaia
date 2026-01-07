@@ -10,30 +10,11 @@
     (disable-self)
 )
 
-; release overflow
-(defrule
-    (escrow-amount wood >= 1200)
-    =>
-    (release-escrow wood)
-)
-
-(defrule
-    (escrow-amount food >= 1200)
-    =>
-    (release-escrow food)
-)
-
-(defrule
-    (escrow-amount gold >= 1200)
-    =>
-    (release-escrow gold)
-)
-
-(defrule
-    (escrow-amount stone >= 1200)
-    =>
-    (release-escrow stone)
-)
+; release 
+(defrule (escrow-amount wood  >= 1200) => (release-escrow wood ))
+(defrule (escrow-amount food  >= 1200) => (release-escrow food ))
+(defrule (escrow-amount gold  >= 1200) => (release-escrow gold ))
+(defrule (escrow-amount stone >= 1200) => (release-escrow stone))
 
 ; release when under attack to train counter units
 (defrule
@@ -41,4 +22,24 @@
     (town-under-attack)
     =>
     (up-release-escrow)
+)
+
+; increase when reaching castle age to get imperial faster
+(defrule
+    (current-age == castle-age)
+    =>
+    (set-escrow-percentage food 75)
+    (set-escrow-percentage gold 75)
+    (disable-self)
+)
+
+; set back to X%
+(defrule
+    (current-age == imperial-age)
+    =>
+    (set-escrow-percentage wood 30)
+    (set-escrow-percentage food 30)
+    (set-escrow-percentage gold 30)
+    (set-escrow-percentage stone 30)
+    (disable-self)
 )

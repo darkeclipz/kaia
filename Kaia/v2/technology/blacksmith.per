@@ -9,7 +9,8 @@
 ; forging
 (defrule
     (goal g-research yes)
-    (goal g-has-melee-units yes)
+(or (goal g-has-melee-units yes)
+    (goal g-has-cavalry yes))
     (can-research-with-escrow ri-forging)
     =>
     (release-escrow food)
@@ -19,7 +20,8 @@
 ; iron casting
 (defrule
     (goal g-research yes)
-    (goal g-has-melee-units yes)
+(or (goal g-has-melee-units yes)
+    (goal g-has-cavalry yes))
     (can-research-with-escrow ri-iron-casting)
     =>
     (release-escrow food)
@@ -30,7 +32,8 @@
 ; blast furnace
 (defrule
     (goal g-research yes)
-    (goal g-has-melee-units yes)
+(or (goal g-has-melee-units yes)
+    (goal g-has-cavalry yes))
     (can-research-with-escrow ri-blast-furnace)
     =>
     (release-escrow food)

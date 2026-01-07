@@ -1,5 +1,6 @@
+; always train villagers, an idle TC is bad!
+
 (defrule
-    (goal g-train yes)
     (current-age == dark-age)
     (civilian-population < num-villagers-dark-age)
     (up-pending-objects c: villager < 1)
@@ -9,7 +10,6 @@
 )
 
 (defrule
-    (goal g-train yes)
     (current-age == feudal-age)
     (civilian-population < num-villagers-feudal-age)
     (up-pending-objects c: villager < 1)
@@ -19,7 +19,6 @@
 )
 
 (defrule
-    (goal g-train yes)
     (current-age == castle-age)
     (civilian-population < num-villagers-castle-age)
     (up-pending-objects c: villager < 3)
@@ -29,7 +28,6 @@
 )
 
 (defrule
-    (goal g-train yes)
     (current-age == imperial-age)
     (civilian-population < num-villagers-imperial-age)
     (up-pending-objects c: villager < 4)

@@ -1,4 +1,5 @@
 (defrule
+    (goal g-train yes)
     (or
         (and (current-age < imperial-age)(unit-type-count-total monk == 0))
         (and (current-age >= imperial-age)(unit-type-count-total monk < 2))
@@ -9,7 +10,9 @@
     (train monk)
 )
 
+; create some monks anyway to gather relics
 (defrule
+    (goal g-train yes)
     (current-age >= castle-age)
     (gold-amount > 1500)
     (up-pending-objects c: monk == 0)
@@ -20,6 +23,7 @@
 )
 
 (defrule
+    (goal g-train yes)
     (goal g-train-monk yes)
     (gold-amount >= min-gold-needed-for-training)
     (can-train militiaman-line)

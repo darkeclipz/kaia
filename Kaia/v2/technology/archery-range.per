@@ -23,7 +23,7 @@
 ; heavy cavalry archer
 (defrule
     (goal g-research yes)
-    (unit-type-count-total cavalry-arche-line >= min-units-required-for-upgrade)
+    (unit-type-count-total cavalry-archer-line >= min-units-required-for-upgrade)
     (can-research-with-escrow ri-heavy-cavalry-archer)
     =>
     (release-escrow food)
@@ -34,10 +34,21 @@
 ; thumb ring
 (defrule
     (goal g-research yes)
-    (goal g-has-archers)
+    (goal g-has-archers yes)
     (can-research-with-escrow ri-thumb-ring)
     =>
     (release-escrow food)
     (release-escrow gold)
     (research ri-thumb-ring)
+)
+
+; parthian tactics
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total cavalry-archer-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-parthian-tactics)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-parthian-tactics)
 )
