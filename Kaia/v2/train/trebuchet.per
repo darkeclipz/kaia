@@ -3,12 +3,13 @@
     (goal g-train-trebuchet yes)
     (wood-amount >= min-wood-needed-for-training)
     (gold-amount >= min-gold-needed-for-training)
-    (housing-headroom >= 5)
+    (housing-headroom >= 3)
     (or
         (and (current-age == castle-age)(unit-type-count-total trebuchet < 2))
-        (and (current-age >= imperial-age)(unit-type-count-total trebuchet < 30))
+        (and (current-age >= imperial-age)(unit-type-count-total trebuchet < 4))
     )
-    (up-pending-objects c: trebuchet == 0)
+    (up-get-fact building-type-count-total castle g-count)
+    (up-pending-objects c: trebuchet g:< g-count)
     (can-train trebuchet)
     =>
     (train trebuchet)

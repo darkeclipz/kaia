@@ -5,7 +5,9 @@
     (building-type-count-total town-center >= 2)
     (up-pending-objects c: siege-workshop == 0)
     =>
-    (build siege-workshop)
+    (up-set-placement-data my-player-number town-center c: 0)
+    (set-strategic-number sn-placement-zone-size 6)
+    (up-build place-control 0 c: siege-workshop)
 )
 
 (defrule
@@ -21,5 +23,7 @@
         (wood-amount > 2500)
     )
     =>
-    (build siege-workshop)
+    (up-set-placement-data my-player-number town-center c: 0)
+    (set-strategic-number sn-placement-zone-size 6)
+    (up-build place-control 0 c: siege-workshop)
 )

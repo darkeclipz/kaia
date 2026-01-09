@@ -1,0 +1,8 @@
+(defrule
+    (true)
+    =>
+    (up-get-fact population-cap 0 g-max-unit-size)
+    (up-modify-goal g-max-unit-size c:- num-villagers-imperial-age)
+    (up-modify-goal g-max-unit-size c:z/ 6)
+    (disable-self)
+)

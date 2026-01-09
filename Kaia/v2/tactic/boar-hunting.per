@@ -1,0 +1,22 @@
+(defrule 
+    (current-age == dark-age)
+    (civilian-population >= 12)
+    =>
+    (set-strategic-number sn-enable-boar-hunting 2) ; 2 = boar and ignore deer
+    (set-strategic-number sn-minimum-number-hunters 2)
+    (set-strategic-number sn-minimum-boar-hunt-group-size 12)
+    (set-strategic-number sn-maximum-hunt-drop-distance 20)
+    (chat-local-to-self "start boar hunting")
+    (disable-self)
+)
+
+(defrule
+    (current-age >= feudal-age)
+    =>
+    (set-strategic-number sn-enable-boar-hunting 0)
+    (set-strategic-number sn-minimum-number-hunters 0)
+    (set-strategic-number sn-minimum-boar-hunt-group-size 0)
+    (set-strategic-number sn-maximum-hunt-drop-distance 6)
+    (chat-local-to-self "stop boar hunting")
+    (disable-self)
+)

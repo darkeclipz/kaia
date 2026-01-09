@@ -1,0 +1,77 @@
+; tsa requested
+(defrule
+    (goal g-enable-tsa yes)
+    (up-compare-goal g-tsa-state c:<= tsa-state-none)
+    ; (not (enemy-units-in-town)) ; check if there are units in our town first before g-enable=yes.
+    =>
+    (set-goal g-tsa-state tsa-state-start)
+    (set-goal g-auto-town-size no)
+    (up-chat-data-to-self "tsa state: %d" g: g-tsa-state)
+)
+
+; tsa start
+(defrule
+    (goal g-tsa-state tsa-state-start)
+    =>
+    (up-modify-goal g-i s:= sn-maximum-town-size)
+    (up-get-point position-map-size g-x0)
+    (up-modify-goal g-n g:= g-x0)
+    (set-goal g-tsa-state tsa-state-search)
+    (up-chat-data-to-self "tsa state: %d" g: g-tsa-state)
+    (chat-local-to-self "tsa start")
+)
+
+; finding enemy building
+(defrule
+    (goal g-tsa-state tsa-state-search)
+    (up-enemy-buildings-in-town == 0)
+    (up-modify-goal g-i c:+ tsa-step-size)
+    (up-compare-goal g-i g:< g-n)
+    =>
+    (up-modify-sn sn-maximum-town-size c:+ tsa-step-size)
+    (up-chat-data-to-self "tsa state: %d" g: g-tsa-state)
+    (up-chat-data-to-self "sn-maximum-town-size: %d" s: sn-maximum-town-size)
+    (up-chat-data-to-self "i: %d" g: g-i)
+    (up-chat-data-to-self "n: %d" g: g-n)
+    (up-jump-rule -1) ; loop while i < n
+)
+
+; we found the enemy building
+(defrule
+    (goal g-tsa-state tsa-state-search)
+    (up-enemy-buildings-in-town > 0)
+    =>
+    (set-goal g-tsa-state tsa-state-attack)
+    (up-chat-data-to-self "tsa state: %d" g: g-tsa-state)
+    (chat-local-to-self "tsa found enemy")
+)
+
+; we didnt find any enemy buildings, so stop
+(defrule
+    (goal g-tsa-state tsa-state-search)
+    (up-compare-goal g-i g:>= g-n)
+    =>
+    (set-goal g-tsa-state tsa-state-end)
+    (up-chat-data-to-self "tsa state: %d" g: g-tsa-state)
+    (chat-local-to-self "tsa found nothing")
+)
+
+; we are waiting for the enemy building to be destroyed
+(defrule
+    (goal g-tsa-state tsa-state-attack)
+    (not (enemy-buildings-in-town))
+    =>
+    (set-goal g-tsa-state tsa-state-end)
+    (up-chat-data-to-self "tsa state: %d" g: g-tsa-state)
+    (chat-local-to-self "tsa attacking")
+)
+
+; stop tsa attack and reset
+(defrule
+    (goal g-tsa-state tsa-state-end)
+    =>
+    (set-goal g-enable-tsa no)
+    (set-goal g-auto-town-size yes)
+    (set-goal g-tsa-state tsa-state-none)
+    (chat-local-to-self "tsa completed")
+)

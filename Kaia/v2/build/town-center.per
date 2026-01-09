@@ -5,6 +5,7 @@
     (disable-self)
 )
 
+; build town center if we dont have any
 (defrule
     (goal g-build yes)
     (building-type-count-total town-center == 0)
@@ -15,15 +16,18 @@
     (build town-center)
 )
 
+; buy stone if possible
 (defrule 
     (current-age == castle-age)
     (stone-amount < 100)
-    (can-buy-commodity stone) 
+    (gold-amount > 250)
+    (can-buy-commodity stone)
     => 
     (buy-commodity stone)
     (disable-self)
 )
 
+; place town centers like mining camps
 (defrule
     (goal g-build yes)
     (or
@@ -36,20 +40,35 @@
     (disable-self)
 )
 
+; build two more town centers after monastery
 (defrule
     (goal g-build yes)
     (or
         (current-age >= castle-age)
         (stone-amount > 2500)
     )
-    (building-type-count-total town-center < 3)
-    (up-pending-objects c: town-center < 1)
+    (building-type-count-total town-center < 2)
+    (building-type-count-total monastery > 0)
+    (up-pending-objects c: town-center == 0)
     (can-build-with-escrow town-center)
     =>
     (release-escrow wood)
     (release-escrow stone)
     (build town-center)
-    (up-modify-sn sn-mining-camp-max-distance c:+ 3)
+)
+
+; build fourth town center
+(defrule
+    (goal g-build yes)
+    (or
+        (current-age >= imperial-age)
+        (stone-amount > 2500)
+    )
+    (building-type-count-total town-center < 3)
+    (up-pending-objects c: town-center == 0)
+    (can-build town-center)
+    =>
+    (build town-center)
 )
 
 (defrule
@@ -68,16 +87,3 @@
     (disable-self)    
 )
 
-(defrule
-    (goal g-build yes)
-    (or
-        (current-age >= imperial-age)
-        (stone-amount > 2500)
-    )
-    (building-type-count-total town-center < 4)
-    (up-pending-objects c: town-center < 1)
-    (can-build town-center)
-    =>
-    (build town-center)
-    (up-modify-sn sn-mining-camp-max-distance c:+ 3)
-)

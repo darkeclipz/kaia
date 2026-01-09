@@ -8,7 +8,8 @@
         (and (current-age == castle-age)(unit-type-count-total scorpion-line < 4))
         (and (current-age >= imperial-age)(unit-type-count-total scorpion-line < 12))
     )
-    (up-pending-objects c: scorpion-line == 0)
+    (up-get-fact building-type-count-total siege-workshop g-count)
+    (up-pending-objects c: scorpion-line g:< g-count)
     (can-train scorpion-line)
     =>
     (train scorpion-line)

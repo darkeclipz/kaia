@@ -1,21 +1,80 @@
+; (defrule
+;     (goal g-build yes)
+;     (or 
+;         (building-type-count-total lumber-camp > 0)
+;         (game-time > 30)
+;     )
+;     (or 
+;         (unit-type-count-total villager >= 15)
+;         (or 
+;             (game-time > 600)
+;             (and 
+;                 (game-time > 30) 
+;                 (not(resource-found food))
+;             )
+;         )
+;     )
+;     (idle-farm-count < 3)
+;     (up-pending-objects c: farm < 3)
+;     (can-build farm)
+;     =>
+;     (build farm)
+; )
+
+; (defrule
+;     (goal g-build yes)
+;     (current-age == imperial-age)
+;     (building-type-count-total farm < 10)
+;     (up-pending-objects c: farm < 3)
+;     (can-build farm)
+;     =>
+;     (build farm)
+; )
+
 (defrule
     (goal g-build yes)
-    (or 
-        (building-type-count-total lumber-camp > 0)
-        (game-time > 30)
-    )
-    (or 
-        (unit-type-count-total villager > 15)
-        (or 
-            (game-time > 600)
-            (and 
-                (game-time > 30) 
-                (not(resource-found food))
-            )
-        )
-    )
-    (idle-farm-count < 3)
+    (current-age == dark-age)
+(or (building-type-count-total lumber-camp >= 1)
+    (wood-amount > 600))
+    (building-type-count-total farm < 5)
+    (up-pending-objects c: farm == 0)
+    ; (idle-farm-count < 3)
+    (can-build farm)
+    =>
+    (build farm)
+)
+
+(defrule
+    (goal g-build yes)
+    (up-research-status c: feudal-age >= research-pending)
+    (current-age == dark-age)
+(or (building-type-count-total lumber-camp >= 1)
+    (wood-amount > 600))
+    ; (building-type-count-total farm < 8)
     (up-pending-objects c: farm < 3)
+    (idle-farm-count < 3)
+    (can-build farm)
+    =>
+    (build farm)
+)
+
+(defrule
+    (goal g-build yes)
+    (current-age == feudal-age)
+    ; (building-type-count-total farm < 15)
+    (up-pending-objects c: farm < 3)
+    (idle-farm-count < 3)
+    (can-build farm)
+    =>
+    (build farm)
+)
+
+(defrule
+    (goal g-build yes)
+    (current-age == castle-age)
+    ; (building-type-count-total farm < 20)
+    (up-pending-objects c: farm < 3)
+    (idle-farm-count < 3)
     (can-build farm)
     =>
     (build farm)
@@ -24,8 +83,9 @@
 (defrule
     (goal g-build yes)
     (current-age == imperial-age)
-    (building-type-count-total farm < 10)
+    ; (building-type-count-total farm < 25)
     (up-pending-objects c: farm < 3)
+    (idle-farm-count < 3)
     (can-build farm)
     =>
     (build farm)

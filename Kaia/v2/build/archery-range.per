@@ -1,12 +1,14 @@
 (defrule
     (goal g-build yes)
-    (can-build archery-range)
+    (can-build-with-escrow archery-range)
     (building-type-count-total archery-range == 0)
     (up-pending-objects c: archery-range == 0)
-(or (building-type-count-total town-center >= 2)
-    (wood-amount > 2000))
     =>
-    (build archery-range)
+    (release-escrow wood)
+    (up-set-placement-data my-player-number town-center c: 0)
+    (set-strategic-number sn-placement-to-center 1)
+    (set-strategic-number sn-placement-zone-size 6)
+    (up-build place-control 0 c: archery-range)
 )
 
 (defrule
@@ -22,5 +24,8 @@
         (wood-amount > 1000)
     )
     =>
-    (build archery-range)
+    (up-set-placement-data my-player-number town-center c: 6) ; bias to center
+    (set-strategic-number sn-placement-to-center 1)
+    (set-strategic-number sn-placement-zone-size 6)
+    (up-build place-control 0 c: archery-range)
 )

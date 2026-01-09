@@ -8,7 +8,8 @@
         (and (current-age == castle-age)(unit-type-count-total battering-ram-line < 4))
         (and (current-age >= imperial-age)(unit-type-count-total battering-ram-line < 12))
     )
-    (up-pending-objects c: battering-ram-line == 0)
+    (up-get-fact building-type-count-total siege-workshop g-count)
+    (up-pending-objects c: battering-ram-line g:< g-count)
     (can-train battering-ram-line)
     =>
     (train battering-ram-line)

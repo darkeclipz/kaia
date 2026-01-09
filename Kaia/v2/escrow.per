@@ -1,6 +1,17 @@
 ; stack X% escrow
 (defrule
-    (true)
+    (current-age == dark-age)
+    =>
+    (set-escrow-percentage wood 0)
+    (set-escrow-percentage food 0)
+    (set-escrow-percentage gold 0)
+    (set-escrow-percentage stone 0)
+    (up-release-escrow)
+    (disable-self)
+)
+
+(defrule
+    (civilian-population >= 12)
     =>
     (set-escrow-percentage wood 30)
     (set-escrow-percentage food 30)

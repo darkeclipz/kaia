@@ -1,44 +1,128 @@
-(defrule
-    (town-under-attack)
-    (current-age <= feudal-age)
-(or (players-unit-type-count any-enemy archer-line > 3)
-    (players-unit-type-count any-enemy militiaman-line > 3))
-    (unit-type-count-total militiaman-line < 8)
-    (up-pending-objects c: militiaman-line < 2)
-    (can-train militiaman-line)
-    =>
-    (train militiaman-line)
-)
+; (defrule
+;     (town-under-attack)
+;     (current-age <= feudal-age)
+; (or (players-unit-type-count any-enemy militiaman-line >= 3)
+;     (players-unit-type-count any-enemy skirmisher-line >= 3))
+;     (unit-type-count-total militiaman-line < 8)
+;     (up-pending-objects c: militiaman-line < 2)
+;     (can-train militiaman-line)
+;     =>
+;     (train militiaman-line)
+; )
 
-(defrule
-    (town-under-attack)
-    (current-age <= feudal-age)
-(or (players-unit-type-count any-enemy knight-line > 3)
-(or (players-unit-type-count any-enemy scout-cavalry-line > 3)
-    (players-unit-type-count any-enemy camel-line > 3)))
-    (unit-type-count-total spearman-line < 8)
-    (up-pending-objects c: spearman-line < 2)
-    (can-train spearman-line)
-    =>
-    (train spearman-line)
-)
+; ; train 4 militiaman at the start anyway
+; (defrule
+;     (current-age == feudal-age)
+;     (unit-type-count-total militiaman-line < 4)
+;     (up-pending-objects c: militiaman-line == 0)
+;     (can-train militiaman-line)
+;     =>
+;     (train militiaman-line)
+; )
 
+; (defrule
+;     (town-under-attack)
+;     (current-age <= feudal-age)
+; (or (players-unit-type-count any-enemy knight-line >= 3)
+; (or (players-unit-type-count any-enemy scout-cavalry-line >= 3)
+;     (players-unit-type-count any-enemy camel-line >= 3)))
+;     (unit-type-count-total spearman-line < 8)
+;     (up-pending-objects c: spearman-line < 2)
+;     (can-train spearman-line)
+;     =>
+;     (train spearman-line)
+; )
+
+; ; counter archers
+; (defrule
+;     (town-under-attack)
+;     (current-age <= feudal-age)
+;     (players-unit-type-count any-enemy archer-line >= 3)
+;     (unit-type-count-total skirmisher-line < 8)
+;     (up-pending-objects c: skirmisher-line < 2)
+;     (can-train spearman-line)
+;     =>
+;     (train skirmisher-line)
+; )
+
+; ; train 4 archers
+; (defrule
+;     (current-age <= feudal-age)
+;     (unit-type-count-total archer-line < 2)
+;     (up-get-fact building-type-count-total archery-range g-count)
+;     (up-pending-objects c: archer-line g:< g-count)
+;     =>
+;     (train archer-line)
+; )
+
+; (defrule
+;     (town-under-attack)
+;     (current-age <= feudal-age)
+;     (players-unit-type-count any-enemy skirmisher-line >= 3)
+;     (unit-type-count-total scout-cavalry-line < 4)
+;     (can-train scout-cavalry-line)
+;     =>
+;     (train scout-cavalry-line)
+; )
+
+; train a few archers to defend
 (defrule
-    (town-under-attack)
-    (current-age <= feudal-age)
-    (unit-type-count-total archer-line < 4)
-    (up-pending-objects c: archer-line < 2)
+    (current-age <= castle-age)
+    (unit-type-count-total archer-line < 3)
+    (can-train archer-line)
     =>
     (train archer-line)
 )
 
+; train a few scouts to defend
+(defrule
+    (current-age <= castle-age)
+    (unit-type-count-total scout-cavalry-line < 3)
+    (can-train scout-cavalry)
+    =>
+    (train scout-cavalry)
+)
+
+; counter militiaman with archers
 (defrule
     (town-under-attack)
-    (current-age <= feudal-age)
-    (players-unit-type-count any-enemy skirmisher-line > 3)
-    (unit-type-count-total scout-cavalry-line < 4)
-    (up-pending-objects c: scout-cavalry-line < 2)
+    (current-age <= castle-age)
+    (players-unit-type-count any-enemy militiaman-line >= 3)
+    (unit-type-count-total archer-line < 4)
+    (can-train archer-line)
+    =>
+    (train archer-line)
+)
+
+; counter archers with skirmishers
+(defrule
+    (town-under-attack)
+    (current-age <= castle-age)
+    (players-unit-type-count any-enemy archer-line >= 3)
+    (unit-type-count-total skirmisher-line < 6)
+    (can-train skirmisher-line)
+    =>
+    (train skirmisher-line)
+)
+
+; counter skirmishers with scouts
+(defrule
+    (town-under-attack)
+    (current-age <= castle-age)
+    (players-unit-type-count any-enemy skirmisher-line >= 3)
+    (unit-type-count-total scout-cavalry-line < 6)
     (can-train scout-cavalry-line)
     =>
     (train scout-cavalry-line)
+)
+
+; counter scouts with spearmen
+(defrule
+    (town-under-attack)
+    (current-age <= castle-age)
+    (players-unit-type-count any-enemy scout-cavalry-line >= 3)
+    (unit-type-count-total spearman-line < 4)
+    (can-train spearman-line)
+    =>
+    (train spearman-line)
 )

@@ -1,0 +1,12 @@
+; every 30 seconds or so, gather all of our units near the watch tower
+
+(defrule
+    (timer-triggered t-one-minute)
+    (not (town-under-attack))
+    (building-type-count-total watch-tower > 0)
+    =>
+    ; find x, y of watch tower
+    ; find all units
+    ; send to watch tower
+    (disable-self)
+)

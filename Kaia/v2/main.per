@@ -4,20 +4,39 @@
 ; goals
 (defconst g-build 1)
 (defconst g-train 2)
-(defconst g-research 3)
-(defconst g-trade 4)
-(defconst g-resign 5)
-(defconst g-resigning 6)
-(defconst g-wall 7)
-(defconst g-auto-stop-attack 8)
-(defconst g-attack 9)
-(defconst g-feudal-rush 20)
-(defconst g-fast-castle 21)
-(defconst g-fast-imperial 22)
-(defconst g-knight-rush 23)
-(defconst g-attacking 24)
-(defconst g-auto-town-size 25)
-(defconst g-forward-build-military 26)
+(defconst g-train-reset 3)
+(defconst g-research 4)
+(defconst g-trade 5)
+(defconst g-resign 6)
+(defconst g-resigning 7)
+(defconst g-wall 8)
+(defconst g-auto-stop-attack 9)
+(defconst g-attack 10)
+(defconst g-attacking 11)
+(defconst g-auto-town-size 12)
+(defconst g-auto-camp-size 13)
+(defconst g-max-villagers 14)
+(defconst g-gold-mines 15)
+(defconst g-stone-mines 16)
+(defconst g-town-size 17)
+(defconst g-uncaptured-relics 18)
+(defconst g-max-unit-size 19)
+
+(defconst g-enable-tsa 20)
+(defconst g-tsa-state 21)
+
+(defconst tsa-step-size 3)
+(defconst tsa-state-none 0)
+(defconst tsa-state-start 1)
+(defconst tsa-state-search 2)
+(defconst tsa-state-attack 3)
+(defconst tsa-state-end 4)
+
+(defconst g-dark-rush 70)
+(defconst g-feudal-rush 71)
+(defconst g-fast-castle 72)
+(defconst g-knight-rush 73)
+
 (defconst g-train-militiaman-line 100)
 (defconst g-train-archer-line 101)
 (defconst g-train-knight-line 102)
@@ -27,11 +46,12 @@
 (defconst g-train-mangonel-line 106)
 (defconst g-train-skirmisher-line 107)
 (defconst g-train-spearman-line 108)
-(defconst g-train-monk 109) ; it always trains 1 monk
+(defconst g-train-monk 109)
 (defconst g-train-scout-cavalry-line 110)
 (defconst g-train-cavalry-archer-line 111)
 (defconst g-train-throwing-axeman-line 112)
-(defconst g-train-reset 199) ; reset training to whatever
+(defconst g-train-villager 113)
+
 (defconst g-has-melee-units 200)
 (defconst g-has-cavalry 201)
 (defconst g-has-infantry 202)
@@ -40,21 +60,51 @@
 (defconst g-has-siege 205)
 (defconst g-has-ships 206)
 
+(defconst g-true 999)
+(defconst g-use-escrow 999)
+(defconst g-x 1000)
+(defconst g-y 1001)
+(defconst g-i 1002)
+(defconst g-j 1003)
+(defconst g-k 1004)
+(defconst g-n 1005)
+(defconst g-m 1006)
+(defconst g-count 1002)
+(defconst g-x0 1016)
+(defconst g-y0 1017)
+(defconst g-x1 1018)
+(defconst g-y1 1019)
+(defconst g-x2 1020)
+(defconst g-y2 1021)
+(defconst g-arg0 1022)
+(defconst g-arg1 1023)
+(defconst g-arg2 1024)
+(defconst g-arg3 1025)
+(defconst g-arg4 1026)
+(defconst g-search-state 1027)
+(defconst g-current-local-search-total 1027)
+(defconst g-last-local-search-count 1028)
+(defconst g-current-remote-search-total 1029)
+(defconst g-last-remote-search-count 1030)
+(defconst g-s 1027)
+(defconst g-lt 1027)
+(defconst g-rt 1029)
+
 ; triggers
 (defconst t-one-minute 1)
 (defconst t-five-minutes 2)
 (defconst t-stop-attack 3)
-(defconst t-retreat 4)
+(defconst t-attack 4)
+(defconst t-retreat 5)
 
 ; parameters
-(defconst num-villagers-dark-age 25)
-(defconst num-villagers-feudal-age 25)
-(defconst num-villagers-castle-age 50)
-(defconst num-villagers-imperial-age 100)
-(defconst min-villagers-dark-age 12)
-(defconst min-villagers-feudal-age 25)
-(defconst min-villagers-castle-age 40)
-(defconst min-villagers-imperial-age 100)
+(defconst num-villagers-dark-age 22) ; max in dark age
+(defconst num-villagers-feudal-age 28) ; max in feudal age
+(defconst num-villagers-castle-age 50) ; max in castle age
+(defconst num-villagers-imperial-age 100) ; max in imperial age
+(defconst min-villagers-dark-age 22) ; needed before researching feudal age
+(defconst min-villagers-feudal-age 28) ; needed before researching castle age
+(defconst min-villagers-castle-age 50) ; needed before researching imperial age
 (defconst min-gold-needed-for-training 200) ; 500
 (defconst min-food-needed-for-training 200) ; 500
 (defconst min-wood-needed-for-training 200) ; 500
@@ -67,8 +117,29 @@
 (defconst num-siege-workshop-imperial-age 2)
 (defconst attack-interval 300)
 (defconst attack-groups 10)
-(defconst wall-perimeter 2)
-(defconst max-monks 24)
+(defconst max-monks 8)
+
+
+; (defconst status-ready 2)
+(defconst status-resource 3)
+(defconst list-active 0)
+; (defconst search-local 1)
+; (defconst search-remote 2)
+; (defconst search-order-none 0)
+(defconst search-order-asc 1)
+(defconst search-order-desc 2)
+; (defconst object-data-point-x 8)
+; (defconst object-data-point-y 9)
+(defconst object-data-distance 44)
+; (defconst position-center 0)
+; (defconst position-self 9)
+
+(defrule
+    (true)
+    =>
+    (set-goal g-true 1)
+    (disable-self)
+)
 
 ; settings
 (defrule
@@ -86,8 +157,10 @@
     (set-strategic-number sn-cap-civilian-builders 200) ; allow all civilians to build at the same time
     (set-strategic-number sn-scale-minimum-attack-group-size 0) ; fixes that min > max, which breaks attack groups
     (set-strategic-number sn-maximum-hunt-drop-distance 10) ; prevent hunting all over the map
-    (set-strategic-number sn-dropsite-separation-distance 5) ; prevent tons of mining camps
+    (set-strategic-number sn-dropsite-separation-distance 3) ; prevent tons of mining camps
     (set-strategic-number sn-initial-exploration-required 0) ; can build immediately
+    (set-strategic-number sn-cap-civilian-explorers 0) ; no civ explorers
+    (set-strategic-number sn-minimum-civilian-explorers 0) ; no civ explorers
     (set-strategic-number sn-total-number-explorers 1)
 	(set-strategic-number sn-number-explore-groups 1)
     (set-strategic-number sn-object-repair-level 14335) ; https://airef.github.io/strategic-numbers/sn-details.html#sn-object-repair-level
@@ -97,6 +170,13 @@
     (set-strategic-number sn-attack-group-gather-spacing 2)
     (set-strategic-number sn-group-form-distance 8)
     (set-strategic-number sn-enable-offensive-priority 1)
+    (set-strategic-number sn-disable-builder-assistance 1) ; prevent buildings from assisting on nearby foundations after their work is complete (0=assist,1=dont assist)
+    (set-strategic-number sn-attack-intelligence 1) ; tries to avoid enemy units and attack from different sides
+    (set-strategic-number sn-disable-tower-priority 1)
+    ; (set-strategic-number sn-allow-civilian-offense 1) ; perhaps do this early game
+
+    ; (up-set-placement-data my-player-number -1 c: -0) ; build around town center
+    ; (set-strategic-number sn-placement-zone-size 6) ; start with size 6?
     (disable-self)
 )
 
@@ -104,21 +184,49 @@
 (defrule
     (true)
     =>
-    (set-goal g-auto-town-size yes)
-    (set-goal g-feudal-rush yes)
     (set-goal g-build yes)
     (set-goal g-train yes)
     (set-goal g-train-reset yes)
     (set-goal g-research yes)
     (set-goal g-trade yes)
     (set-goal g-resign yes)
-    (set-goal g-wall no) ; blocks military if its big
+    (set-goal g-wall yes)
     (set-goal g-attack yes)
-    (enable-timer t-one-minute 60)
-    (enable-timer t-five-minutes 300)
+    (set-goal g-auto-town-size yes)
+    (set-goal g-auto-camp-size yes)
     (disable-self)
 )
 
+(defrule
+    (true)
+    =>
+    (set-goal g-dark-rush no)
+    (set-goal g-fast-castle no)
+    (set-goal g-feudal-rush no)
+    (disable-self)
+)
+
+(defrule
+    (goal g-train-reset yes)
+    =>
+    (chat-local-to-self "reset training goals")
+    (set-goal g-train-villager yes)
+    (set-goal g-train-militiaman-line no)
+    (set-goal g-train-spearman-line no)
+    (set-goal g-train-archer-line no)
+    (set-goal g-train-scout-cavalry-line no)
+    (set-goal g-train-knight-line yes)
+    (set-goal g-train-battering-ram-line no)
+    (set-goal g-train-trebuchet yes)
+    (set-goal g-train-scorpion-line no)
+    (set-goal g-train-mangonel-line no)
+    (set-goal g-train-skirmisher-line no)
+    (set-goal g-train-cavalry-archer-line yes)
+    (set-goal g-train-monk yes)
+    (set-goal g-train-reset no)
+)
+
+(load "Kaia\v2\timer")
 (load "Kaia\v2\gather")
 (load "Kaia\v2\drop")
 (load "Kaia\v2\town-size")
@@ -146,20 +254,25 @@
 (load "Kaia\v2\strategy\counter")
 (load "Kaia\v2\strategy\knight-rush")
 (load "Kaia\v2\strategy\retreat")
+(load "Kaia\v2\strategy\dark-rush")
+(load "Kaia\v2\tactic\relic")
+(load "Kaia\v2\tactic\boar-hunting")
+(load "Kaia\v2\tactic\tsa")
+(load "Kaia\v2\train\max-unit-size")
 (load "Kaia\v2\train\villager")
+(load "Kaia\v2\train\knight-line")
+(load "Kaia\v2\train\throwing-axeman-line")
+(load "Kaia\v2\train\cavalry-archer-line")
 (load "Kaia\v2\train\militiaman-line")
+(load "Kaia\v2\train\monk")
+(load "Kaia\v2\train\scout-cavalry-line")
 (load "Kaia\v2\train\spearman-line")
 (load "Kaia\v2\train\archer-line")
-(load "Kaia\v2\train\cavalry-archer-line")
 (load "Kaia\v2\train\skirmisher-line")
-(load "Kaia\v2\train\scout-cavalry-line")
-(load "Kaia\v2\train\knight-line")
-(load "Kaia\v2\train\monk")
 (load "Kaia\v2\train\battering-ram-line")
 (load "Kaia\v2\train\scorpion-line")
 (load "Kaia\v2\train\mangonel-line")
 (load "Kaia\v2\train\trebuchet")
-(load "Kaia\v2\train\throwing-axeman-line")
 (load "Kaia\v2\build\queue")
 (load "Kaia\v2\build\town-center")
 (load "Kaia\v2\build\house")
@@ -179,48 +292,4 @@
 (load "Kaia\v2\build\watch-tower")
 (load "Kaia\v2\build\wall")
 
-(defrule
-    (goal g-train-reset yes)
-    =>
-    (chat-local-to-self "reset training goals")
-    (set-goal g-train-militiaman-line no)
-    (set-goal g-train-spearman-line no)
-    (set-goal g-train-archer-line no)
-    (set-goal g-train-scout-cavalry-line no)
-    (set-goal g-train-knight-line yes)
-    (set-goal g-train-battering-ram-line no)
-    (set-goal g-train-trebuchet yes)
-    (set-goal g-train-scorpion-line no)
-    (set-goal g-train-mangonel-line no)
-    (set-goal g-train-skirmisher-line no)
-    (set-goal g-train-cavalry-archer-line yes)
-    (set-goal g-train-monk no)
-    (set-goal g-train-reset no)
-)
-
-#load-if-defined FRANKISH-CIV
-(defrule
-    (true)
-    =>
-    (set-goal g-train-cavalry-archer-line no)
-    (set-goal g-train-throwing-axeman-line yes)
-    (disable-self)
-)
-#end-if
-
-; (defrule
-;     (timer-triggered t-one-minute)
-;     =>
-;     (set-strategic-number sn-task-ungrouped-soldiers 1)
-;     (set-strategic-number sn-gather-defense-units 0)
-;     (enable-timer t-task-ungrouped-soldiers 15)
-; )
-
-; (defrule
-;     (timer-triggered t-task-ungrouped-soldiers)
-;     =>
-;     (set-strategic-number sn-task-ungrouped-soldiers 0)
-;     (set-strategic-number sn-gather-defense-units 1)
-;     (disable-timer t-task-ungrouped-soldiers)
-; )
-
+(load "Kaia\v2\debug")

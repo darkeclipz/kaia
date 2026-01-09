@@ -19,7 +19,7 @@
 (defrule
     (goal g-feudal-rush yes)
     (unit-type-count-total militiaman-line < 4)
-    (up-pending-objects c: militiaman-line == 0)
+    (up-pending-objects c: militiaman-line < 3)
     (can-train militiaman-line)
     =>
     (train militiaman-line)
@@ -29,7 +29,7 @@
 (defrule
     (goal g-feudal-rush yes)
     (unit-type-count-total archer-line < 6)
-    (up-pending-objects c: archer-line == 0)
+    (up-pending-objects c: archer-line < 3)
     (can-train archer-line)
     =>
     (train archer-line)
@@ -47,7 +47,7 @@
     (set-strategic-number sn-number-attack-groups 200)
     (up-reset-target-priorities priority-offense 1)
     (up-set-offense-priority c: villager c: 11)
-    (enable-timer t-stop-attack 120)
+    (enable-timer t-stop-attack 40)
     (set-goal g-feudal-rush no)
     (chat-local-to-self "feudal rush: complete")
     (disable-self)

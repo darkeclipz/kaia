@@ -2,6 +2,25 @@
 
 Kaia is a custom AOE2 bot that should close the difficulty gap a bit vs. the default AI. The default AI tends to be really boring on lower settings and quickly ramps up and becomes overwhelming. Kaia aims to be fun opponent to play against, while also keeping the game chill to play!
 
+## TODO
+ * Research missing tech
+ * ~~Research unit upgrades only when there are a mininum number of units of it (e.g. 8)~~
+ * Research last tech at university
+ * Build bombardment towers
+ * Test good attack group combo for different difficulties
+ * Add light cavalry and exploring with 2 or even 3 cavals, instead of the current fixed 1. Perhaps based on map size.
+ * ~~Build watch towers towards the enemy, instead of a random position around the town.~~
+ * Find and protect relics in the case it is not possible to send a monk before the enemy team does. Basically if they reach the castle age and a relic has been located, send a scout cavalry to that position. Scout cavalry is quick enough to kill the monk before they are being converted.
+
+
+## Findings
+
+1. `resource-found` doesn't trigger for gold if the gold mine is further away then the `sn-mining-camp-max-distance` in the dark age. Once the feudal age is reached, the distance increases and it is detected. You would expect `resource-found` to return `true` once a scout has found the gold, but that is not the case.
+2. `up-get-fact military-population any-enemy g-x` doesn't work, because it only counts the population for the current player. There is no `up-` variant available that counts enemy units this way. Use `up-find-remote` and keep track of the enemy units that way.
+3. Farms don't get up and running if `sn-maximum-food-drop-distance` is too small.
+4. Research loom before hunting boars (if applicable).
+5. Playing a normal game with low resources needs like 6 barracks, archery ranges, or stables to be able to quickly produce unit. With only 3 of them the resources stack up because they don't train fast enough.
+
 ## Resources
  
  * **Scripting encyclopedia:** https://airef.github.io/index.html
@@ -10,31 +29,164 @@ Kaia is a custom AOE2 bot that should close the difficulty gap a bit vs. the def
  * **AI Scripting Steam Tutorial:** https://steamcommunity.com/sharedfiles/filedetails/?id=1238296169
  * **Three ways to get AI to attack:** https://forums.ageofempires.com/t/three-ways-to-get-the-ai-to-attack/205476
  * **Discussion about attack groups:** https://aok.heavengames.com/cgi-bin/forums/display.cgi?action=st&fn=28&tn=39123
+ * **TSA:** https://aok.heavengames.com/university/other/town-size-attack/
 
-## TODO
- * Research missing tech
- * Research unit upgrades only when there is a unit
- * Research last tech at university
- * Build bombardment towers
- * Test good attack group combo for different difficulties
- * Add light cavalry and exploring with 2 or even 3 cavals, instead of the current fixed 1
- * Add flags for building and military lines, e.g. `g-build-barracks`, `g-build-archery-range`, `g-build-stable`, `g-build-siege-workshop`.
+## UserPatch commands
 
-## Notes about strategic numbers
+ * Send units to a specific point: https://airef.github.io/commands/commands-details.html#up-target-point
+ * Find a resource on the map: https://airef.github.io/commands/commands-details.html#up-find-resource
+ * Filter on distance within target point: https://airef.github.io/commands/commands-details.html#up-filter-distance
+ * Object data: https://airef.github.io/parameters/parameters-details.html#ObjectData
+ * Find enemy units: https://airef.github.io/commands/commands-details.html#up-find-remote
+ * Attack units with local vs remote: https://airef.github.io/commands/commands-details.html#up-target-objects
+ * Set target object from search result: https://airef.github.io/commands/commands-details.html#up-set-target-object
+ * Only select units within 10 tiles from target point: https://airef.github.io/commands/commands-details.html#up-filter-distance
 
-### Attack behaviour
+### Boar hunting
 
-#### (10, 25, 50)
+ * https://airef.github.io/strategic-numbers/sn-details.html#sn-boar-lure-destination
+ * https://airef.github.io/strategic-numbers/sn-details.html#sn-enable-boar-hunting
+ * https://airef.github.io/strategic-numbers/sn-details.html#sn-minimum-number-hunters
+ * https://airef.github.io/strategic-numbers/sn-details.html#sn-minimum-boar-hunt-group-size
+ * https://airef.github.io/strategic-numbers/sn-details.html#sn-minimum-boar-lure-group-size
+ * https://airef.github.io/strategic-numbers/sn-details.html#sn-maximum-hunt-drop-distance
+
+### Find the closest object
 
 ```
-(set-strategic-number sn-number-attack-groups 10)
-(set-strategic-number sn-minimum-attack-group-size 28)
-(set-strategic-number sn-maximum-attack-group-size 50)
+(defrule
+	(goal SPLIT 1)
+	(goal gl-Phosphoru-castle 1)
+	(up-compare-goal lt c:> 0)
+=>
+	(up-set-target-point point-enemy-fort)
+	; Find the one closest to the enemy
+	(up-clean-search search-local object-data-full-distance search-order-asc)
+	(up-set-target-object search-local c: 0)
+
+	; Get the position of the targeted gold:
+	(up-get-object-target-data object-data-point-x point1-x)
+	(up-get-object-target-data object-data-point-y point1-y)
+	(up-set-target-point point1)
+	
+	(up-filter-distance c: -1 c: 10)
+	(up-find-resource c: wood c: 40)
+
+	(up-set-target-point point-home-build)
+	(up-remove-objects search-remote object-data-distance c:< 10)
+	(up-remove-objects search-remote object-data-distance c:> 24)
+	
+	(up-set-target-point point1)
+	(up-clean-search search-remote object-data-distance search-order-asc)
+	(up-remove-objects search-remote -1 c:< 5) ; Remove 5 closest trees, since a few may be stragglers.
+	(up-get-search-state lt)
+	
+	(up-copy-point point2 point-home-build) ; fallback point in case no valid wood is found
+)
+
+### Find gold on the map and send a villager to it
+
+```
+; ; find gold sorted by distance from town center in remote object
+; (defrule 
+;     (taunt-detected my-player-number 19)
+;     =>
+;     (acknowledge-taunt my-player-number 19)
+;     (chat-local-to-self "found gold")
+;     (up-full-reset-search)
+;     (up-filter-status c: status-resource c: list-active)
+;     (up-find-resource c: gold c: 20)
+;     (up-get-search-state search-state)
+;     ; (up-chat-data-to-self "current local search total: %d" g: current-local-search-total)
+;     ; (up-chat-data-to-self "last local search count: %d" g: last-local-search-count)
+;     ; (up-chat-data-to-self "current remote search total: %d" g: current-remote-search-total)
+;     ; (up-chat-data-to-self "last remote search count: %d" g: last-remote-search-count)
+;     (up-modify-goal g-gold-mines-found g:= current-remote-search-total)
+;     (up-chat-data-to-self "gold mines found: %d" g: g-gold-mines-found)
+
+;     ; find closest to me
+;     (up-get-point position-self g-my-position-x)
+;     (up-set-target-point g-my-position-x)
+;     (up-clean-search search-remote object-data-distance search-order-asc)
+;     (up-set-target-object search-remote c: 0)
+;     (up-get-object-data object-data-point-x x0)
+;     (up-chat-data-to-self "x: %d" g: x0)
+;     (up-get-object-data object-data-point-y y0)
+;     (up-chat-data-to-self "y: %d" g: y0)
+    
+;     ; find one villager a mine it
+;     ; (up-filter-status c: status-ready c: list-active)
+;     (up-reset-filters)
+;     (up-find-local c: villager-class c: 1)
+;     ; (up-target-objects 1 action-default -1 -1)
+
+;     (up-get-search-state search-state)
+;     (up-chat-data-to-self "current local search total: %d" g: current-local-search-total)
+;     (up-chat-data-to-self "last local search count: %d" g: last-local-search-count)
+;     (up-chat-data-to-self "current remote search total: %d" g: current-remote-search-total)
+;     (up-chat-data-to-self "last remote search count: %d" g: last-remote-search-count)
+
+;     (up-target-objects 1 action-default -1 -1)
+; )
+
+; ; assign villager to first thing in remote objects
+; (defrule 
+;     (taunt-detected my-player-number 20)
+;     =>
+;     (acknowledge-taunt my-player-number 20)
+;     (up-full-reset-search)
+;     (up-get-point position-self g-my-position-x)
+;     (up-set-target-point g-my-position-x)
+;     (up-reset-filters)
+;     (up-find-local c: villager-class c: 20)
+;     (up-get-search-state search-state)
+;     (up-chat-data-to-self "current local search total: %d" g: current-local-search-total)
+;     (up-chat-data-to-self "last local search count: %d" g: last-local-search-count)
+;     (up-chat-data-to-self "current remote search total: %d" g: current-remote-search-total)
+;     (up-chat-data-to-self "last remote search count: %d" g: last-remote-search-count)
+;     ; (up-target-objects 1 action-gather -1 -1)
+;     ; (up-target-point )
+; )
+
+### Build watch tower towards the enemey
+
+```
+; (up-set-placement-data <PlayerNumber> <ObjectId> <typeOp> <Value>)
+(up-set-placement-data my-player-number -1 c: 15)  ; 15 tiles in front of the town center
+
+; (up-build <PlacementType> <EscrowGoalId> <typeOp> <BuildingId>)
+(up-build place-control 0 c: watch-tower)
 ```
 
-#### Adding a new unit to train
+### Train eagles from forward most barracks
 
- * Create the training flag `g_train_XXX` in `main`.
- * Add `train\XXX` and only train the unit if `g_train_XXX` is `yes`.
- * Add the unit to the correct types in `technology\has` to receive automatic upgrades.
- * Set the training flag to `yes` to train it.
+```
+; Train eagles from forwardmost barracks:
+(defrule
+	(can-train eagle-warrior)
+=>
+	(up-full-reset-search)
+	(up-find-local c: barracks c: 240)
+	(up-remove-objects search-local object-data-progress-type c:!= 0)
+	(up-set-target-point point-enemy-home)
+	(up-clean-search search-local object-data-distance search-order-asc)
+	(up-get-search-state lt)
+	(set-goal gl-1 0)
+)
+(defrule
+	(can-train eagle-warrior)
+	(up-compare-goal gl-1 c:< lt)
+=>
+	(up-set-target-object search-local g: gl-1)
+	(up-target-point gl-do-not-use-escrow action-train c: eagle-warrior)
+	(up-modify-goal gl-1 c:+ 1)
+	(up-jump-rule -1)
+)
+(defrule
+	(true)
+=>
+	(up-full-reset-search)
+	(up-get-search-state lt)
+	(set-goal gl-1 -1)
+)
+```

@@ -4,7 +4,7 @@
     (can-build-with-escrow lumber-camp)
     (resource-found wood)
     (dropsite-min-distance wood > 3)
-    (up-pending-objects c: lumber-camp < 2)
+    (up-pending-objects c: lumber-camp == 0)
     =>
     (release-escrow wood)
     (build lumber-camp)

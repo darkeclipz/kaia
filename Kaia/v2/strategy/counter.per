@@ -19,7 +19,7 @@
 )
 
 (defrule
-(or (players-unit-type-count any-enemy spearman-line > 8)
+(or (players-unit-type-count any-enemy archer-line > 8)
     (players-unit-type-count any-enemy cavalry-archer-line > 8))
     =>
     (set-goal g-train-skirmisher-line yes)

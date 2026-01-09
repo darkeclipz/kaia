@@ -1,47 +1,132 @@
 (defrule
     (true)
     =>
-    (set-strategic-number sn-minimum-town-size 8) ; default = 12
-    (set-strategic-number sn-maximum-town-size 14) ; default = 20
-    (disable-self)
+    (up-full-reset-search)
+    (up-find-local c: building-class c: 240)
+    (up-remove-objects search-local object-data-type == mill)
+    (up-remove-objects search-local object-data-type == mining-camp)
+    (up-remove-objects search-local object-data-type == lumber-camp)
+    (up-clean-search search-local object-data-distance search-order-desc)
+    (up-set-target-object search-local c: 0)
+    (up-get-object-data object-data-distance g-x)
+    (up-modify-goal g-town-size g:= g-x)
 )
 
 (defrule
-    (current-age == castle-age)
+    (goal g-auto-town-size yes)
+    (up-compare-goal g-town-size >= 0)
     =>
-    (set-strategic-number sn-minimum-town-size 14) ; default = 12
-    (set-strategic-number sn-maximum-town-size 18) ; default = 20
-    (disable-self)
+    (up-modify-sn sn-minimum-town-size g:= g-town-size)
+    (up-modify-sn sn-minimum-town-size c:max 6)
+    (up-modify-goal g-x g:= g-town-size)
+    (up-modify-goal g-x c:+ 8)
+    (up-modify-sn sn-maximum-town-size g:= g-x)
+    (up-modify-sn sn-maximum-town-size c:max 8)
 )
 
-(defrule
-    (current-age == imperial-age)
-    =>
-    (set-strategic-number sn-minimum-town-size 18) ; default = 12
-    (set-strategic-number sn-maximum-town-size 24) ; default = 20
-    (disable-self)
-)
+; (defrule
+;     (goal g-auto-town-size yes)
+;     (current-age == dark-age)
+;     =>
+;     (set-strategic-number sn-minimum-town-size 12) ; default = 12
+;     (set-strategic-number sn-maximum-town-size 20) ; default = 20
+; )
 
-(defrule
-    (game-time > 1200) ; 20 min
-    =>
-    (set-strategic-number sn-minimum-town-size 24) ; default = 12
-    (set-strategic-number sn-maximum-town-size 28) ; default = 20
-    (disable-self)
-)
+; (defrule
+;     (goal g-auto-town-size yes)
+;     (current-age == feudal-age)
+;     =>
+;     (set-strategic-number sn-minimum-town-size 12) ; default = 12
+;     (set-strategic-number sn-maximum-town-size 20) ; default = 20
+; )
 
-(defrule
-    (game-time > 2400) ; 40 min
-    =>
-    (set-strategic-number sn-minimum-town-size 26) ; default = 12
-    (set-strategic-number sn-maximum-town-size 30) ; default = 20
-    (disable-self)
-)
+; (defrule
+;     (goal g-auto-town-size yes)
+;     (current-age == castle-age)
+;     =>
+;     (set-strategic-number sn-minimum-town-size 12) ; default = 12
+;     (set-strategic-number sn-maximum-town-size 20) ; default = 20
+; )
 
-(defrule
-    (game-time > 3600) ; 60 min
-    =>
-    (set-strategic-number sn-minimum-town-size 28) ; default = 12
-    (set-strategic-number sn-maximum-town-size 33) ; default = 20
-    (disable-self)
-)
+; (defrule
+;     (goal g-auto-town-size yes)
+;     (current-age == imperial-age)
+;     =>
+;     (set-strategic-number sn-minimum-town-size 12) ; default = 12
+;     (set-strategic-number sn-maximum-town-size 20) ; default = 20
+; )
+
+; (defrule
+;     (goal g-auto-town-size yes)
+;     (current-age == imperial-age)
+;     (building-type-count-total castle >= 1) ; important
+;     (building-type-count-total university >= 1)
+;     (building-type-count-total monastery >= 1)
+;     (building-type-count-total town-center >= 3)
+;     =>
+;     (up-full-reset-search)
+;     (up-find-local c: castle c: 20)
+;     (up-clean-search search-local object-data-distance search-order-desc)
+;     (up-get-search-state g-s)
+;     (up-set-target-object search-local c: 0)
+;     (up-get-object-data object-data-distance g-x)
+;     (up-modify-sn sn-maximum-town-size g: g-x)
+;     (up-modify-sn sn-maximum-town-size c:+ 4)
+; )
+
+; (defrule
+;     (true)
+;     =>
+;     (set-strategic-number sn-minimum-town-size 4) ; default = 12
+;     (set-strategic-number sn-maximum-town-size 6) ; default = 20
+;     (disable-self)
+; )
+
+; (defrule
+;     (current-age == feudal-age)
+;     =>
+;     (set-strategic-number sn-minimum-town-size 12) ; default = 12
+;     (set-strategic-number sn-maximum-town-size 12) ; default = 20
+;     (disable-self)
+; )
+
+; (defrule
+;     (current-age == castle-age)
+;     =>
+;     (set-strategic-number sn-minimum-town-size 8) ; default = 12
+;     (set-strategic-number sn-maximum-town-size 16) ; default = 20
+;     (disable-self)
+; )
+
+; (defrule
+;     (current-age == imperial-age)
+;     =>
+;     (set-strategic-number sn-minimum-town-size 12) ; default = 12
+;     (set-strategic-number sn-maximum-town-size 20) ; default = 20
+;     (disable-self)
+; )
+
+; (defrule
+;     (game-time > 1200) ; 20 min
+;     =>
+;     (set-strategic-number sn-minimum-town-size 24) ; default = 12
+;     (set-strategic-number sn-maximum-town-size 28) ; default = 20
+;     (disable-self)
+; )
+
+; (defrule
+;     (game-time > 2400) ; 40 min
+;     =>
+;     (set-strategic-number sn-minimum-town-size 26) ; default = 12
+;     (set-strategic-number sn-maximum-town-size 30) ; default = 20
+;     (disable-self)
+; )
+
+; (defrule
+;     (game-time > 3600) ; 60 min
+;     =>
+;     (set-strategic-number sn-minimum-town-size 28) ; default = 12
+;     (set-strategic-number sn-maximum-town-size 33) ; default = 20
+;     (disable-self)
+; )
+

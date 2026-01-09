@@ -7,3 +7,14 @@
     (release-escrow gold)
     (research ri-fervor)
 )
+
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow ri-fervor)
+    (current-age == imperial-age)
+    (unit-type-count-total monk c:== max-monks) ; if max monks
+    (gold-amount > 2000) ; and gold to spare
+    =>
+    (release-escrow gold)
+    (research ri-fervor)
+)

@@ -6,21 +6,8 @@
     ; (gold-amount < 2000)
     (housing-headroom >= 5)
     (can-train throwing-axeman-line)
-    (or
-        (or 
-            (or 
-                (and(building-type-count-total castle == 1)(up-pending-objects c: throwing-axeman-line < 1))
-                (and(building-type-count-total castle == 2)(up-pending-objects c: throwing-axeman-line < 2))
-            )
-            (or
-                (and(building-type-count-total castle == 3)(up-pending-objects c: throwing-axeman-line < 3))
-                (and(building-type-count-total castle == 4)(up-pending-objects c: throwing-axeman-line < 4)))
-        )
-        (or
-            (and(building-type-count-total castle == 5)(up-pending-objects c: throwing-axeman-line < 5))
-            (and(building-type-count-total castle >= 6)(up-pending-objects c: throwing-axeman-line < 6))
-        )
-    )
+    (up-get-fact building-type-count-total castle g-count)
+    (up-pending-objects c: throwing-axeman-line g:< g-count)
     =>
     (train throwing-axeman-line)
 )
