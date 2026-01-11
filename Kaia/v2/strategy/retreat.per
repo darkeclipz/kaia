@@ -16,3 +16,91 @@
 ;     (set-goal g-auto-town-size yes)
 ;     (disable-timer t-retreat)
 ; )
+
+
+(defrule
+    (goal g-retreat yes)
+    (up-enemy-units-in-town > 0) ; only retreat if we saw enemy units
+; (or 
+;     (up-enemy-buildings-in-town > 0))
+(or (building-type-count castle > 0)
+    (building-type-count town-center > 0))
+    (up-timer-status t-retreat == timer-disabled)
+    (up-compare-goal g-tsa-state <= 0)
+    =>
+    (enable-timer t-retreat retreat-delay) ; time it takes to retreat after a unit or building has been sighted
+)
+
+(defrule    
+    (timer-triggered t-retreat)
+    ; check if castle is still valid
+    =>
+    (disable-timer t-retreat)
+    ; set target to town center
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+
+    ; find furthest castle position
+    (up-full-reset-search)
+    (up-modify-goal g-x s:= sn-focus-player-number)
+    (set-strategic-number sn-focus-player-number my-player-number)
+    (up-find-remote c: castle c: 20)
+    (up-find-remote c: barracks c: 20)
+    (up-find-remote c: watch-tower c: 20)
+    (up-find-remote c: town-center c: 20) ; fallback in case the castles are destroyed
+    (up-clean-search search-remote object-data-distance search-order-desc)
+    (up-set-target-object search-remote c: 0)
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+
+    ; select all troops
+    (up-find-local c: infantry-class c: 240)
+    (up-find-local c: cavalry-class c: 240)
+    (up-find-local c: archery-class c: 240)
+    ; (up-find-local c: monk c: 240) ; monks too?
+    
+    ; skip one scout
+    ; (up-get-fact unit-type-count-total scout-cavalry-line g-count)
+    ; (up-modify-goal g-count s:- sn-total-number-explorers)
+    (up-find-local c: 947 g: 240) ; scout class
+    (up-remove-objects search-local object-data-action == actionid-explore) ; remove scouts
+
+    ; move to castle
+    (set-strategic-number sn-enable-patrol-attack 0)
+    ; (up-set-attack-stance)
+    (up-set-attack-stance infantry-class c: stance-no-attack)
+    (up-set-attack-stance cavalry-class c: stance-no-attack)
+    (up-set-attack-stance 947 c: stance-no-attack) ; scout
+    (up-set-attack-stance archery-class c: stance-no-attack)
+    (enable-timer t-reset-stance aggressive-delay) ; time we retreat before we attack them with aggresive stance (on sight) (5)
+
+    (up-target-point g-x0 action-move -1 -1)
+
+    ; (chat-local-to-self "retreating")
+    (up-modify-sn sn-focus-player-number g:= g-x)
+
+    ; (chat-local-to-self "retreat")
+)
+
+(defrule
+    (timer-triggered t-reset-stance)
+    =>
+    (disable-timer t-reset-stance)
+    (up-set-attack-stance infantry-class c: stance-aggressive)
+    (up-set-attack-stance cavalry-class c: stance-aggressive)
+    (up-set-attack-stance 947 c: stance-aggressive)
+    (up-set-attack-stance archery-class c: stance-aggressive)
+)
+
+; (defrule
+;     (timer-triggered t-one-minute)
+;     =>
+;     (up-full-reset-search)
+;     (up-get-point position-self g-x0)
+;     (up-set-target-point g-x0)
+;     (up-find-local c: villager-class c: 240)
+;     (up-get-search-state g-s)
+;     (up-chat-data-to-self "villagers selected (retreat): %d" g: g-lt)
+;     (set-strategic-number sn-enable-patrol-attack 0)
+;     (up-target-point g-x0 action-move -1 -1)
+; )

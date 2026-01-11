@@ -95,6 +95,7 @@
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-stone-mining)
+    (current-age >= castle-age)
     =>
     (release-escrow food)
     (release-escrow wood)

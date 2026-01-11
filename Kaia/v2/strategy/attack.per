@@ -1,21 +1,37 @@
 (defrule
     (goal g-attack yes)
-    ; (timer-triggered t-five-minutes)
-    (population-headroom < 25)
     (civilian-population >= 50)
-    (not (up-timer-status t-attack == timer-running))
+    (up-timer-status t-attack == timer-disabled)
+    ; attack if: population cap - population < 25
+    (up-get-fact population-cap 0 g-x)
+    (up-get-fact population 0 g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x g:min g-y)
+    (up-compare-goal g-x c:< 25)
     =>
     ; (enable-timer t-attack 5)
     ; (enable-timer t-stop-attack 60)
-    (chat-local-to-self "starting attack in 3 seconds...")
-    (enable-timer t-attack 3)
+    ; (chat-local-to-self "starting attack in 3 seconds...")
+    (enable-timer t-attack attack-delay) ; time it takes to attack again (usually after a retreat)
+)
+
+(defrule
+    (up-get-fact population-cap 0 g-x)
+    (up-get-fact population 0 g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x g:min g-y)
+    (up-compare-goal g-x c:>= 25)
+    =>
+    (set-goal g-attacking no)
 )
 
 (defrule
     (timer-triggered t-attack)
     =>
-    (chat-local-to-self "attacking!")
+    ; (chat-local-to-self "attacking!")
     (disable-timer t-attack)
+    (set-strategic-number sn-enable-patrol-attack 1)
+    (set-goal g-attacking yes)
     (set-goal g-enable-tsa yes)
     ; (set-strategic-number sn-percent-attack-soldiers 100)
     ; (set-strategic-number sn-minimum-attack-group-size 24)
@@ -30,3 +46,4 @@
     ; (set-goal g-attacking yes)
     ; (enable-timer t-stop-attack 60)
 )
+

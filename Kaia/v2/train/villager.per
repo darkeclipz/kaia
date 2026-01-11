@@ -71,7 +71,7 @@
 (defrule
     (goal g-train-villager yes)
     (civilian-population g:< g-max-villagers)
-    (up-get-fact building-type-count-total town-center g-count)
+    (up-get-fact building-type-count town-center g-count)
     (up-pending-objects c: villager g:< g-count)
     (can-train villager)
     =>

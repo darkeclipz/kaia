@@ -1,5 +1,16 @@
+(defrule
+    (goal g-escrow no)
+    =>
+    (set-escrow-percentage wood 0)
+    (set-escrow-percentage food 0)
+    (set-escrow-percentage gold 0)
+    (set-escrow-percentage stone 0)
+    (up-release-escrow)
+)
+
 ; stack X% escrow
 (defrule
+    (goal g-escrow yes)
     (current-age == dark-age)
     =>
     (set-escrow-percentage wood 0)
@@ -7,18 +18,17 @@
     (set-escrow-percentage gold 0)
     (set-escrow-percentage stone 0)
     (up-release-escrow)
-    (disable-self)
 )
 
 (defrule
-    (civilian-population >= 12)
+    (goal g-escrow no)
+    (current-age == dark-age)
     =>
-    (set-escrow-percentage wood 30)
-    (set-escrow-percentage food 30)
-    (set-escrow-percentage gold 30)
-    (set-escrow-percentage stone 30)
+    (set-escrow-percentage wood 0)
+    (set-escrow-percentage food 0)
+    (set-escrow-percentage gold 0)
+    (set-escrow-percentage stone 0)
     (up-release-escrow)
-    (disable-self)
 )
 
 ; release 
@@ -29,6 +39,7 @@
 
 ; release when under attack to train counter units
 (defrule
+    (goal g-escrow yes)
     (game-time > 1800)
     (town-under-attack)
     =>
@@ -37,20 +48,20 @@
 
 ; increase when reaching castle age to get imperial faster
 (defrule
+    (goal g-escrow yes)
     (current-age == castle-age)
     =>
     (set-escrow-percentage food 50) ; dont set too high; need food for villagers
     (set-escrow-percentage gold 100) ; release all at once to prevent only one type of unit being trained
-    (disable-self)
 )
 
 ; set back to X%
 (defrule
+    (goal g-escrow yes)
     (current-age == imperial-age)
     =>
     (set-escrow-percentage wood 30)
     (set-escrow-percentage food 30)
     (set-escrow-percentage gold 100) ; release all at once to prevent only one type of unit being trained
     (set-escrow-percentage stone 0)
-    (disable-self)
 )

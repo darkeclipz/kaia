@@ -2,28 +2,35 @@
 (defconst yes 1)
 
 ; goals
-(defconst g-build 1)
-(defconst g-train 2)
-(defconst g-train-reset 3)
-(defconst g-research 4)
-(defconst g-trade 5)
-(defconst g-resign 6)
-(defconst g-resigning 7)
-(defconst g-wall 8)
-(defconst g-auto-stop-attack 9)
-(defconst g-attack 10)
-(defconst g-attacking 11)
-(defconst g-auto-town-size 12)
-(defconst g-auto-camp-size 13)
-(defconst g-max-villagers 14)
-(defconst g-gold-mines 15)
-(defconst g-stone-mines 16)
-(defconst g-town-size 17)
-(defconst g-uncaptured-relics 18)
-(defconst g-max-unit-size 19)
-
-(defconst g-enable-tsa 20)
-(defconst g-tsa-state 21)
+(defconst g-build 1) ; enable building
+(defconst g-train 2) ; enable training (excl. villagers, use g-train-villagers)
+(defconst g-train-reset 3) ; request to reset what units to train
+(defconst g-research 4) ; enable researching
+(defconst g-trade 5) ; enable buying and selling of resources if needed
+(defconst g-resign 6) ; enable resignation
+(defconst g-resigning 7) ; indicates that we are resigning
+(defconst g-wall 8) ; builds a wall
+(defconst g-auto-stop-attack 9) ; not used
+(defconst g-attack 10) ; enable attacking
+(defconst g-attacking 11) ; not used
+(defconst g-auto-town-size 12) ; enable automatic town size (furthest building)
+(defconst g-auto-camp-size 13) ; enable automatic camp sizing (nearest mine/tree)
+(defconst g-max-villagers 14) ; max villagers to train
+(defconst g-wood-resources 15) ; count of wood resources on the map
+(defconst g-food-resources 16) ; count of food resources on the map (berries and sheep)
+(defconst g-gold-resources 17) ; count of gold resources on the map
+(defconst g-stone-resources 18) ; count of stone resources on the map
+(defconst g-town-size 19) ; size of the town used for sn-maximum-town-size
+(defconst g-uncaptured-relics 20) ; total uncaptured relics on the map
+(defconst g-max-unit-size 21) ; max unit count for trash units
+(defconst g-enable-tsa 22) ; request a TSA attack
+(defconst g-tsa-state 23) ; state the TSA attack is in
+(defconst g-scout 24) ; enables scouting
+(defconst g-build-order 25) ; order in which buildings are constructed in a strategy
+(defconst g-escrow 26) ; enables escrow
+(defconst g-harass 27) ; scout harasses the enemy early game
+(defconst g-stragglers 28) ; number of straggler trees around the TC
+(defconst g-retreat 29) ; enable retreating
 
 (defconst tsa-step-size 3)
 (defconst tsa-state-none 0)
@@ -59,6 +66,8 @@
 (defconst g-has-archers 204)
 (defconst g-has-siege 205)
 (defconst g-has-ships 206)
+
+(defconst g-num-relic-monks-trained 300)
 
 (defconst g-true 999)
 (defconst g-use-escrow 999)
@@ -96,6 +105,7 @@
 (defconst t-stop-attack 3)
 (defconst t-attack 4)
 (defconst t-retreat 5)
+(defconst t-reset-stance 6)
 
 ; parameters
 (defconst num-villagers-dark-age 22) ; max in dark age
@@ -118,9 +128,11 @@
 (defconst attack-interval 300)
 (defconst attack-groups 10)
 (defconst max-monks 8)
+(defconst attack-delay 20) ; attack interval with TSA if conditions to attack are satisfied
+(defconst retreat-delay 60) ; time it takes to retreat after a unit has been sighted
+(defconst aggressive-delay 8) ; time it takes after retreating to become aggressive again
 
-
-; (defconst status-ready 2)
+(defconst status-ready 2)
 (defconst status-resource 3)
 (defconst list-active 0)
 ; (defconst search-local 1)
@@ -173,6 +185,7 @@
     (set-strategic-number sn-disable-builder-assistance 1) ; prevent buildings from assisting on nearby foundations after their work is complete (0=assist,1=dont assist)
     (set-strategic-number sn-attack-intelligence 1) ; tries to avoid enemy units and attack from different sides
     (set-strategic-number sn-disable-tower-priority 1)
+    (set-strategic-number sn-sentry-distance 0) ; extends the defend area above max-town-size, we dont want this
     ; (set-strategic-number sn-allow-civilian-offense 1) ; perhaps do this early game
 
     ; (up-set-placement-data my-player-number -1 c: -0) ; build around town center
@@ -184,6 +197,7 @@
 (defrule
     (true)
     =>
+    (up-log-data 0 "init" c: 0)
     (set-goal g-build yes)
     (set-goal g-train yes)
     (set-goal g-train-reset yes)
@@ -194,14 +208,19 @@
     (set-goal g-attack yes)
     (set-goal g-auto-town-size yes)
     (set-goal g-auto-camp-size yes)
+    (set-goal g-scout yes)
+    (set-goal g-escrow yes)
+    (set-goal g-harass yes)
+    (set-goal g-retreat yes)
     (disable-self)
 )
 
 (defrule
     (true)
     =>
+    (up-log-data 0 "setting strategy" c: 0)
     (set-goal g-dark-rush no)
-    (set-goal g-fast-castle no)
+    (set-goal g-fast-castle yes)
     (set-goal g-feudal-rush no)
     (disable-self)
 )
@@ -209,10 +228,9 @@
 (defrule
     (goal g-train-reset yes)
     =>
-    (chat-local-to-self "reset training goals")
     (set-goal g-train-villager yes)
     (set-goal g-train-militiaman-line no)
-    (set-goal g-train-spearman-line no)
+    (set-goal g-train-spearman-line yes)
     (set-goal g-train-archer-line no)
     (set-goal g-train-scout-cavalry-line no)
     (set-goal g-train-knight-line yes)
@@ -221,12 +239,12 @@
     (set-goal g-train-scorpion-line no)
     (set-goal g-train-mangonel-line no)
     (set-goal g-train-skirmisher-line no)
-    (set-goal g-train-cavalry-archer-line yes)
+    (set-goal g-train-cavalry-archer-line no)
     (set-goal g-train-monk yes)
     (set-goal g-train-reset no)
+    (up-log-data 0 "training goals resetted" c: 0)
 )
 
-(load "Kaia\v2\timer")
 (load "Kaia\v2\gather")
 (load "Kaia\v2\drop")
 (load "Kaia\v2\town-size")
@@ -234,6 +252,7 @@
 (load "Kaia\v2\escrow")
 (load "Kaia\v2\trade")
 (load "Kaia\v2\resign")
+(load "Kaia\v2\knowledge\resources")
 (load "Kaia\v2\technology\has")
 (load "Kaia\v2\technology\resource")
 (load "Kaia\v2\technology\age")
@@ -255,9 +274,11 @@
 (load "Kaia\v2\strategy\knight-rush")
 (load "Kaia\v2\strategy\retreat")
 (load "Kaia\v2\strategy\dark-rush")
-(load "Kaia\v2\tactic\relic")
+(load "Kaia\v2\tactic\scout")
+(load "Kaia\v2\tactic\harass")
 (load "Kaia\v2\tactic\boar-hunting")
-(load "Kaia\v2\tactic\tsa")
+(load "Kaia\v2\tactic\capture-relic")
+(load "Kaia\v2\tactic\tsa-attack")
 (load "Kaia\v2\train\max-unit-size")
 (load "Kaia\v2\train\villager")
 (load "Kaia\v2\train\knight-line")
@@ -292,4 +313,5 @@
 (load "Kaia\v2\build\watch-tower")
 (load "Kaia\v2\build\wall")
 
+(load "Kaia\v2\timer")
 (load "Kaia\v2\debug")

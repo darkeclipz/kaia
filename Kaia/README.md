@@ -11,6 +11,11 @@ Kaia is a custom AOE2 bot that should close the difficulty gap a bit vs. the def
  * Add light cavalry and exploring with 2 or even 3 cavals, instead of the current fixed 1. Perhaps based on map size.
  * ~~Build watch towers towards the enemy, instead of a random position around the town.~~
  * Find and protect relics in the case it is not possible to send a monk before the enemy team does. Basically if they reach the castle age and a relic has been located, send a scout cavalry to that position. Scout cavalry is quick enough to kill the monk before they are being converted.
+ * ~~FIX: Scout doesn't explore the enemy town, so TSA doesn't work.~~
+ * ~~FIX: Camp size for trees is not updated dynamically, so it gets stuck making a lumber camp.~~
+ * Idea: move the scout to the enemy at some point to see which units they are making as a first attack. We can train counter units in that case. Depending on that we need to either build an archery range or stables.
+ * Use scouts to harass the enemy at the start of a game at the 8th minute (berry time). Stand in range of the TC and attack a villager to have them garrison in the TC. Then run away so they come out again. Repeat this until the scout is dead. Also run away if we are being attacked. 
+ * Update `g-XXX-resources` to only include gold and stone that is reachable within half of the map size. This is to prevent "suicide building missions" to build a mining camp next to the enemy base.
 
 
 ## Findings
@@ -30,6 +35,8 @@ Kaia is a custom AOE2 bot that should close the difficulty gap a bit vs. the def
  * **Three ways to get AI to attack:** https://forums.ageofempires.com/t/three-ways-to-get-the-ai-to-attack/205476
  * **Discussion about attack groups:** https://aok.heavengames.com/cgi-bin/forums/display.cgi?action=st&fn=28&tn=39123
  * **TSA:** https://aok.heavengames.com/university/other/town-size-attack/
+ * **Difficulty parameters (hard-coded AI limits based on difficulty):** https://airef.github.io/commands/commands-details.html#difficulty
+  * Specifically the time it takes to train a villager (33 sec on easy vs. 25 sec on extreme).
 
 ## UserPatch commands
 

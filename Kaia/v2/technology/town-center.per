@@ -1,11 +1,14 @@
 (defrule
-    (current-age >= feudal-age)
+    (goal g-research yes)
+    (current-age >= dark-age)
+    (civilian-population >= 26)
     (can-research ri-loom)
     =>
     (research ri-loom)
 )
 
 (defrule
+    (goal g-research yes)
     (can-research ri-town-watch)
     (current-age >= castle-age)
     =>
@@ -13,6 +16,7 @@
 )
 
 (defrule
+    (goal g-research yes)
     (can-research ri-town-patrol)
     (current-age >= imperial-age)
     =>

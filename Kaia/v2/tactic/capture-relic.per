@@ -11,7 +11,7 @@
 (defrule
     (goal g-rt 1)
     =>
-    (chat-local-to-self "found relic!")
+    ; (chat-local-to-self "found relic!")
     (up-modify-goal g-uncaptured-relics g:= g-rt)
     ; TODO: send a unit to the relic to "guard" it
         ; set relic point as target

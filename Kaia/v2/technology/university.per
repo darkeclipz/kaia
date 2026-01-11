@@ -43,6 +43,8 @@
 
 (defrule
     (goal g-research yes)
+(or (up-compare-goal g-has-archers == yes)
+    (up-compare-goal g-has-ranged-units == yes))
     (can-research-with-escrow ri-chemistry)
     =>
     (release-escrow food)

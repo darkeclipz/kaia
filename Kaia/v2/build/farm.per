@@ -31,6 +31,11 @@
 ;     (build farm)
 ; )
 
+; find berries around camp
+; dont build a farm if there are berries
+
+
+
 (defrule
     (goal g-build yes)
     (current-age == dark-age)
@@ -38,6 +43,7 @@
     (wood-amount > 600))
     (building-type-count-total farm < 5)
     (up-pending-objects c: farm == 0)
+    (up-compare-goal g-food-resources < 2) ; build farms after the berries and animals are done
     ; (idle-farm-count < 3)
     (can-build farm)
     =>

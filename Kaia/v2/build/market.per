@@ -2,7 +2,7 @@
     (goal g-build yes)
     (can-build market)
     (building-type-count-total market == 0)
-    (building-type-count-total monastery > 0)
+    (building-type-count-total archery-range > 0)
     (up-pending-objects c: market == 0)
     =>
     (up-set-placement-data my-player-number town-center c: -4) ; bias to the back

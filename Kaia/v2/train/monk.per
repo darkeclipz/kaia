@@ -2,11 +2,13 @@
 (defrule
     (goal g-train yes)
     (unit-type-count-total monk g:< g-uncaptured-relics)
+    (up-compare-goal g-num-relic-monks-trained g:< g-uncaptured-relics) ; in case they get killed
     (up-pending-objects c: monk == 0)
     (can-train-with-escrow monk)
     =>
     (release-escrow gold)
     (train monk)
+    (up-modify-goal g-num-relic-monks-trained c:+ 1)
 )
 
 ; train monks

@@ -1,0 +1,31 @@
+; dont scout if we dont have any, dont use other units for this
+(defrule
+(or (unit-type-count-total scout-cavalry-line == 0)
+    (goal g-scout no))
+    =>
+    (up-log-data 0 "stop scouting, no cavalry scout unit available" c: 0)
+    (up-modify-goal sn-total-number-explorers c: 0)
+    (up-modify-goal sn-number-explore-groups c: 0)
+    (up-reset-scouts)
+)
+
+; start scouting if we have a scout
+(defrule
+    (goal g-scout yes)
+    (unit-type-count-total scout-cavalry-line > 0)
+    =>
+    (up-log-data 0 "start scouting" c: 0)
+    (up-modify-goal sn-total-number-explorers c: 1)
+    (up-modify-goal sn-number-explore-groups c: 1)
+)
+
+; scout enemy position after some time
+(defrule
+    (goal g-scout yes)
+    (game-time s:> sn-home-exploration-time)
+    (up-compare-sn sn-total-number-explorers c:> 0)
+    =>
+    (up-log-data 0 "scout enemy %d once" s: sn-target-player-number)
+    (up-send-scout group-type-land-explore scout-enemy)
+    (disable-self)
+)

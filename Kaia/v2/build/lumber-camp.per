@@ -1,12 +1,34 @@
+; perhaps we can also search the next spot based on the current spot?
+; sort lumber camps based on ID (desc) and grab the top on; that should be the last one that has been build
+
 (defrule
     (goal g-build yes)
     (building-type-count-total mill > 0)
     (can-build-with-escrow lumber-camp)
     (resource-found wood)
     (dropsite-min-distance wood > 3)
+    (up-compare-goal g-wood-resources > 5)
     (up-pending-objects c: lumber-camp == 0)
     =>
     (release-escrow wood)
-    (build lumber-camp)
-    (up-modify-sn sn-lumber-camp-max-distance c:+ 3)
+
+    ; find position of last build lumber-camp
+    
+
+    (up-full-reset-search)
+    (up-get-point position-self g-x0)
+    (up-get-point position-center g-x1)
+    (up-lerp-tiles g-x0 g-x1 c: -5)
+    (up-set-target-point g-x0)
+    (up-filter-status c: status-ready c: list-active)
+	(up-find-resource c: wood c: 40)
+    (up-get-search-state g-s)
+    (up-modify-goal g-wood-resources g:= g-rt)
+    (up-clean-search search-remote object-data-distance search-order-asc)
+    (up-set-target-object search-remote c: 5) ; skip first trees, can be out of bounds!!
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: lumber-camp)
 )

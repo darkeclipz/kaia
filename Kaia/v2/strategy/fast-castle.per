@@ -1,236 +1,500 @@
-; enable fast castle if there are a lot of resources, e.g. deathmatch
+; https://www.youtube.com/watch?v=JsTNM7j6fs4
+
 (defrule
-    (false)
-    (game-time < 30)
-    (food-amount > 10000)
-    (wood-amount > 10000)
-    (gold-amount > 5000)
-    (stone-amount > 2500)
+    (goal g-fast-castle yes)
     =>
-    (set-goal g-fast-castle yes)
+    (set-goal g-build no)
+    (set-goal g-research no)
+    (set-goal g-train no)
+    (set-goal g-trade no)
+    (set-goal g-attack no)
+    (set-goal g-escrow no)
+    (set-goal g-harass no)
+    (set-goal g-build-order 0)
+    (set-escrow-percentage wood 0)
+    (set-escrow-percentage food 0)
+    (set-escrow-percentage gold 0)
+    (set-escrow-percentage stone 0)
+    (set-strategic-number sn-home-exploration-time 300)
+    ; (set-strategic-number sn-allow-adjacent-dropsites 1)
     (chat-local-to-self "fast castle: enabled")
     (disable-self)
 )
 
+; gathering
 (defrule
-    (goal g-fast-castle yes)
+    (goal g-fast-castle yes)    
+    (civilian-population >= 4)
     =>
-    (set-goal g-train-archer-line yes)
-    (set-goal g-train-villager no)
-    (set-goal g-build no)
+    (set-strategic-number sn-food-gatherer-percentage 100)
+    (set-strategic-number sn-wood-gatherer-percentage 0)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 5)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 100)
+    (set-strategic-number sn-wood-gatherer-percentage 0)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 6)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 100)
+    (set-strategic-number sn-wood-gatherer-percentage 0)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 10)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 60)
+    (set-strategic-number sn-wood-gatherer-percentage 40)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 15)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 73)
+    (set-strategic-number sn-wood-gatherer-percentage 27)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 20)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 60)
+    (set-strategic-number sn-wood-gatherer-percentage 40)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 22)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 61)
+    (set-strategic-number sn-wood-gatherer-percentage 30)
+    (set-strategic-number sn-gold-gatherer-percentage 9)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 28)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 42)
+    (set-strategic-number sn-wood-gatherer-percentage 46)
+    (set-strategic-number sn-gold-gatherer-percentage 12)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
     (disable-self)
 )
 
+; research feudal age
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 23)
+    (can-research feudal-age)
+    =>
+    (research feudal-age)
+)
+
+; research castle age
 (defrule
     (goal g-fast-castle yes)
+    (civilian-population >= 25)
+    (can-research castle-age)
+    =>
+    (research castle-age)
+)
+
+; train villagers
+(defrule
+    (goal g-fast-castle yes)
+    (current-age == dark-age)
+    (civilian-population < 22)
+    (up-pending-objects c: villager < 2)
     (can-train villager)
     =>
     (train villager)
-    (disable-self)
 )
-
 (defrule
-    (goal g-fast-castle yes)
+    (goal g-fast-castle yes)    
     (current-age == feudal-age)
+    (civilian-population < 24)
+    (up-pending-objects c: villager < 2)
     (can-train villager)
     =>
     (train villager)
-    (disable-self)
 )
 
+; house
 (defrule
-    (goal g-fast-castle yes)
+    (goal g-fast-castle yes)    
+    (goal g-build-order 0)
+    (can-build house)
+    =>
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 5)
+    
+    (up-build place-point 0 c: house)
+    (up-modify-goal g-build-order c:+ 1)
+    (chat-local-to-self "build first house")
+)
+
+; house
+(defrule
+    (goal g-fast-castle yes)    
+    (goal g-build-order 1)
+    (building-type-count house == 1)
+    (can-build house)
+    =>
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 5)
+    (up-build place-point 0 c: house)
+    (up-modify-goal g-build-order c:+ 1)
+    (chat-local-to-self "build second house")
+)
+
+; house
+(defrule
+    (goal g-fast-castle yes)    
+    (goal g-build-order 2)
+    (civilian-population >= 13)
+    (can-build house)
+    =>
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 5)
+    (up-build place-point 0 c: house)
+    (up-modify-goal g-build-order c:+ 1)
+    (chat-local-to-self "build third house")
+)
+
+; house
+(defrule
+    (goal g-fast-castle yes)    
+    (goal g-build-order 3)
+    (building-type-count house == 3)
+    (can-build house)
+    =>
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 5)
+    (up-build place-point 0 c: house)
+    (up-modify-goal g-build-order c:+ 1)
+    (chat-local-to-self "build fourth house")
+)
+
+; mill
+(defrule
+    (goal g-fast-castle yes)    
+    (goal g-build-order 4)
+    (building-type-count house == 4)
     (can-build mill)
-    (up-pending-objects c: mill == 0)
     =>
     (build mill)
-    (disable-self)
+    (up-modify-goal g-build-order c:+ 1)
+    (chat-local-to-self "build mill")
 )
 
+; lumber camp
 (defrule
     (goal g-fast-castle yes)
-    (can-build barracks)
-    (up-pending-objects c: barracks == 0)
+    (up-compare-goal g-build-order == 5)
+    (up-compare-goal g-wood-resources > 5)
+    (up-pending-objects c: lumber-camp == 0)
+    (building-type-count mill == 1)
+    (can-build lumber-camp)
     =>
-    (build barracks)
-    (disable-self)
+    (up-full-reset-search)
+    (up-get-point position-self g-x0)
+    (up-get-point position-center g-x1)
+    (up-lerp-tiles g-x0 g-x1 c: -)
+    (up-set-target-point g-x0)
+    (up-filter-status c: status-ready c: list-active)
+	(up-find-resource c: wood c: 40)
+    (up-get-search-state g-s)
+    (up-modify-goal g-wood-resources g:= g-rt)
+    (up-clean-search search-remote object-data-distance search-order-asc)
+    ;(up-set-target-object search-remote g: g-stragglers) ; skip first trees, can be out of bounds!!
+    (up-set-target-object search-remote c: 5)
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: lumber-camp)
+    (up-modify-goal g-build-order c:+ 1)
+    (chat-local-to-self "build lumber camp")
 )
 
+; lumber camp (dont increment build order)
 (defrule
     (goal g-fast-castle yes)
+    (up-compare-goal g-build-order >= 5)
+    (dropsite-min-distance wood > 5)
+    (up-compare-goal g-wood-resources > 5)
+    (up-pending-objects c: lumber-camp == 0)
+    (building-type-count mill >= 1)
+    (can-build lumber-camp)
+    =>
+    (up-full-reset-search)
+    (up-filter-status c: status-ready c: list-active)
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+	(up-find-resource c: wood c: 40)
+    (up-get-search-state g-s)
+    (up-modify-goal g-wood-resources g:= g-rt)
+    (up-clean-search search-remote object-data-distance search-order-asc)
+    ; (up-set-target-object search-remote g:- g-stragglers) ; skip first trees, can be out of bounds!!
+    (up-set-target-object search-remote c: 5)
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: lumber-camp)
+    (chat-local-to-self "build lumber camp")
+)
+
+; house
+(defrule
+    (goal g-fast-castle yes)    
+    (goal g-build-order 6)
+    (building-type-count lumber-camp == 1)
     (can-build house)
-    (up-pending-objects c: house < 3)
+    =>
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 5)
+    (up-build place-point 0 c: house)
+    (up-modify-goal g-build-order c:+ 1)
+    (chat-local-to-self "build fourth house")
+)
+
+; build farm (4x)
+(defrule
+    (goal g-fast-castle yes)    
+    (up-compare-goal g-build-order > 6)
     (current-age == dark-age)
+    (building-type-count-total farm < 4)
+    (can-build farm)
     =>
-    (build house)
+    (build farm)
+    (chat-local-to-self "build farm (first 4)")
+    ; (up-modify-goal g-build-order c:+ 1)
 )
 
+; barracks
 (defrule
-    (goal g-fast-castle yes)
-    (can-build blacksmith)
-    (up-pending-objects c: blacksmith == 0)
+    (goal g-fast-castle yes)    
+    (goal g-build-order 7)
+    (can-build barracks)
     =>
-    (build blacksmith)
-    (disable-self)
+    (up-set-placement-data my-player-number town-center c: 4) ; bias to front
+    (set-strategic-number sn-placement-zone-size 6)
+    (set-strategic-number sn-placement-to-center 1)
+    (up-build place-control 0 c: barracks)
+    (up-modify-goal g-build-order c:+ 1)
+    (chat-local-to-self "build barracks")
 )
 
+; stable
 (defrule
-    (goal g-fast-castle yes)
+    (goal g-fast-castle yes)    
+    (goal g-build-order 8)
     (can-build stable)
-    (up-pending-objects c: stable == 0)
     =>
-    (build stable)
-    (disable-self)
+    (up-set-placement-data my-player-number town-center c: 4) ; bias to front
+    (set-strategic-number sn-placement-zone-size 6)
+    (set-strategic-number sn-placement-to-center 1)
+    (up-build place-control 0 c: stable)
+    (up-modify-goal g-build-order c:+ 1)
+    (chat-local-to-self "build stable")
+
+    ; send scout back
+	(set-strategic-number sn-number-explore-groups 0)
+	(set-strategic-number sn-total-number-explorers 0)
+    (up-reset-scouts)
 )
 
+; build farm (4x)
 (defrule
     (goal g-fast-castle yes)
-    (can-build archery-range)
-    (up-pending-objects c: archery-range == 0)
+    (up-compare-goal g-build-order > 7)
+    (civilian-population >= 23)
+    (building-type-count-total farm < 8)
+    (can-build farm)
     =>
-    (build archery-range)
-    (disable-self)
+    (build farm)
+    (chat-local-to-self "build farm (second 4)")
+    ; (up-modify-goal g-build-order c:+ 1)
 )
 
-; (defrule
-;     (goal g-fast-castle yes)
-;     (current-age == feudal-age)
-;     (can-build lumber-camp)
-;     =>
-;     (build lumber-camp)
-;     (disable-self)
-; )
-
-; (defrule
-;     (goal g-fast-castle yes)
-;     (current-age == feudal-age)
-;     (can-build mining-camp)
-;     =>
-;     (build mining-camp)
-;     (disable-self)
-; )
-
-; research feudal asap
+; mining camp
 (defrule
-    (goal g-fast-castle yes)
-    (can-research-with-escrow feudal-age)
-    =>
-    (release-escrow food)
-    (release-escrow wood)
-    (research feudal-age)
-    (set-goal g-build yes)
-)
-
-; research castle asap
-(defrule
-    (goal g-fast-castle yes)
-    (can-research-with-escrow castle-age)
-    =>
-    (release-escrow food)
-    (release-escrow wood)
-    (research castle-age)
-    (set-goal g-train-villager yes)
-)
-
-; mining camps before its full with other buildings
-(defrule
-    (goal g-fast-castle yes)
-    (goal g-build yes)
-(or (resource-found gold)
-    (resource-found stone))
-    (goal g-fast-castle yes)
-    (wood-amount > 2000)
-    (up-pending-objects c: mining-camp == 0)
-    (building-type-count-total mining-camp < 2)
+    (goal g-fast-castle yes)    
+    (goal g-build-order 9)
+    (up-compare-goal g-gold-resources > 0)
+    (civilian-population >= 22)
     (can-build mining-camp)
     =>
-    (build mining-camp)
-    (up-modify-sn sn-mining-camp-max-distance c:+ 15)
+    (up-full-reset-search)
+    (up-filter-status c: status-resource c: list-active)
+	(up-find-resource c: gold c: 40)
+    (up-get-search-state g-s)
+    (up-modify-goal g-gold-resources g:= g-rt)
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (up-clean-search search-remote object-data-distance search-order-asc)
+    (up-set-target-object search-remote c: 0)
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: mining-camp)
+    (up-modify-goal g-build-order c:+ 1)
+    (chat-local-to-self "build mining camp")
 )
 
-; ; place town center next to gold or stone
+; market
+(defrule
+    (goal g-fast-castle yes)    
+    (goal g-build-order 10)
+    (can-build market)
+    =>
+    (up-set-placement-data my-player-number town-center c: -4) ; bias to back
+    (set-strategic-number sn-placement-zone-size 6)
+    (set-strategic-number sn-placement-to-center 1)
+    (up-build place-control 0 c: market)
+    (up-modify-goal g-build-order c:+ 1)
+    (chat-local-to-self "build market")
+)
+
+; train scouts to defend
+(defrule
+    (goal g-fast-castle yes)
+    (food-amount > 85)
+    (can-train scout-cavalry-line)
+(or (unit-type-count-total scout-cavalry-line < 4)
+    (up-research-status c: castle-age >= research-pending))
+    (up-pending-objects c: scout-cavalry-line == 0)
+    =>
+    (train scout-cavalry-line)
+)
+
+; ; buy 100 wood
 ; (defrule
-;     (goal g-fast-castle yes)
+;     (up-compare-goal g-build-order >= 10)
+;     (can-buy-commodity wood)
 ;     =>
-;     (set-strategic-number sn-town-center-placement mining-camp)
+;     (buy-commodity wood)
 ;     (disable-self)
 ; )
 
-; fast castle; buy max 400 stone if needed
-(defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
-(defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
-(defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
-(defrule (goal g-fast-castle yes)(stone-amount < 100)(can-buy-commodity stone) => (buy-commodity stone)(disable-self))
-
-; increase camp distance
+; town center 1
 (defrule
-    (goal g-fast-castle yes)
-    (current-age == castle-age)
+    (goal g-fast-castle yes)    
+    (up-compare-goal g-build-order >= 11)
+    (building-type-count-total town-center < 2)
+    (up-pending-objects c: town-center == 0)
+    (can-build town-center)
     =>
+    ; (up-set-placement-data my-player-number town-center c: -4) ; bias to back
+    ; (set-strategic-number sn-placement-zone-size 6)
+    ; (set-strategic-number sn-placement-to-center 1)
     (set-strategic-number sn-town-center-placement mining-camp)
-    (set-strategic-number sn-mining-camp-max-distance 20)
-    (disable-self)
+    (up-build place-normal 0 c: town-center)
+    (up-modify-goal g-build-order c:+ 1)
+    (chat-local-to-self "build town center 1")
 )
 
-; militiaman to defend
+; town center 2
 (defrule
     (goal g-fast-castle yes)
-    (unit-type-count-total militiaman-line < 8)
-    (up-pending-objects c: militiaman-line < 2)
-    (can-train militiaman-line)
-    =>
-    (train militiaman-line)
-)
-
-; upgrade militiaman asap
-(defrule
-    (goal g-fast-castle yes)
-    (can-research ri-man-at-arms)
-    =>
-    (research ri-man-at-arms)
-)
-
-; train archers to defend
-(defrule
-    (goal g-fast-castle yes)
-    (unit-type-count-total archer-line < 8)
-    (up-pending-objects c: archer-line < 2)
-    (can-train archer-line)
-    =>
-    (train archer-line)
-)
-
-; knight to defend
-(defrule
-    (goal g-fast-castle yes)
-    (unit-type-count-total knight-line < 8)
-    (up-pending-objects c: knight-line < 2)
-    (can-train knight-line)
-    =>
-    (train knight-line)
-)
-
-; build 4 town centers
-(defrule
-    (goal g-fast-castle yes)
+    (up-compare-goal g-build-order >= 12)
+    (building-type-count-total town-center >= 2)
     (building-type-count-total town-center < 3)
     (up-pending-objects c: town-center == 0)
     (can-build town-center)
     =>
-    (build town-center)
-    (up-modify-sn sn-mining-camp-max-distance c:+ 5)
+    ; (up-set-placement-data my-player-number town-center c: -4) ; bias to back
+    ; (set-strategic-number sn-placement-zone-size 6)
+    ; (set-strategic-number sn-placement-to-center 1)
+    (set-strategic-number sn-town-center-placement mining-camp)
+    (up-build place-normal 0 c: town-center)
+    (up-modify-goal g-build-order c:+ 1)
+    (chat-local-to-self "build town center 2")
 )
 
-; research imperial age
+; ; stable
+; (defrule
+;     (goal g-fast-castle yes)    
+;     (goal g-build-order 12)
+;     (building-type-count-total town-center >= 2)
+;     (can-build stable)
+;     =>
+;     (up-set-placement-data my-player-number town-center c: 4) ; bias to front
+;     (set-strategic-number sn-placement-zone-size 6)
+;     (set-strategic-number sn-placement-to-center 1)
+;     (up-build place-control 0 c: stable)
+;     (up-modify-goal g-build-order c:+ 1)
+;     (chat-local-to-self "build stable")
+; )
+
+; auto build houses
 (defrule
     (goal g-fast-castle yes)
-    (can-research-with-escrow imperial-age)
+    (housing-headroom < 5)
+    (population-headroom > 3) ; = population-cap - current-housing-capacity
+    (up-compare-goal g-build-order >= 7)
+    (up-pending-objects c: house == 0)
+    (can-build house)
     =>
-    (release-escrow food)
-    (release-escrow wood)
-    (release-escrow gold)
-    (research imperial-age)
-    (set-goal g-fast-castle no)
-    (set-strategic-number sn-town-center-placement 0)
-    (chat-local-to-self "fast castle: complete")
+    ; try to place the houses as close to the TC as possible
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 5)
+    (up-build place-point 0 c: house)
 )
+
+; TODO: research bow saw
+; TODO: research heavy plow
+
+; done
+(defrule
+    (goal g-fast-castle yes)
+    (current-age >= castle-age)
+    (building-type-count town-center >= 3)
+    =>
+    (set-goal g-build yes)
+    (set-goal g-research yes)
+    (set-goal g-train yes)
+    (set-goal g-trade yes)
+    (set-goal g-attack yes)
+    (set-goal g-escrow yes)
+    (set-goal g-fast-castle no)
+    (set-goal g-scout yes)
+    (chat-local-to-self "fast castle: done")
+
+	(set-strategic-number sn-number-explore-groups 1)
+	(set-strategic-number sn-total-number-explorers 1)
+    ; (up-reset-scouts)
+
+    (disable-self)
+)
+
