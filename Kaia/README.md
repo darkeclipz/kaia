@@ -16,7 +16,8 @@ Kaia is a custom AOE2 bot that should close the difficulty gap a bit vs. the def
  * Idea: move the scout to the enemy at some point to see which units they are making as a first attack. We can train counter units in that case. Depending on that we need to either build an archery range or stables.
  * Use scouts to harass the enemy at the start of a game at the 8th minute (berry time). Stand in range of the TC and attack a villager to have them garrison in the TC. Then run away so they come out again. Repeat this until the scout is dead. Also run away if we are being attacked. 
  * Update `g-XXX-resources` to only include gold and stone that is reachable within half of the map size. This is to prevent "suicide building missions" to build a mining camp next to the enemy base.
-
+ * Build a siege workshop in the center of the map once we start attacking, if it is training any siege units.
+ * Place a lumber camp next to the last lumber camp that has been placed. This is to ensure that we minimize the distance that the villagers have to walk.
 
 ## Findings
 
@@ -24,7 +25,15 @@ Kaia is a custom AOE2 bot that should close the difficulty gap a bit vs. the def
 2. `up-get-fact military-population any-enemy g-x` doesn't work, because it only counts the population for the current player. There is no `up-` variant available that counts enemy units this way. Use `up-find-remote` and keep track of the enemy units that way.
 3. Farms don't get up and running if `sn-maximum-food-drop-distance` is too small.
 4. Research loom before hunting boars (if applicable).
-5. Playing a normal game with low resources needs like 6 barracks, archery ranges, or stables to be able to quickly produce unit. With only 3 of them the resources stack up because they don't train fast enough.
+5. Playing a normal game with low resources needs like 6 barracks, archery ranges, or stables to be able to quickly produce unit. With only 3 of them the resources stack up because they don't train fast enough. Perhaps even build 9 of them in late imperial?
+
+## Game parameters
+
+Note that the game should be started with the following parameters: `SKIPINTRO DEBUGSPEEDS AIDEBUGGING LOGSYSTEMS=AIScript VERBOSELOGGING AISCRIPTPROFILING CONSTANTLOGGING`.
+
+## Logs
+
+Logs produced by the game can be found here: `~/.steam/debian-installation/steamapps/compatdata/813780/pfx/drive_c/users/steamuser/Games/Age of Empires 2 DE/logs` on Linux.
 
 ## Resources
  
@@ -36,7 +45,8 @@ Kaia is a custom AOE2 bot that should close the difficulty gap a bit vs. the def
  * **Discussion about attack groups:** https://aok.heavengames.com/cgi-bin/forums/display.cgi?action=st&fn=28&tn=39123
  * **TSA:** https://aok.heavengames.com/university/other/town-size-attack/
  * **Difficulty parameters (hard-coded AI limits based on difficulty):** https://airef.github.io/commands/commands-details.html#difficulty
-  * Specifically the time it takes to train a villager (33 sec on easy vs. 25 sec on extreme).
+   * Specifically the time it takes to train a villager on easy is 33 seconds vs. only 25 seconds when the difficulty is set to extreme.
+ * **Object data:** https://airef.github.io/parameters/parameters-details.html#ObjectData
 
 ## UserPatch commands
 
@@ -48,6 +58,7 @@ Kaia is a custom AOE2 bot that should close the difficulty gap a bit vs. the def
  * Attack units with local vs remote: https://airef.github.io/commands/commands-details.html#up-target-objects
  * Set target object from search result: https://airef.github.io/commands/commands-details.html#up-set-target-object
  * Only select units within 10 tiles from target point: https://airef.github.io/commands/commands-details.html#up-filter-distance
+
 
 ### Boar hunting
 

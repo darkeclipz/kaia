@@ -1,16 +1,27 @@
-; research wheel barrow
+; allows villagers to carry 26.95% more resources and move 10% faster
+; 175 food
+; 50 wood
 (defrule
     (goal g-research yes)
+    (building-type-count-total town-center >= 3)
     (can-research-with-escrow ri-wheel-barrow)
+    (civilian-population > 50)
+    (food-amount > 500)
     =>
-    (release-escrow food)
+    ; (release-escrow food)
     (release-escrow wood)
     (research ri-wheel-barrow)
 )
 
-; research hand cart
+; allows villages to carry 50% more resources and move 10% faster
+; 300 food
+; 200 wood
 (defrule
     (goal g-research yes)
+    (current-age == imperial-age)
+    (food-amount > 800)
+    (building-type-count-total town-center >= 3)
+    (civilian-population > 50)
     (can-research-with-escrow ri-hand-cart)
     =>
     (release-escrow food)
@@ -18,50 +29,74 @@
     (research ri-hand-cart)
 )
 
-; research horse collar
+; farms provide +75 food (for a total of 250) before they need to be reseeded
+; 75 food
+; 75 wood
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-horse-collar)
+    (up-research-status c: castle-age >= research-pending)
     =>
     (release-escrow food)
     (release-escrow wood)
     (research ri-horse-collar)
 )
 
-; research heavy plot
+; farms provide +125 food (for a total of 375) and allows villagers to carry +1 food
+; 125 food
+; 125 wood
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-heavy-plow)
+    (up-research-status c: imperial-age >= research-pending)
     =>
     (release-escrow food)
     (release-escrow wood)
     (research ri-heavy-plow)
 )
 
-; TODO: research crop rotation?
-; ...
+; farms provide +175 food (for a total of 550)
+; 250 food
+; 250 wood
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow ri-crop-rotation)
+    (current-age == imperial-age)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-crop-rotation)
+)
 
-; research double bit axe
+; allows villager to gather wood 20% faster
+; 100 food
+; 50 wood
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-double-bit-axe)
+    (up-research-status c: castle-age >= research-pending)
     =>
     (release-escrow food)
     (release-escrow wood)
     (research ri-double-bit-axe)
 )
 
-; research two man saw
+; allows villagers to gather wood 20% faster
+; 150 food
+; 100 wood
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-two-man-saw)
+    (food-amount > 500)
     =>
     (release-escrow food)
     (release-escrow wood)
     (research ri-two-man-saw)
 )
 
-; research bow saw
+; allows villagers to gather wood 10% faster
+; 300 food
+; 200 wood
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-bow-saw)
@@ -71,30 +106,42 @@
     (research ri-bow-saw)
 )
 
-; research gold mining
+; allows villagers to gather gold 15% faster
+; 100 food
+; 75 wood
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-gold-mining)
+    ; (civilian-population > 60)
+    (up-research-status c: imperial-age >= research-pending)
     =>
     (release-escrow food)
     (release-escrow wood)
     (research ri-gold-mining)
 )
 
-; research gold shaft mining
+; allows villagers to gather gold 15% faster
+; 175 food
+; 75 wood
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-gold-shaft-mining)
+    (civilian-population > 60)
+    (up-research-status c: imperial-age >= research-pending)
     =>
     (release-escrow food)
     (release-escrow wood)
     (research ri-gold-shaft-mining)
 )
 
-; research stone mining
+; allows villagers to gather stone 15% faster
+; 100 food
+; 75 wood
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-stone-mining)
+    (civilian-population > 60)
+    (up-research-status c: imperial-age >= research-pending)
     (current-age >= castle-age)
     =>
     (release-escrow food)
@@ -102,10 +149,14 @@
     (research ri-stone-mining)
 )
 
-; research stone shaft mining
+; allows villagers to gather stone 15% faster
+; 175 food
+; 75 wood
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-stone-shaft-mining)
+    (civilian-population > 60)
+    (up-research-status c: imperial-age >= research-pending)
     =>
     (release-escrow food)
     (release-escrow wood)

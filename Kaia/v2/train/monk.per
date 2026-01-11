@@ -18,6 +18,7 @@
     (gold-amount >= min-gold-needed-for-training)
     (up-pending-objects c: monk == 0)
     (unit-type-count-total monk < max-monks)
+    (current-age == imperial-age)
     (can-train monk)
     =>
     (train monk)

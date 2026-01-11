@@ -14,11 +14,11 @@
 (defrule
     (goal g-build yes)
     (goal g-train-knight-line yes)
-    (can-build stable)
     (building-type-count-total stable < num-stable-imperial-age)
     (up-pending-objects c: stable < 2)
-(or (current-age >= imperial-age)
-    (wood-amount > 1000))
+; (or (current-age >= imperial-age)
+;     (wood-amount > 350))
+    (can-build stable)
     =>
     (up-set-placement-data my-player-number town-center c: 6) ; bias to center
     (set-strategic-number sn-placement-zone-size 6)

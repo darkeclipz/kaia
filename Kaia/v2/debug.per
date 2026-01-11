@@ -152,7 +152,7 @@
     (up-chat-data-to-self "archer: %d" g: g-train-archer-line)
     (up-chat-data-to-self "scout: %d" g: g-train-scout-cavalry-line)
     (up-chat-data-to-self "knight: %d" g: g-train-knight-line)
-    (up-chat-data-to-self "battering: %d" g: g-train-battering-ram-line)
+    (up-chat-data-to-self "battering ram: %d" g: g-train-battering-ram-line)
     (up-chat-data-to-self "trebuchet: %d" g: g-train-trebuchet)
     (up-chat-data-to-self "scorpion: %d" g: g-train-scorpion-line)
     (up-chat-data-to-self "mangonel: %d" g: g-train-mangonel-line)
@@ -168,3 +168,23 @@
     (acknowledge-taunt my-player-number 26)
     (set-goal g-enable-tsa yes)
 )
+
+(defrule (true) => (up-full-reset-search))
+
+; spam message if TC is idle
+(defrule
+    (up-find-local c: town-center c: 1)
+    (up-set-target-object search-local c: 0)
+    (up-get-object-data 60 g-x) ; object-data-progress-type
+    (up-compare-goal g-x == 0)
+    (up-compare-goal civilian-population g:>= g-max-villagers)
+    =>
+    (chat-local-to-self "TOWN CENTER IDLE")
+)
+
+; ; spam message if housed
+; (defrule
+;     (population-headroom == 0)
+;     =>
+;     (chat-local-to-self "NEED HOUSES")
+; )

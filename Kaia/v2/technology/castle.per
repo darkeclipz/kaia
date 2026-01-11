@@ -1,4 +1,6 @@
 ; research conscription (it is cheap) asap
+; 150 food
+; 150 gold
 (defrule
     (goal g-research yes)
     (can-research-with-escrow ri-conscription) ; military buildings 33% faster (except siege workshop)
@@ -9,6 +11,8 @@
 )
 
 ; research chivalry (franks)
+; 600 wood
+; 500 gold
 (defrule
     (goal g-research yes)
     (current-age == imperial-age)
@@ -20,8 +24,11 @@
     (research ri-chivalry)
 )
 
-; research hoardings
+; increases base hitpoints of a castle with 21% (+1000 hp)
+; 400 food
+; 400 wood
 (defrule
+    (false)
     (goal g-research yes)
     (current-age == imperial-age)
     (can-research-with-escrow ri-hoardings) ; castle +1000hp

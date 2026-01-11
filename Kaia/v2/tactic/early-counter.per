@@ -1,20 +1,22 @@
-; train a few archers to defend
-(defrule
-    (current-age <= castle-age)
-    (unit-type-count-total archer-line < 3)
-    (can-train archer-line)
-    =>
-    (train archer-line)
-)
+; ; train a few archers to defend
+; (defrule
+;     (current-age <= castle-age)
+;     (up-research-status c: castle-age >= research-pending)
+;     (unit-type-count-total archer-line < 6)
+;     (can-train archer-line)
+;     =>
+;     (train archer-line)
+; )
 
-; train a few scouts to defend
-(defrule
-    (current-age <= castle-age)
-    (unit-type-count-total scout-cavalry-line < 3)
-    (can-train scout-cavalry)
-    =>
-    (train scout-cavalry)
-)
+; ; train a few scouts to defend
+; (defrule
+;     (current-age <= castle-age)
+;     (up-research-status c: castle-age >= research-pending)
+;     (unit-type-count-total scout-cavalry-line < 3)
+;     (can-train scout-cavalry)
+;     =>
+;     (train scout-cavalry)
+; )
 
 ; counter militiaman with archers
 (defrule

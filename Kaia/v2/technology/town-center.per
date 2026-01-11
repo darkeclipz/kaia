@@ -1,24 +1,49 @@
+; gives villagers +15 hitpoints, +1 armor, +2 pierce armor
+; 50 gold
 (defrule
     (goal g-research yes)
-    (current-age >= dark-age)
-    (civilian-population >= 26)
+    (current-age == dark-age)
+    (civilian-population >= min-villagers-dark-age)
+    (not (can-research feudal-age))
     (can-research ri-loom)
     =>
     (research ri-loom)
 )
+(defrule
+    (goal g-research yes)
+    (current-age == feudal-age)
+    (civilian-population >= min-villagers-feudal-age)
+    (not (can-research castle-age))
+    (can-research ri-loom)
+    =>
+    (research ri-loom)
+)
+(defrule
+    (goal g-research yes)
+    (current-age >= castle-age)
+    (can-research ri-loom)
+    (building-type-count town-center >= 3)
+    =>
+    (research ri-loom)
+)
 
+; increases LOS +4 of buildings
+; 75 food
 (defrule
     (goal g-research yes)
     (can-research ri-town-watch)
-    (current-age >= castle-age)
+    (current-age == imperial-age)
     =>
     (research ri-town-watch)
 )
 
+; increases LOS +4 of buildings
+; 300 food
+; 100 gold
 (defrule
     (goal g-research yes)
     (can-research ri-town-patrol)
-    (current-age >= imperial-age)
+    (current-age == imperial-age)
     =>
     (research ri-town-watch)
 )

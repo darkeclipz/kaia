@@ -58,6 +58,7 @@
     (goal g-research yes)
     (unit-type-count-total spearman-line >= min-units-required-for-upgrade)
     (can-research-with-escrow ri-halberdier)
+    (up-research-status c: ri-paladin >= research-complete) ; either if halberdier > cavalry or cavelry is completed
     =>
     (release-escrow food)
     (release-escrow gold)

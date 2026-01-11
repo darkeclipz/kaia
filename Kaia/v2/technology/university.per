@@ -1,13 +1,22 @@
+; strengthens all buildings (except walls, gates, farms and fish traps) by 
+; providing 10% hitpoint, +1 melee armor, +1 pierce armor and +3 all buildings armor, 
+; making every building stronger particularly against attacks from infantry and cavalry units.
+; 150 food
+; 175 wood
 (defrule
     (goal g-research yes)
     (current-age == imperial-age)
     (can-research-with-escrow ri-masonry)
+    (town-under-attack)
     =>
     (release-escrow food)
     (release-escrow wood)
     (research ri-masonry)
 )
 
+; increases hitpoints of walls by +1200, +4 melee armor, +2 pierce armor, +8 anti-building armor
+; 200 food
+; 100 wood
 (defrule
     (goal g-research yes)
     (current-age == imperial-age)
@@ -19,17 +28,24 @@
     (research ri-fortified-wall)
 )
 
+; removes minimum range from defensive structures
+; 200 food
+; 100 stone
 (defrule
     (goal g-research yes)
     (current-age == imperial-age)
     (building-type-count-total watch-tower > 0)
     (can-research-with-escrow ri-murder-holes)
+    (false)
     =>
     (release-escrow food)
     (release-escrow stone)
     (research ri-murder-holes)
 )
 
+; upgrade guard towers, gives +480 hitpoints +1 melee, +1 pierce and +2 attack and +2 anti-ship attack
+; 100 food
+; 250 wood
 (defrule
     (goal g-research yes)
     (current-age == imperial-age)
@@ -41,23 +57,32 @@
     (research ri-guard-tower)
 )
 
+; increases the attack of defensive structures, non-gunpowdered archers, ranged non-gunpowder siege units 
+; and most ranged non-gunpowder ships by +1.
+; 300 food
+; 200 gold
 (defrule
     (goal g-research yes)
+    (current-age == imperial-age)
 (or (up-compare-goal g-has-archers == yes)
     (up-compare-goal g-has-ranged-units == yes))
     (can-research-with-escrow ri-chemistry)
+    (false)
     =>
     (release-escrow food)
     (release-escrow gold)
     (research ri-chemistry)
 )
 
-; must have for scorpion-line and ranged units
+; improves accuracy of all arrows (e.g. without this they miss against moving units), this includes
+; castle, archers, and scorpions.
+; 300 wood
+; 175 gold
 (defrule
     (goal g-research yes)
 (or (goal g-has-ranged-units yes)
 (or (unit-type-count-total scorpion-line > min-siege-required-for-upgrade)
-    (current-age == imperial-age)))
+    (building-type-count-total castle >= 3)))
     (can-research-with-escrow ri-ballistics)
     =>
     (release-escrow wood)
@@ -65,9 +90,14 @@
     (research ri-ballistics)
 )
 
+; increases attack bonus of siege units against buildings by 20% and that of suicide units by 40%, and 
+; increases range of all such ranged units by +1.
+; 500 food
+; 600 wood
 (defrule
     (goal g-research yes)
     (current-age == imperial-age)
+    (up-compare-goal g-has-siege == yes)
     (can-research-with-escrow ri-siege-engineers)
     =>
     (release-escrow food)

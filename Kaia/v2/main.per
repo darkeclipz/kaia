@@ -59,6 +59,8 @@
 (defconst g-train-throwing-axeman-line 112)
 (defconst g-train-villager 113)
 
+(defconst g-build-mill 150) ; number of mills queued for building
+
 (defconst g-has-melee-units 200)
 (defconst g-has-cavalry 201)
 (defconst g-has-infantry 202)
@@ -108,26 +110,33 @@
 (defconst t-reset-stance 6)
 
 ; parameters
-(defconst num-villagers-dark-age 22) ; max in dark age
-(defconst num-villagers-feudal-age 28) ; max in feudal age
-(defconst num-villagers-castle-age 50) ; max in castle age
-(defconst num-villagers-imperial-age 100) ; max in imperial age
-(defconst min-villagers-dark-age 22) ; needed before researching feudal age
-(defconst min-villagers-feudal-age 28) ; needed before researching castle age
+(defconst max-villagers-dark-age 23) ; max in dark age
+(defconst max-villagers-feudal-age 25) ; max in feudal age
+(defconst max-villagers-castle-age 100) ; max in castle age
+(defconst max-villagers-imperial-age 100) ; max in imperial age
+
+(defconst min-villagers-dark-age 23) ; needed before researching feudal age
+(defconst min-villagers-feudal-age 25) ; needed before researching castle age
 (defconst min-villagers-castle-age 50) ; needed before researching imperial age
+
 (defconst min-gold-needed-for-training 200) ; 500
 (defconst min-food-needed-for-training 200) ; 500
 (defconst min-wood-needed-for-training 200) ; 500
 (defconst min-gold-needed-for-trading-excess-resources 250) ; should be higher then min-x-needed-for-training
-(defconst min-units-required-for-upgrade 8)
-(defconst min-siege-required-for-upgrade 4)
+
+(defconst min-units-required-for-upgrade 12) ; minimum we need of a unit type before we buy all the upgrades
+(defconst min-siege-required-for-upgrade 6)
+
 (defconst num-barracks-imperial-age 6)
 (defconst num-archery-range-imperial-age 6)
 (defconst num-stable-imperial-age 6)
 (defconst num-siege-workshop-imperial-age 2)
-(defconst attack-interval 300)
-(defconst attack-groups 10)
+
+(defconst attack-interval 300) ; not used
+(defconst attack-groups 10) ; not used
+
 (defconst max-monks 8)
+
 (defconst attack-delay 20) ; attack interval with TSA if conditions to attack are satisfied
 (defconst retreat-delay 60) ; time it takes to retreat after a unit has been sighted
 (defconst aggressive-delay 8) ; time it takes after retreating to become aggressive again
@@ -212,6 +221,8 @@
     (set-goal g-escrow yes)
     (set-goal g-harass yes)
     (set-goal g-retreat yes)
+
+    (set-goal g-build-mill 0)
     (disable-self)
 )
 
@@ -230,7 +241,7 @@
     =>
     (set-goal g-train-villager yes)
     (set-goal g-train-militiaman-line no)
-    (set-goal g-train-spearman-line yes)
+    (set-goal g-train-spearman-line no)
     (set-goal g-train-archer-line no)
     (set-goal g-train-scout-cavalry-line no)
     (set-goal g-train-knight-line yes)
@@ -265,20 +276,19 @@
 (load "Kaia\v2\technology\university")
 (load "Kaia\v2\technology\siege-workshop")
 (load "Kaia\v2\technology\town-center")
-(load "Kaia\v2\strategy\stop-attack")
-(load "Kaia\v2\strategy\attack")
-(load "Kaia\v2\strategy\feudal-rush")
+; (load "Kaia\v2\strategy\feudal-rush")
 (load "Kaia\v2\strategy\fast-castle")
-(load "Kaia\v2\strategy\early-counter")
-(load "Kaia\v2\strategy\counter")
-(load "Kaia\v2\strategy\knight-rush")
-(load "Kaia\v2\strategy\retreat")
-(load "Kaia\v2\strategy\dark-rush")
+; (load "Kaia\v2\strategy\knight-rush")
+; (load "Kaia\v2\strategy\dark-rush")
 (load "Kaia\v2\tactic\scout")
-(load "Kaia\v2\tactic\harass")
 (load "Kaia\v2\tactic\boar-hunting")
+(load "Kaia\v2\tactic\early-counter")
+(load "Kaia\v2\tactic\harass")
 (load "Kaia\v2\tactic\capture-relic")
+(load "Kaia\v2\tactic\attack")
 (load "Kaia\v2\tactic\tsa-attack")
+(load "Kaia\v2\tactic\counter")
+(load "Kaia\v2\tactic\retreat")
 (load "Kaia\v2\train\max-unit-size")
 (load "Kaia\v2\train\villager")
 (load "Kaia\v2\train\knight-line")

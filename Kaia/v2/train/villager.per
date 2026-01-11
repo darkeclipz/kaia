@@ -43,28 +43,29 @@
 (defrule
     (current-age == dark-age)
     =>
-    (set-goal g-max-villagers num-villagers-dark-age)
+    (set-goal g-max-villagers max-villagers-dark-age)
     (disable-self)
 )
 
 (defrule
     (current-age == feudal-age)
     =>
-    (set-goal g-max-villagers num-villagers-feudal-age)
+    (set-goal g-max-villagers max-villagers-feudal-age)
     (disable-self)
 )
 
 (defrule
     (current-age == castle-age)
     =>
-    (set-goal g-max-villagers num-villagers-castle-age)
+    (set-goal g-max-villagers max-villagers-castle-age)
     (disable-self)
 )
 
 (defrule
-    (current-age == imperial-age)
+    ; (current-age == imperial-age)
+    (up-research-status c: imperial-age >= research-pending)
     =>
-    (set-goal g-max-villagers num-villagers-imperial-age)
+    (set-goal g-max-villagers max-villagers-imperial-age)
     (disable-self)
 )
 

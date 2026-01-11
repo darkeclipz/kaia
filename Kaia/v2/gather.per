@@ -144,6 +144,17 @@
     ; (current-age >= imperial-age)
     =>
     (set-strategic-number sn-wood-gatherer-percentage 28)
+    (set-strategic-number sn-food-gatherer-percentage 44)
+    (set-strategic-number sn-gold-gatherer-percentage 28)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    ; (disable-self)
+)
+
+(defrule
+    (civilian-population >= 60)
+    ; (current-age >= imperial-age)
+    =>
+    (set-strategic-number sn-wood-gatherer-percentage 28)
     (set-strategic-number sn-food-gatherer-percentage 35)
     (set-strategic-number sn-gold-gatherer-percentage 28)
     (set-strategic-number sn-stone-gatherer-percentage 9)

@@ -8,7 +8,7 @@
 
 (defrule
     (goal g-train-scout-cavalry-line yes)
-    (food-amount >= min-wood-needed-for-training)
+    (food-amount >= min-food-needed-for-training)
     (housing-headroom >= 5)
     (unit-type-count-total scout-cavalry-line g:< g-max-unit-size)
     (can-train scout-cavalry-line)
