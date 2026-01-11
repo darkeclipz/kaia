@@ -37,7 +37,7 @@
 (defrule
     (goal g-trade yes)
     (game-time > 3600)
-    (wood-amount > 10000)
+    (wood-amount > 5000)
     (can-sell-commodity wood)
     =>
     (sell-commodity wood)
@@ -67,7 +67,7 @@
 (defrule
     (goal g-trade yes)
     (game-time > 3600)
-    (food-amount > 10000)
+    (food-amount > 5000)
     (can-sell-commodity food)
     =>
     (sell-commodity food)

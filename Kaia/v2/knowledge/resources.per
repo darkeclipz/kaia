@@ -28,7 +28,8 @@
 (defrule
     (true)
     =>
-	(up-full-reset-search)
+	(set-goal g-rt 0)
+    (up-full-reset-search)
     (up-get-point position-self g-x0)
     (up-set-target-point g-x0)
     (up-filter-distance c: -1 c: 6)
@@ -44,6 +45,11 @@
     =>
     (set-goal g-rt 0)
     (up-full-reset-search)
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (up-get-point position-map-size g-x1)
+    (up-modify-goal g-x1 c:z/ 2)
+    (up-filter-distance c: -1 g: g-x1)
     (up-filter-status c: status-resource c: list-active)
 	(up-find-resource c: gold c: 40)
     (up-get-search-state g-s)
@@ -56,6 +62,12 @@
     =>
     (set-goal g-rt 0)
     (up-full-reset-search)
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (up-filter-status c: status-resource c: list-active)
+    (up-get-point position-map-size g-x1)
+    (up-modify-goal g-x1 c:z/ 2)
+    (up-filter-distance c: -1 g: g-x1)
     (up-filter-status c: status-resource c: list-active)
 	(up-find-resource c: stone c: 40)
     (up-get-search-state g-s)

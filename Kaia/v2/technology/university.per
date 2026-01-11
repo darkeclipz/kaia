@@ -65,7 +65,8 @@
     (goal g-research yes)
     (current-age == imperial-age)
 (or (up-compare-goal g-has-archers == yes)
-    (up-compare-goal g-has-ranged-units == yes))
+(or (up-compare-goal g-has-ranged-units == yes)
+    (up-compare-goal g-has-siege == yes)))
     (can-research-with-escrow ri-chemistry)
     (false)
     =>

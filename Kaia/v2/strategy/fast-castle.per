@@ -228,17 +228,24 @@
     (building-type-count mill == 1)
     (can-build lumber-camp)
     =>
+    ; find mill pos
     (up-full-reset-search)
-    (up-get-point position-self g-x0)
+    (up-find-local c: mill c: 1)
+    (up-set-target-object search-local c: 0)
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-full-reset-search)
+    ; (up-get-point position-self g-x0)
     ; (up-get-point position-center g-x1)
     ; (up-lerp-tiles g-x0 g-x1 c: -)
     (up-set-target-point g-x0)
     (up-filter-status c: status-ready c: list-active)
+    (up-filter-distance c: 0 c: 8)
 	(up-find-resource c: wood c: 40)
     (up-get-search-state g-s)
     ; (up-modify-goal g-wood-resources g:= g-rt)
     (up-clean-search search-remote object-data-distance search-order-asc)
-    (up-set-target-object search-remote g: g-stragglers) ; skip first trees, can be out of bounds!!
+    (up-set-target-object search-remote g: 5) ; skip first trees, can be out of bounds!!
     ; (up-set-target-object search-remote c: 5)
     (up-get-object-data object-data-point-x g-x0)
     (up-get-object-data object-data-point-y g-y0)
