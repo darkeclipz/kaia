@@ -230,13 +230,13 @@
     =>
     (up-full-reset-search)
     (up-get-point position-self g-x0)
-    (up-get-point position-center g-x1)
+    ; (up-get-point position-center g-x1)
     ; (up-lerp-tiles g-x0 g-x1 c: -)
     (up-set-target-point g-x0)
     (up-filter-status c: status-ready c: list-active)
 	(up-find-resource c: wood c: 40)
     (up-get-search-state g-s)
-    (up-modify-goal g-wood-resources g:= g-rt)
+    ; (up-modify-goal g-wood-resources g:= g-rt)
     (up-clean-search search-remote object-data-distance search-order-asc)
     (up-set-target-object search-remote g: g-stragglers) ; skip first trees, can be out of bounds!!
     ; (up-set-target-object search-remote c: 5)
@@ -516,7 +516,7 @@
 (defrule
     (goal g-fast-castle yes)
     (current-age >= castle-age)
-    (building-type-count town-center >= 3)
+    (building-type-count-total town-center >= 3)
     =>
     (set-goal g-build yes)
     (set-goal g-research yes)
@@ -530,5 +530,63 @@
 	(set-strategic-number sn-number-explore-groups 1)
 	(set-strategic-number sn-total-number-explorers 1)
     (chat-local-to-self "fast castle: done")
+    (disable-self)
+)
+
+
+
+
+; finish knights!
+
+(defrule 
+    (current-age == imperial-age)
+    =>
+    (set-goal g-research no)
+    ; (release-escrow wood)
+    ; (set-goal g-release-escrow no)
+    (disable-self)
+)
+
+; (defrule
+;     (goal g-escrow yes)
+;     (current-age == imperial-age)
+;     =>
+;     (set-escrow-percentage food 50)
+;     (set-escrow-percentage gold 50) ; release all at once to prevent only one type of unit being trained
+; )
+
+; upgrade knights; increases attack and hit points by 20%
+; 300 food
+; 300 gold
+(defrule
+    ; (goal g-research yes)
+    (unit-type-count-total knight-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-cavalier)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-cavalier)
+    (disable-self)
+)
+
+; upgrade cavalier; increases attack and hit points by another 20%?
+; 1300 food
+; 750 gold
+(defrule
+    ; (goal g-research yes)
+    (unit-type-count-total knight-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-paladin)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-paladin)
+    (disable-self)
+)
+
+(defrule
+    (up-research-status c: ri-paladin >= research-pending)
+    =>
+    (set-goal g-research yes)
+    ; (set-goal g-release-escrow yes)
     (disable-self)
 )

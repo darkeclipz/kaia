@@ -18,6 +18,7 @@ Kaia is a custom AOE2 bot that should close the difficulty gap a bit vs. the def
  * Update `g-XXX-resources` to only include gold and stone that is reachable within half of the map size. This is to prevent "suicide building missions" to build a mining camp next to the enemy base.
  * Build a siege workshop in the center of the map once we start attacking, if it is training any siege units.
  * Place a lumber camp next to the last lumber camp that has been placed. This is to ensure that we minimize the distance that the villagers have to walk.
+ * Retreat units if they are in range of an enemy castle
 
 ## Findings
 

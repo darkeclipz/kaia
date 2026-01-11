@@ -31,6 +31,7 @@
 (defconst g-harass 27) ; scout harasses the enemy early game
 (defconst g-stragglers 28) ; number of straggler trees around the TC
 (defconst g-retreat 29) ; enable retreating
+(defconst g-release-escrow 30) ; enable to release screw after a threshold
 
 (defconst tsa-step-size 3)
 (defconst tsa-state-none 0)
@@ -135,7 +136,7 @@
 (defconst attack-interval 300) ; not used
 (defconst attack-groups 10) ; not used
 
-(defconst max-monks 8)
+(defconst max-monks 2)
 
 (defconst attack-delay 20) ; attack interval with TSA if conditions to attack are satisfied
 (defconst retreat-delay 60) ; time it takes to retreat after a unit has been sighted
@@ -221,6 +222,7 @@
     (set-goal g-escrow yes)
     (set-goal g-harass yes)
     (set-goal g-retreat yes)
+    (set-goal g-release-escrow yes)
 
     (set-goal g-build-mill 0)
     (disable-self)
@@ -251,7 +253,7 @@
     (set-goal g-train-mangonel-line no)
     (set-goal g-train-skirmisher-line no)
     (set-goal g-train-cavalry-archer-line no)
-    (set-goal g-train-monk yes)
+    (set-goal g-train-monk no)
     (set-goal g-train-reset no)
     (up-log-data 0 "training goals resetted" c: 0)
 )
