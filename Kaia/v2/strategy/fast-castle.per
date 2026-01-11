@@ -543,7 +543,7 @@
     =>
     (set-goal g-research no)
     ; (release-escrow wood)
-    ; (set-goal g-release-escrow no)
+    (set-goal g-release-escrow no)
     (disable-self)
 )
 
@@ -587,6 +587,6 @@
     (up-research-status c: ri-paladin >= research-pending)
     =>
     (set-goal g-research yes)
-    ; (set-goal g-release-escrow yes)
+    (set-goal g-release-escrow yes)
     (disable-self)
 )
