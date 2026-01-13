@@ -136,9 +136,23 @@
     (set-goal g-retreat-delay 35)
 )
 
+; ; reset aggro if they are idle
+; (defrule
+;     (true)
+;     =>
+;     (up-full-reset-search)
+;     (up-set-attack-stance infantry-class c: stance-no-attack)
+;     (up-set-attack-stance cavalry-class c: stance-no-attack)
+;     (up-set-attack-stance scout-cavalry-class c: stance-no-attack) ; scout
+;     (up-set-attack-stance archery-class c: stance-no-attack)
+;     (up-remove-objects search-local object-data-idling 0)
+;     (up-set-timer c: t-reset-stance g: g-aggressive-delay) ; time we retreat before we attack them with aggresive stance (on sight) (5)
+; )
+
 (defrule
     (current-age == imperial-age)
     (unit-type-count-total trebuchet > 0)
+    (goal g-attacking yes)
     =>
     (set-goal g-retreat-delay 60)
 )

@@ -176,7 +176,7 @@
     (up-find-local c: town-center c: 1)
     (up-set-target-object search-local c: 0)
     (up-get-object-data 60 g-x) ; object-data-progress-type
-    (up-compare-goal g-x == 1)
+    (up-compare-goal g-x == 0)
     (up-compare-goal civilian-population g:>= g-max-villagers)
     =>
     (chat-local-to-self "warning: town center idle!")

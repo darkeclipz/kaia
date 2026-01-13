@@ -8,7 +8,6 @@ Kaia is a custom AOE2 bot that should close the difficulty gap a bit vs. the def
  * Research last tech at university
  * Build bombardment towers
  * Test good attack group combo for different difficulties
- * Add light cavalry and exploring with 2 or even 3 cavals, instead of the current fixed 1. Perhaps based on map size.
  * ~~Build watch towers towards the enemy, instead of a random position around the town.~~
  * Find and protect relics in the case it is not possible to send a monk before the enemy team does. Basically if they reach the castle age and a relic has been located, send a scout cavalry to that position. Scout cavalry is quick enough to kill the monk before they are being converted.
  * ~~FIX: Scout doesn't explore the enemy town, so TSA doesn't work.~~
@@ -17,8 +16,13 @@ Kaia is a custom AOE2 bot that should close the difficulty gap a bit vs. the def
  * Use scouts to harass the enemy at the start of a game at the 8th minute (berry time). Stand in range of the TC and attack a villager to have them garrison in the TC. Then run away so they come out again. Repeat this until the scout is dead. Also run away if we are being attacked. 
  * Update `g-XXX-resources` to only include gold and stone that is reachable within half of the map size. This is to prevent "suicide building missions" to build a mining camp next to the enemy base.
  * Build a siege workshop in the center of the map once we start attacking, if it is training any siege units.
- * Place a lumber camp next to the last lumber camp that has been placed. This is to ensure that we minimize the distance that the villagers have to walk.
+ * ~~Place a lumber camp next to the last lumber camp that has been placed. This is to ensure that we minimize the distance that the villagers have to walk.~~
  * Retreat units if they are in range of an enemy castle
+ * Retreat units that have low HP
+ * If we are not attacking, don't allow units to go outside of `sn-maximum-town-size`.
+ * Retreat based on how many enemies we see instead of a fixed time interval.
+ * Stay near castle and towers if we are defending.
+ * Stay away from castles and towers if we are attacking.
 
 ## Findings
 

@@ -395,7 +395,7 @@
 ; )
 
 ; ------------------------------------------------------------------------------------
-; Trading.
+; Trade.
 ; ------------------------------------------------------------------------------------
 
 ; buy 100 food to reach castle faster if food is going very slow and we have extra gold
@@ -411,7 +411,7 @@
     =>
     (buy-commodity food)
     (chat-local-to-self "buy 100 food")
-    (disable-self)
+    ; (disable-self)
 )
 
 ; buy wood for town centers
@@ -424,7 +424,7 @@
     =>
     (buy-commodity wood)
     (chat-local-to-self "buy 100 wood")
-    (disable-self)
+    ; (disable-self)
 )
 
 ; buy food to research imperial age
@@ -439,16 +439,16 @@
     (chat-local-to-self "buy 100 food")
 )
 
-; sell some wood if we dont have enough gold to keep TC busy producing villagers
-(defrule
-    (goal g-fast-castle yes)
-    (civilian-population g:>= g-max-villagers)
-    (gold-amount < 180)
-    (can-sell-commodity wood)
-    =>
-    (sell-commodity wood)
-    (disable-self)
-)
+; ; sell some wood if we dont have enough gold to keep TC busy producing villagers
+; (defrule
+;     (goal g-fast-castle yes)
+;     (civilian-population g:>= g-max-villagers)
+;     (gold-amount < 180)
+;     (can-sell-commodity wood)
+;     =>
+;     (sell-commodity wood)
+;     ; (disable-self)
+; )
 
 ; ------------------------------------------------------------------------------------
 ; Research.
@@ -487,10 +487,17 @@
     (up-research-status c: castle-age >= research-pending)
     =>
     (set-goal g-escrow no)
-    (set-escrow-percentage food 15)
-    (set-escrow-percentage wood 10)
+
+    ; (set-escrow-percentage food 15)
+    ; (set-escrow-percentage wood 10)
+    ; (set-escrow-percentage gold 0)
+    ; (set-escrow-percentage stone 0)
+
+    (set-escrow-percentage food 0)
+    (set-escrow-percentage wood 0)
     (set-escrow-percentage gold 0)
     (set-escrow-percentage stone 0)
+
     (disable-self)
 )
 

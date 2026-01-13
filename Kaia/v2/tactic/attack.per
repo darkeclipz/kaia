@@ -2,12 +2,8 @@
     (goal g-attack yes)
     (civilian-population >= 50)
     (up-timer-status t-attack == timer-disabled)
-    (up-get-fact population-cap 0 g-x)
-    (up-get-fact population 0 g-y)
-    (up-modify-goal g-y g:min g-x)
-    (up-modify-goal g-x g:- g-y)
-    (up-compare-goal g-x g:< g-headroom-remaining-before-attacking)
-    
+    (up-get-fact population-cap 0 g-count)
+    (population g:>= g-count)
     =>
     (up-set-timer c: t-attack g: g-attack-delay) ; time it takes to attack again (usually after a retreat)
     (set-goal g-headroom-remaining-before-attacking 25)

@@ -33,18 +33,27 @@
     ; (up-chat-data-to-self "sn-maximum-town-size: %d" s: sn-maximum-town-size)
     ; (up-chat-data-to-self "i: %d" g: g-i)
     ; (up-chat-data-to-self "n: %d" g: g-n)
-    (up-jump-rule -1) ; loop while i < n
+    ; (up-jump-rule -1) ; loop while i < n
 )
 
 ; we found the enemy building
 (defrule
     (goal g-tsa-state tsa-state-search)
     (up-enemy-buildings-in-town > 0)
-
     =>
     (set-goal g-tsa-state tsa-state-attack)
     ; (up-chat-data-to-self "tsa state: %d" g: g-tsa-state)
-    (chat-local-to-self "tsa: found enemy")
+    ; (chat-local-to-self "tsa: found enemy")
+
+
+    ; TEST: perhaps stop all units with retreating, so they will attack?
+    (up-full-reset-search)
+    (up-find-local c: infantry-class c: 240)
+    (up-target-objects 0 action-stop -1 -1)
+    (up-find-local c: cavalry-class c: 240)
+    (up-target-objects 0 action-stop -1 -1)
+    (up-find-local c: archery-class c: 240)
+    (up-target-objects 0 action-stop -1 -1)
 )
 
 ; we didnt find any enemy buildings, so stop
@@ -54,13 +63,16 @@
     =>
     (set-goal g-tsa-state tsa-state-end)
     ; (up-chat-data-to-self "tsa state: %d" g: g-tsa-state)
-    (chat-local-to-self "tsa: found nothing")
+    ; (chat-local-to-self "tsa: found nothing")
 )
 
 ; we are waiting for the enemy building to be destroyed
 (defrule
     (goal g-tsa-state tsa-state-attack)
-    (up-enemy-buildings-in-town == 0)
+    (up-get-fact population-cap 0 g-x)
+    (up-modify-goal g-x c:- 50)
+(or (up-enemy-buildings-in-town == 0)
+    (military-population g:< g-x))
     =>
     (set-goal g-tsa-state tsa-state-end)
     ; (up-chat-data-to-self "tsa state: %d" g: g-tsa-state)
@@ -74,5 +86,5 @@
     (set-goal g-enable-tsa no)
     (set-goal g-auto-town-size yes)
     (set-goal g-tsa-state tsa-state-none)
-    (chat-local-to-self "tsa: reset")
+    ; (chat-local-to-self "tsa: reset")
 )
