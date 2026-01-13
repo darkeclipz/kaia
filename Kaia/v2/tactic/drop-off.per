@@ -1,0 +1,67 @@
+; drop off food if town center queue is empty
+(defrule
+    (current-age == dark-age)
+    (up-pending-objects c: villager == 0)
+    (up-modify-goal g-x c:= 80)
+    (up-get-fact food-amount 0 g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-compare-goal g-x > 0)
+    =>
+    (up-drop-resources food g: g-x)
+    ; (up-chat-data-to-self "drop off %d food" g: g-x)
+    ; (disable-self)
+)
+
+; drop off food for feudal age
+(defrule
+    (current-age == dark-age)
+    (up-research-status c: feudal-age == research-available)
+    ; reached current age max villagers
+    (up-get-fact unit-type-count-total villager g-x)
+    (up-compare-goal g-x g:>= g-max-villagers)
+    ; need to drop off food for age research
+    (up-modify-goal g-x c:= 500)
+    (up-get-fact food-amount 0 g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-compare-goal g-x > 0)
+    =>
+    (up-drop-resources food g: g-x)
+    ; (up-chat-data-to-self "drop off %d food" g: g-x)
+    ; (disable-self)
+)
+
+; drop off food for castle
+(defrule
+    (current-age == feudal-age)
+    (up-research-status c: castle-age == research-available)
+    ; reached current age max villagers
+    (up-get-fact unit-type-count-total villager g-x)
+    (up-compare-goal g-x g:>= g-max-villagers)
+    ; need to drop off food for age research
+    (up-modify-goal g-x c:= 800)
+    (up-get-fact food-amount 0 g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-compare-goal g-x > 0)
+    =>
+    (up-drop-resources food g: g-x)
+    ; (up-chat-data-to-self "drop off %d food" g: g-x)
+    ; (disable-self)
+)
+
+; drop off gold for castle
+(defrule
+    (current-age == feudal-age)
+    (up-research-status c: castle-age == research-available)
+    ; reached current age max villagers
+    (up-get-fact unit-type-count-total villager g-x)
+    (up-compare-goal g-x g:>= g-max-villagers)
+    ; need to drop off food for age research
+    (up-modify-goal g-x c:= 200)
+    (up-get-fact gold-amount 0 g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-compare-goal g-x > 0)
+    =>
+    (up-drop-resources gold g: g-x)
+    ; (up-chat-data-to-self "drop off %d gold" g: g-x)
+    ; (disable-self)
+)

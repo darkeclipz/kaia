@@ -40,6 +40,7 @@
 (defrule
     (goal g-tsa-state tsa-state-search)
     (up-enemy-buildings-in-town > 0)
+
     =>
     (set-goal g-tsa-state tsa-state-attack)
     ; (up-chat-data-to-self "tsa state: %d" g: g-tsa-state)
@@ -59,7 +60,7 @@
 ; we are waiting for the enemy building to be destroyed
 (defrule
     (goal g-tsa-state tsa-state-attack)
-    (not (enemy-buildings-in-town))
+    (up-enemy-buildings-in-town == 0)
     =>
     (set-goal g-tsa-state tsa-state-end)
     ; (up-chat-data-to-self "tsa state: %d" g: g-tsa-state)

@@ -1,3 +1,4 @@
+; build first castle
 (defrule
     (goal g-build yes)
     (can-build-with-escrow castle)
@@ -6,53 +7,15 @@
     (building-type-count-total town-center >= 2)
     =>
     (release-escrow stone)
-    ; find point to place castle
-    (up-get-point position-self g-x0) ; my pos
-    (up-get-point position-center g-x1) ; center
-    (up-lerp-tiles g-x0 g-x1 g: g-town-size) ; lerp my pos some tiles towards the center
-    ; set max area
-    (up-set-target-point g-x0) ; try place at that pos
+    (up-get-point position-self g-x0)
+    (up-get-point position-center g-x1)
+    (up-lerp-tiles g-x0 g-x1 g: g-town-size)
+    (up-set-target-point g-x0)
     (set-strategic-number sn-placement-zone-size 1)
-    ; try placement
     (up-build place-point 0 c: castle)
 )
 
-; buy a bit of stone if we have the gold
-(defrule
-    (building-type-count-total castle == 0)
-    (building-type-count-total town-center >= 3) ; ensure we dont spend it on a TC
-    (up-pending-objects c: castle == 0)
-    (gold-amount > 700)
-    (stone-amount < 275)
-    (can-buy-commodity stone)
-    (current-age >= castle-age)
-    =>
-    (buy-commodity stone)
-    (buy-commodity stone)
-    (chat-local-to-self "bought 2x stone for castle")
-    (disable-self)
-)
-
-(defrule
-    (goal g-build yes)
-    (current-age == castle-age)
-    (building-type-count-total castle < 2)
-    (up-pending-objects c: castle == 0)
-    (building-type-count-total town-center >= 2)
-    (stone-amount > 800)
-    (can-build castle)
-    =>
-    ; find point to place castle
-    (up-get-point position-self g-x0) ; my pos
-    (up-get-point position-center g-x1) ; center
-    (up-lerp-tiles g-x0 g-x1 g: g-town-size) ; lerp my pos some tiles towards the center
-    ; set max area
-    (up-set-target-point g-x0) ; try place at that pos
-    (set-strategic-number sn-placement-zone-size 1)
-    ; try placement
-    (up-build place-point 0 c: castle)
-)
-
+; keep building castles when there is stone
 (defrule
     (goal g-build yes)
     (current-age == imperial-age)
@@ -65,13 +28,10 @@
     (stone-amount > 800)
     (can-build castle)
     =>
-    ; find point to place castle
-    (up-get-point position-self g-x0) ; my pos
-    (up-get-point position-center g-x1) ; center
-    (up-lerp-tiles g-x0 g-x1 g: g-town-size) ; lerp my pos some tiles towards the center
-    ; set max area
-    (up-set-target-point g-x0) ; try place at that pos
+    (up-get-point position-self g-x0)
+    (up-get-point position-center g-x1)
+    (up-lerp-tiles g-x0 g-x1 g: g-town-size)
+    (up-set-target-point g-x0)
     (set-strategic-number sn-placement-zone-size 1)
-    ; try placement
     (up-build place-point 0 c: castle)
 )

@@ -1,41 +1,4 @@
-; (defrule
-;     (goal g-build yes)
-;     (or 
-;         (building-type-count-total lumber-camp > 0)
-;         (game-time > 30)
-;     )
-;     (or 
-;         (unit-type-count-total villager >= 15)
-;         (or 
-;             (game-time > 600)
-;             (and 
-;                 (game-time > 30) 
-;                 (not(resource-found food))
-;             )
-;         )
-;     )
-;     (idle-farm-count < 3)
-;     (up-pending-objects c: farm < 3)
-;     (can-build farm)
-;     =>
-;     (build farm)
-; )
-
-; (defrule
-;     (goal g-build yes)
-;     (current-age == imperial-age)
-;     (building-type-count-total farm < 10)
-;     (up-pending-objects c: farm < 3)
-;     (can-build farm)
-;     =>
-;     (build farm)
-; )
-
-; find berries around camp
-; dont build a farm if there are berries
-
-
-
+; build farms once berries and animals are collected
 (defrule
     (goal g-build yes)
     (current-age == dark-age)
@@ -43,55 +6,45 @@
     (wood-amount > 600))
     (building-type-count-total farm < 5)
     (up-pending-objects c: farm == 0)
-    (up-compare-goal g-food-resources < 2) ; build farms after the berries and animals are done
-    ; (idle-farm-count < 3)
+    (up-compare-goal g-food-resources < 2)
     (can-build farm)
     =>
     (build farm)
 )
 
+; build farms when feudal age research started
 (defrule
     (goal g-build yes)
     (up-research-status c: feudal-age >= research-pending)
-    (current-age == dark-age)
 (or (building-type-count-total lumber-camp >= 1)
     (wood-amount > 600))
-    ; (building-type-count-total farm < 8)
-    (up-pending-objects c: farm < 3)
-    (idle-farm-count < 3)
+    (building-type-count-total farm < 10)
+    (up-pending-objects c: farm < 2)
     (can-build farm)
     =>
     (build farm)
 )
 
-(defrule
-    (goal g-build yes)
-    (current-age == feudal-age)
-    ; (building-type-count-total farm < 15)
-    (up-pending-objects c: farm < 3)
-    (idle-farm-count < 3)
-    (can-build farm)
-    =>
-    (build farm)
-)
-
+; build as many farms as there are farmers in castle age
 (defrule
     (goal g-build yes)
     (current-age == castle-age)
-    ; (building-type-count-total farm < 20)
-    ; (wood-amount > 185)
     (up-pending-objects c: farm < 3)
     (idle-farm-count < 3)
+    (up-get-fact civilian-population 0 g-x)
+    (up-modify-goal g-x s:* sn-food-gatherer-percentage)
+    (up-modify-goal g-x c:z/ 100)
+    (up-modify-goal g-x c:+ 3)
+    (building-type-count-total farm g:< g-x)
     (can-build farm)
     =>
     (build farm)
 )
 
+; build as many farms as needed in imperial age
 (defrule
     (goal g-build yes)
     (current-age == imperial-age)
-    ; (building-type-count-total farm < 25)
-    ; (wood-amount > 185)
     (up-pending-objects c: farm < 3)
     (idle-farm-count < 3)
     (can-build farm)

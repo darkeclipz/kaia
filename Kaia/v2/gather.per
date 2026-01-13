@@ -1,71 +1,3 @@
-; really depends on what strategy we are using, probably better to set it there
-
-; (defrule
-;     (true)
-;     =>
-;     (set-strategic-number sn-wood-gatherer-percentage 35)
-;     (set-strategic-number sn-food-gatherer-percentage 35)
-;     (set-strategic-number sn-gold-gatherer-percentage 20)
-;     (set-strategic-number sn-stone-gatherer-percentage 10)
-;     (disable-self)
-; )
-
-; (defrule
-;     (civilian-population >= 8)
-;     =>
-;     (set-strategic-number sn-wood-gatherer-percentage 25)
-;     (set-strategic-number sn-food-gatherer-percentage 75)
-;     (set-strategic-number sn-gold-gatherer-percentage 0)
-;     (set-strategic-number sn-stone-gatherer-percentage 0)
-;     (disable-self)
-; )
-
-; (defrule
-;     (civilian-population >= 10)
-;     =>
-;     (set-strategic-number sn-wood-gatherer-percentage 40)
-;     (set-strategic-number sn-food-gatherer-percentage 60)
-;     (set-strategic-number sn-gold-gatherer-percentage 0)
-;     (set-strategic-number sn-stone-gatherer-percentage 0)
-;     (disable-self)
-; )
-
-; (defrule
-;     (civilian-population >= 18)
-;     =>
-;     (set-strategic-number sn-wood-gatherer-percentage 38)
-;     (set-strategic-number sn-food-gatherer-percentage 40)
-;     (set-strategic-number sn-gold-gatherer-percentage 22)
-;     (set-strategic-number sn-stone-gatherer-percentage 0)
-;     (disable-self)
-; )
-
-; (defrule
-;     (civilian-population >= 26)
-;     =>
-;     (set-strategic-number sn-wood-gatherer-percentage 50)
-;     (set-strategic-number sn-food-gatherer-percentage 30)
-;     (set-strategic-number sn-gold-gatherer-percentage 20)
-;     (set-strategic-number sn-stone-gatherer-percentage 0)
-;     (disable-self)
-; )
-
-; ; (defrule
-; ;     (civilian-population >= 28)
-; ;     (current-age >= castle-age)
-; ;     =>
-; ;     (set-strategic-number sn-wood-gatherer-percentage 33)
-; ;     (set-strategic-number sn-food-gatherer-percentage 42)
-; ;     (set-strategic-number sn-gold-gatherer-percentage 20)
-; ;     (set-strategic-number sn-stone-gatherer-percentage 5)
-; ;     (disable-self)
-; ; )
-
-
-
-
-
-; gathering
 (defrule
     (civilian-population >= 4)
     =>
@@ -141,22 +73,30 @@
 
 (defrule
     (civilian-population >= 32)
-    ; (current-age >= imperial-age)
     =>
-    (set-strategic-number sn-wood-gatherer-percentage 28)
-    (set-strategic-number sn-food-gatherer-percentage 44)
+    (set-strategic-number sn-wood-gatherer-percentage 32)
+    (set-strategic-number sn-food-gatherer-percentage 40)
     (set-strategic-number sn-gold-gatherer-percentage 28)
     (set-strategic-number sn-stone-gatherer-percentage 0)
-    ; (disable-self)
+    (disable-self)
 )
 
 (defrule
     (civilian-population >= 60)
-    ; (current-age >= imperial-age)
+    =>
+    (set-strategic-number sn-wood-gatherer-percentage 28)
+    (set-strategic-number sn-food-gatherer-percentage 38)
+    (set-strategic-number sn-gold-gatherer-percentage 25)
+    (set-strategic-number sn-stone-gatherer-percentage 9)
+    (disable-self)
+)
+
+(defrule
+    (civilian-population >= 80)
     =>
     (set-strategic-number sn-wood-gatherer-percentage 28)
     (set-strategic-number sn-food-gatherer-percentage 35)
     (set-strategic-number sn-gold-gatherer-percentage 28)
     (set-strategic-number sn-stone-gatherer-percentage 9)
-    ; (disable-self)
+    (disable-self)
 )

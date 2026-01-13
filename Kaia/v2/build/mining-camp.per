@@ -13,7 +13,7 @@
     (up-set-target-point g-x0)
     (up-filter-status c: status-resource c: list-active)
     (up-get-point position-map-size g-x1)
-    (up-modify-goal g-x1 c:z/ 2) ; dont build past half map size, although this needs to be checked in the facts session too, preferably the g-XXX-resource parameter already excludes them if they are too far away
+    (up-modify-goal g-x1 c:z/ 2)
     (up-filter-distance c: -1 g: g-x1)
 	(up-find-resource c: gold c: 40)
     (up-get-search-state g-s)
@@ -27,7 +27,6 @@
     (up-build place-point 0 c: mining-camp)
 )
 
-
 (defrule
     (goal g-build yes)
     (can-build-with-escrow mining-camp)
@@ -36,7 +35,7 @@
     (current-age >= castle-age)
 (or (unit-type-count-total villager >= 20)
     (current-age >= feudal-age))
-    (up-compare-goal g-stone-resources > 0) ; TODO: check if these are within our half of the map
+    (up-compare-goal g-stone-resources > 0)
     =>
     (release-escrow wood)
     (up-full-reset-search)
@@ -56,4 +55,14 @@
     (up-set-target-point g-x0)
     (set-strategic-number sn-placement-zone-size 1)
     (up-build place-point 0 c: mining-camp)
+)
+
+(defrule
+    (goal g-build yes)
+    (civilian-population > 60)
+    (up-pending-objects c: mining-camp == 0)
+    (building-type-count-total mining-camp < 3)
+    (can-build mining-camp)
+    =>
+    (build mining-camp)
 )

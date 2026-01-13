@@ -5,8 +5,8 @@
     (goal g-research yes)
     (building-type-count-total town-center >= 3)
     (can-research-with-escrow ri-wheel-barrow)
-    (civilian-population > 50)
-    (food-amount > 500)
+    ; (up-research-status c: imperial-age >= research-pending)
+    (civilian-population > 60)
     =>
     ; (release-escrow food)
     (release-escrow wood)
@@ -19,9 +19,10 @@
 (defrule
     (goal g-research yes)
     (current-age == imperial-age)
-    (food-amount > 800)
+    ; (food-amount > 800)
     (building-type-count-total town-center >= 3)
-    (civilian-population > 50)
+    (civilian-population > 70)
+    (up-research-status c: imperial-age >= research-pending)
     (can-research-with-escrow ri-hand-cart)
     =>
     (release-escrow food)

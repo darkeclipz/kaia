@@ -5,9 +5,8 @@
     (building-type-count-total mill > 0)
 (or (building-type-count-total lumber-camp > 0)
     (wood-amount > 2000))
-    (can-build-with-escrow barracks)
+    (can-build barracks)
     =>
-    (release-escrow wood)
     (up-set-placement-data my-player-number town-center c: 0)
     (set-strategic-number sn-placement-zone-size 6)
     (set-strategic-number sn-placement-to-center 1)

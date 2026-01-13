@@ -6,32 +6,8 @@
     (up-pending-objects c: house == 0)
     (can-build house)
     =>
-    ; try to place the houses as close to the TC as possible
     (up-get-point position-self g-x0)
     (up-set-target-point g-x0)
     (set-strategic-number sn-placement-zone-size 5)
     (up-build place-point 0 c: house)
 )
-
-; (defrule
-;     (goal g-build yes)
-;     (current-age >= castle-age)
-;     (housing-headroom < 9) ; = current-housing-capacity - population
-;     (population-headroom > 3) ; = population-cap - current-housing-capacity
-;     (up-pending-objects c: house < 3) ; allow 2 houses to be build at the same time
-;     (can-build house)
-;     =>
-;     (build house)
-; )
-
-; (defrule
-;     (goal g-build yes)
-;     (wood-amount > 5000)
-;     (current-age >= castle-age)
-;     (housing-headroom < 20)
-;     (up-pending-objects c: house < 2)
-;     ; (up-pending-objects c: castle == 0)
-;     (can-build house)
-;     =>
-;     (build house)
-; )

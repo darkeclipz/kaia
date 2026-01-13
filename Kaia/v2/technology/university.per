@@ -68,7 +68,7 @@
 (or (up-compare-goal g-has-ranged-units == yes)
     (up-compare-goal g-has-siege == yes)))
     (can-research-with-escrow ri-chemistry)
-    (false)
+    (up-research-status c: ri-paladin >= research-pending)
     =>
     (release-escrow food)
     (release-escrow gold)

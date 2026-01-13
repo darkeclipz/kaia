@@ -10,7 +10,7 @@
 (defconst g-resign 6) ; enable resignation
 (defconst g-resigning 7) ; indicates that we are resigning
 (defconst g-wall 8) ; builds a wall
-(defconst g-auto-stop-attack 9) ; not used
+; (defconst g-auto-stop-attack 9) ; not used
 (defconst g-attack 10) ; enable attacking
 (defconst g-attacking 11) ; not used
 (defconst g-auto-town-size 12) ; enable automatic town size (furthest building)
@@ -32,6 +32,18 @@
 (defconst g-stragglers 28) ; number of straggler trees around the TC
 (defconst g-retreat 29) ; enable retreating
 (defconst g-release-escrow 30) ; enable to release screw after a threshold
+(defconst g-min-villagers-dark-age 31)
+(defconst g-min-villagers-feudal-age 32)
+(defconst g-min-villagers-castle-age 33)
+(defconst g-max-villagers-dark-age 34)
+(defconst g-max-villagers-feudal-age 35)
+(defconst g-max-villagers-castle-age 36)
+(defconst g-max-villagers-imperial-age 37)
+(defconst g-attack-delay 38) ; attack interval with TSA if conditions to attack are satisfied
+(defconst g-retreat-delay 39) ; time it takes to retreat after a unit has been sighted
+(defconst g-aggressive-delay 40) ; time it takes after retreating to become aggressive again
+(defconst g-train-counter-units 41) ; enable to train counter units (and buildings + upgrades)
+(defconst g-headroom-remaining-before-attacking 42)
 
 (defconst tsa-step-size 3)
 (defconst tsa-state-none 0)
@@ -40,10 +52,11 @@
 (defconst tsa-state-attack 3)
 (defconst tsa-state-end 4)
 
-(defconst g-dark-rush 70)
-(defconst g-feudal-rush 71)
+; (defconst g-dark-rush 70)
+; (defconst g-feudal-rush 71)
 (defconst g-fast-castle 72)
-(defconst g-knight-rush 73)
+; (defconst g-knight-rush 73)
+(defconst g-scout-rush 74)
 
 (defconst g-train-militiaman-line 100)
 (defconst g-train-archer-line 101)
@@ -61,6 +74,7 @@
 (defconst g-train-villager 113)
 
 (defconst g-build-mill 150) ; number of mills queued for building
+(defconst g-build-lumber-camp-v2 151)
 
 (defconst g-has-melee-units 200)
 (defconst g-has-cavalry 201)
@@ -81,7 +95,7 @@
 (defconst g-k 1004)
 (defconst g-n 1005)
 (defconst g-m 1006)
-(defconst g-count 1002)
+(defconst g-count 1007)
 (defconst g-x0 1016)
 (defconst g-y0 1017)
 (defconst g-x1 1018)
@@ -101,32 +115,24 @@
 (defconst g-s 1027)
 (defconst g-lt 1027)
 (defconst g-rt 1029)
+(defconst g-rule-split 1031)
 
 ; triggers
 (defconst t-one-minute 1)
 (defconst t-five-minutes 2)
-(defconst t-stop-attack 3)
+; (defconst t-stop-attack 3)
 (defconst t-attack 4)
 (defconst t-retreat 5)
 (defconst t-reset-stance 6)
 
 ; parameters
-(defconst max-villagers-dark-age 23) ; max in dark age
-(defconst max-villagers-feudal-age 25) ; max in feudal age
-(defconst max-villagers-castle-age 120) ; max in castle age
-(defconst max-villagers-imperial-age 120) ; max in imperial age
-
-(defconst min-villagers-dark-age 23) ; needed before researching feudal age
-(defconst min-villagers-feudal-age 25) ; needed before researching castle age
-(defconst min-villagers-castle-age 50) ; needed before researching imperial age
-
 (defconst min-gold-needed-for-training 200) ; 500
 (defconst min-food-needed-for-training 200) ; 500
 (defconst min-wood-needed-for-training 200) ; 500
-(defconst min-gold-needed-for-trading-excess-resources 250) ; should be higher then min-x-needed-for-training
+(defconst min-gold-needed-for-trading-excess-resources 1300) ; should be higher then min-x-needed-for-training
 
 (defconst min-units-required-for-upgrade 12) ; minimum we need of a unit type before we buy all the upgrades
-(defconst min-siege-required-for-upgrade 6)
+(defconst min-siege-required-for-upgrade 3) ; keep it low to start researching chemistry
 
 (defconst num-barracks-imperial-age 6)
 (defconst num-archery-range-imperial-age 6)
@@ -138,30 +144,19 @@
 
 (defconst max-monks 2)
 
-(defconst attack-delay 20) ; attack interval with TSA if conditions to attack are satisfied
-(defconst retreat-delay 60) ; time it takes to retreat after a unit has been sighted
-(defconst aggressive-delay 8) ; time it takes after retreating to become aggressive again
-
+(defconst status-pending 0)
 (defconst status-ready 2)
 (defconst status-resource 3)
 (defconst list-active 0)
-; (defconst search-local 1)
-; (defconst search-remote 2)
-; (defconst search-order-none 0)
+(defconst list-inactive 1)
 (defconst search-order-asc 1)
 (defconst search-order-desc 2)
-; (defconst object-data-point-x 8)
-; (defconst object-data-point-y 9)
 (defconst object-data-distance 44)
-; (defconst position-center 0)
-; (defconst position-self 9)
-
-(defrule
-    (true)
-    =>
-    (set-goal g-true 1)
-    (disable-self)
-)
+(defconst object-data-precise-distance 45)
+(defconst object-data-full-distance 46) ; distance squared
+(defconst scout-cavalry-class 947)
+(defconst tree-class 915)
+(defconst forage-class 907)
 
 ; settings
 (defrule
@@ -178,7 +173,6 @@
     (set-strategic-number sn-enable-research-queue 1) ; allows technologies to be queued too
     (set-strategic-number sn-cap-civilian-builders 200) ; allow all civilians to build at the same time
     (set-strategic-number sn-scale-minimum-attack-group-size 0) ; fixes that min > max, which breaks attack groups
-    (set-strategic-number sn-maximum-hunt-drop-distance 10) ; prevent hunting all over the map
     (set-strategic-number sn-dropsite-separation-distance 3) ; prevent tons of mining camps
     (set-strategic-number sn-initial-exploration-required 0) ; can build immediately
     (set-strategic-number sn-cap-civilian-explorers 0) ; no civ explorers
@@ -192,7 +186,7 @@
     (set-strategic-number sn-attack-group-gather-spacing 2)
     (set-strategic-number sn-group-form-distance 8)
     (set-strategic-number sn-enable-offensive-priority 1)
-    (set-strategic-number sn-disable-builder-assistance 1) ; prevent buildings from assisting on nearby foundations after their work is complete (0=assist,1=dont assist)
+    (set-strategic-number sn-disable-builder-assistance 1) ; prevent builders from assisting on nearby foundations after their work is complete (0=assist,1=dont assist)
     (set-strategic-number sn-attack-intelligence 1) ; tries to avoid enemy units and attack from different sides
     (set-strategic-number sn-disable-tower-priority 1)
     (set-strategic-number sn-sentry-distance 0) ; extends the defend area above max-town-size, we dont want this
@@ -208,6 +202,7 @@
     (true)
     =>
     (up-log-data 0 "init" c: 0)
+    (set-goal g-true 1)
     (set-goal g-build yes)
     (set-goal g-train yes)
     (set-goal g-train-reset yes)
@@ -223,8 +218,12 @@
     (set-goal g-harass yes)
     (set-goal g-retreat yes)
     (set-goal g-release-escrow yes)
-
+    (set-goal g-attack-delay 20)
+    (set-goal g-retreat-delay 60)
+    (set-goal g-aggressive-delay 8)
+    (set-goal g-train-counter-units no)
     (set-goal g-build-mill 0)
+    (set-goal g-headroom-remaining-before-attacking 0)
     (disable-self)
 )
 
@@ -232,9 +231,10 @@
     (true)
     =>
     (up-log-data 0 "setting strategy" c: 0)
-    (set-goal g-dark-rush no)
+    ; (set-goal g-dark-rush no)
     (set-goal g-fast-castle yes)
-    (set-goal g-feudal-rush no)
+    (set-goal g-scout-rush no)
+    ; (set-goal g-feudal-rush no)
     (disable-self)
 )
 
@@ -280,6 +280,7 @@
 (load "Kaia\v2\technology\town-center")
 ; (load "Kaia\v2\strategy\feudal-rush")
 (load "Kaia\v2\strategy\fast-castle")
+(load "Kaia\v2\strategy\scout-rush")
 ; (load "Kaia\v2\strategy\knight-rush")
 ; (load "Kaia\v2\strategy\dark-rush")
 (load "Kaia\v2\tactic\scout")
@@ -291,6 +292,7 @@
 (load "Kaia\v2\tactic\tsa-attack")
 (load "Kaia\v2\tactic\counter")
 (load "Kaia\v2\tactic\retreat")
+(load "Kaia\v2\tactic\drop-off")
 (load "Kaia\v2\train\max-unit-size")
 (load "Kaia\v2\train\villager")
 (load "Kaia\v2\train\knight-line")
@@ -327,3 +329,4 @@
 
 (load "Kaia\v2\timer")
 (load "Kaia\v2\debug")
+

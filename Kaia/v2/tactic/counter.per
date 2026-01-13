@@ -1,4 +1,5 @@
-(defrule
+(defrule    
+    (goal g-train-counter-units yes)
 (or (players-unit-type-count any-enemy knight-line > 8)
 (or (players-unit-type-count any-enemy scout-cavalry-line > 8)
 (or (players-unit-type-count any-enemy camel-line > 8)
@@ -8,6 +9,7 @@
 )
 
 (defrule
+    (goal g-train-counter-units yes)
 (or (players-unit-type-count any-enemy skirmisher-line > 8)
 (or (players-unit-type-count any-enemy archer-line > 8)
 (or (players-unit-type-count any-enemy scorpion-line > 2)
@@ -19,6 +21,7 @@
 )
 
 (defrule
+    (goal g-train-counter-units yes)
 (or (players-unit-type-count any-enemy archer-line > 8)
     (players-unit-type-count any-enemy cavalry-archer-line > 8))
     =>

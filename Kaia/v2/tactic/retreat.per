@@ -28,7 +28,7 @@
     (up-timer-status t-retreat == timer-disabled)
     (up-compare-goal g-tsa-state <= 0)
     =>
-    (enable-timer t-retreat retreat-delay) ; time it takes to retreat after a unit or building has been sighted
+    (up-set-timer c: t-retreat g: g-retreat-delay) ; time it takes to retreat after a unit or building has been sighted
 )
 
 (defrule    
@@ -48,6 +48,8 @@
     (up-find-remote c: barracks c: 20)
     (up-find-remote c: watch-tower c: 20)
     (up-find-remote c: town-center c: 20) ; fallback in case the castles are destroyed
+    (up-find-remote c: unpacked-trebuchet-class c: 20)
+    (up-find-remote c: packed-trebuchet-class c: 20)
     (up-clean-search search-remote object-data-distance search-order-desc)
     (up-set-target-object search-remote c: 0)
     (up-get-object-data object-data-point-x g-x0)
@@ -70,9 +72,9 @@
     ; (up-set-attack-stance)
     (up-set-attack-stance infantry-class c: stance-no-attack)
     (up-set-attack-stance cavalry-class c: stance-no-attack)
-    (up-set-attack-stance 947 c: stance-no-attack) ; scout
+    (up-set-attack-stance scout-cavalry-class c: stance-no-attack) ; scout
     (up-set-attack-stance archery-class c: stance-no-attack)
-    (enable-timer t-reset-stance aggressive-delay) ; time we retreat before we attack them with aggresive stance (on sight) (5)
+    (up-set-timer c: t-reset-stance g: g-aggressive-delay) ; time we retreat before we attack them with aggresive stance (on sight) (5)
 
     (up-target-point g-x0 action-move -1 -1)
 
@@ -92,6 +94,27 @@
     (up-set-attack-stance archery-class c: stance-aggressive)
 )
 
+; dynamiccaly set the attack stance to aggressive if the unit is idle;
+; we need to iterate over all unit IDs in the list and set the stance
+; (defrule 
+;     (true) 
+;     => 
+;     (set-goal g-lt 0)
+;     (up-modify-goal g-i 0)
+;     (up-full-reset-search)
+;     (up-find-local c: infantry-class c: 240)
+;     (up-find-local c: cavalry-class c: 240)
+;     (up-find-local c: archery-class c: 240)
+;     (up-remove-objects search-local object-data-idling == 1)
+;     (up-get-search-state g-s)
+;     (up-compare-goal g-lt > 0)
+; )
+
+; (defrule
+;     (up-check-goal g-lt > 0)
+;     (up-modify-goal)
+; )
+
 ; (defrule
 ;     (timer-triggered t-one-minute)
 ;     =>
@@ -104,3 +127,18 @@
 ;     (set-strategic-number sn-enable-patrol-attack 0)
 ;     (up-target-point g-x0 action-move -1 -1)
 ; )
+
+
+
+(defrule
+    (true)
+    =>
+    (set-goal g-retreat-delay 35)
+)
+
+(defrule
+    (current-age == imperial-age)
+    (unit-type-count-total trebuchet > 0)
+    =>
+    (set-goal g-retreat-delay 60)
+)

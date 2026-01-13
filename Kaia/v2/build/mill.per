@@ -6,21 +6,10 @@
     (civilian-population >= 14)
     (up-pending-objects c: mill == 0)
     (up-compare-goal g-build-mill == 0)
-    (can-build mill)
     (or (resource-found food) ; ensure we found berries
     (or (game-time > 90) ; in case none found
         (food-amount > 2000)))
-    =>
-    ; (build mill)
-    (up-modify-goal g-build-mill c:+ 1)
-)
-
-; builds the mill
-(defrule
-    (up-compare-goal g-build-mill > 0)
-    (up-pending-objects c: mill == 0)
     (can-build mill)
     =>
     (build mill)
-    (up-modify-goal g-build-mill c:- 1)
 )

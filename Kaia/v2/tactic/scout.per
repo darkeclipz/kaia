@@ -19,6 +19,34 @@
     (up-modify-goal sn-number-explore-groups c: 1)
 )
 
+; find and get gaia sheep
+(defrule
+    (game-time < 120)
+    =>
+    (up-full-reset-search)
+    (set-goal g-rt 0) ; reset
+    (set-strategic-number sn-target-player-number 0) ; gaia
+    (up-filter-status c: status-ready c: list-active) ; live animals
+    (up-find-remote c: livestock-class c: 1)
+    (up-get-search-state g-s)
+)
+(defrule
+    (up-compare-goal g-rt > 0) ; found gaia animal
+    (game-time < 120)
+    =>
+    ; get sheep pos
+    (up-set-target-object search-remote c: 0)
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-modify-goal g-x0 c:+ 1)
+    ; get scout
+    (set-strategic-number sn-target-player-number my-player-number)
+    (up-find-local c: scout-cavalry-class c: 1)
+    (up-get-search-state g-s)
+    ; send scout
+    (up-target-point g-x0 action-move -1 -1)
+)
+
 ; scout enemy position after some time
 (defrule
     (goal g-scout yes)
