@@ -1,3 +1,5 @@
+(defrule (true) => (set-goal g-rule-split -1))
+
 ; ; retreat a bit every minute to pull them into our town
 ; (defrule
 ;     (timer-triggered t-one-minute)
@@ -16,8 +18,6 @@
 ;     (set-goal g-auto-town-size yes)
 ;     (disable-timer t-retreat)
 ; )
-
-
 (defrule
     (goal g-retreat yes)
     (up-enemy-units-in-town > 0) ; only retreat if we saw enemy units
@@ -95,42 +95,6 @@
     (up-set-attack-stance archery-class c: stance-aggressive)
 )
 
-; dynamiccaly set the attack stance to aggressive if the unit is idle;
-; we need to iterate over all unit IDs in the list and set the stance
-; (defrule 
-;     (true) 
-;     => 
-;     (set-goal g-lt 0)
-;     (up-modify-goal g-i 0)
-;     (up-full-reset-search)
-;     (up-find-local c: infantry-class c: 240)
-;     (up-find-local c: cavalry-class c: 240)
-;     (up-find-local c: archery-class c: 240)
-;     (up-remove-objects search-local object-data-idling == 1)
-;     (up-get-search-state g-s)
-;     (up-compare-goal g-lt > 0)
-; )
-
-; (defrule
-;     (up-check-goal g-lt > 0)
-;     (up-modify-goal)
-; )
-
-; (defrule
-;     (timer-triggered t-one-minute)
-;     =>
-;     (up-full-reset-search)
-;     (up-get-point position-self g-x0)
-;     (up-set-target-point g-x0)
-;     (up-find-local c: villager-class c: 240)
-;     (up-get-search-state g-s)
-;     (up-chat-data-to-self "villagers selected (retreat): %d" g: g-lt)
-;     (set-strategic-number sn-enable-patrol-attack 0)
-;     (up-target-point g-x0 action-move -1 -1)
-; )
-
-
-
 (defrule
     (true)
     =>
@@ -156,4 +120,33 @@
     (goal g-attacking yes)
     =>
     (set-goal g-retreat-delay 60)
+)
+
+; ------------------------------------------------------------------------------------
+; If we are defending, find any units outside of our town and force a retreat.
+; We do not want to chase the enemy all the way into, or near, their base!
+; ------------------------------------------------------------------------------------
+
+; find any units outside of our town
+(defrule
+    (goal g-attacking no)
+    =>
+    (up-full-reset-search)
+    (up-get-point position-map-size g-x0)
+    (up-filter-distance g: g-town-size g: g-x0)
+    (up-find-local c: infantry-class c: 240)
+    (up-find-local c: cavalry-class c: 240)
+    (up-find-local c: archery-class c: 240)
+    (up-remove-objects search-local object-data-action == actionid-explore) ; except scouts
+    (up-get-search-state g-s)
+    (set-goal g-rule-split 1)
+)
+; retreat them
+(defrule
+    (goal g-attacking no)
+    (goal g-rule-split 1)
+    (up-compare-goal g-lt > 0)
+    =>
+    (disable-timer t-retreat)
+    (up-set-timer c: t-retreat g: 1)
 )

@@ -115,48 +115,12 @@
 ; Buildings, following a build order.
 ; ------------------------------------------------------------------------------------
 
-; build the first house with 2 villagers
+; wait for first 2 houses.
 (defrule
     (goal g-fast-castle yes)
-    (goal g-build-order 0)
-    (can-build house)
+(or (goal g-build-order 0)
+    (goal g-build-order 1))
     =>
-    (up-full-reset-search)
-    (up-find-local c: villager-class c: 3)
-    (up-clean-search search-local object-data-id search-order-asc)
-    (up-set-target-object search-local c: 0) ; select first villager
-    (up-get-object-data object-data-point-x g-x0)
-    (up-get-object-data object-data-point-y g-y0)
-    (up-set-target-point g-x0)
-    (set-strategic-number sn-placement-zone-size 1)
-    (up-assign-builders c: house c: 2)
-    (up-build place-point 0 c: house)
-    (up-modify-goal g-build-order c:+ 1)
-    ; (chat-local-to-self "build first house")
-)
-
-; assign 1 builder per house (it starts with 2)
-(defrule
-    (building-type-count house > 0)
-    =>
-    (up-assign-builders c: house c: 1)
-)
-
-; build the second house with the 3rd villager
-(defrule
-    (goal g-fast-castle yes)    
-    (goal g-build-order 1)
-    (can-build house)
-    =>
-    (up-full-reset-search)
-    (up-find-local c: villager-class c: 3)
-    (up-clean-search search-local object-data-id search-order-asc)
-    (up-set-target-object search-local c: 2) ; select 3rd villager
-    (up-get-object-data object-data-point-x g-x0)
-    (up-get-object-data object-data-point-y g-y0)
-    (up-set-target-point g-x0)
-    (set-strategic-number sn-placement-zone-size 1)
-    (up-build place-point 0 c: house)
     (up-modify-goal g-build-order c:+ 1)
 )
 
@@ -377,22 +341,6 @@
     (set-strategic-number sn-placement-zone-size 5)
     (up-build place-point 0 c: house)
 )
-
-; ------------------------------------------------------------------------------------
-; Units.
-; ------------------------------------------------------------------------------------
-
-; train scouts to defend
-; (defrule
-;     (goal g-fast-castle yes)
-;     (food-amount > 85)
-;     (unit-type-count-total scout-cavalry-line < 8)
-;     (up-pending-objects c: scout-cavalry-line == 0)
-;     (up-research-status c: castle-age >= research-pending)
-;     (can-train scout-cavalry-line)
-;     =>
-;     (train scout-cavalry-line)
-; )
 
 ; ------------------------------------------------------------------------------------
 ; Trade.

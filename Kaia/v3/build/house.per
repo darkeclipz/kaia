@@ -1,13 +1,58 @@
+; ------------------------------------------------------------------------------------
+; Automatically build a house if the housing headroom is running low.
+; ------------------------------------------------------------------------------------
 (defrule
     (goal g-build yes)
 (or (and (current-age <= feudal-age)(housing-headroom < 5))
     (and (current-age >= castle-age)(housing-headroom < 10))) ; = current-housing-capacity - population
-    (population-headroom > 3) ; = population-cap - current-housing-capacity
+    (population-headroom > 0) ; = population-cap - current-housing-capacity
     (up-pending-objects c: house == 0)
     (can-build house)
     =>
     (up-get-point position-self g-x0)
     (up-set-target-point g-x0)
     (set-strategic-number sn-placement-zone-size 5)
+    (up-build place-point 0 c: house)
+)
+
+; ------------------------------------------------------------------------------------
+; Build 2 houses at the start of the game, using all 3 villagers.
+; We basically always start a game like this, so we don't guard with g-build.
+; This requires a house to have 2 assigned builders at the start!
+; ------------------------------------------------------------------------------------
+
+; build the first house with two villagers
+(defrule
+    (can-build house)
+    (building-type-count-total house == 0)
+    (unit-type-count-total villager >= 3)
+    =>
+    ; find and place house next to villager
+    (up-full-reset-search)
+    (up-find-local c: villager-class c: 3)
+    (up-clean-search search-local object-data-id search-order-asc)
+    (up-set-target-object search-local c: 0) ; select first villager
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: house)
+)
+
+; build the second house with one villager
+(defrule
+    (can-build house)
+    (building-type-count-total house == 1)
+    (unit-type-count-total villager >= 3)
+    =>
+    ; find and place house next to villager
+    (up-full-reset-search)
+    (up-find-local c: villager-class c: 3)
+    (up-clean-search search-local object-data-id search-order-asc)
+    (up-set-target-object search-local c: 2) ; select 3rd villager
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 1)
     (up-build place-point 0 c: house)
 )

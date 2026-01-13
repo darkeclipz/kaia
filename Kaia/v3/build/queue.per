@@ -1,9 +1,9 @@
 (defrule
     (true)
     =>
-    (set-strategic-number sn-enable-new-building-system 1) ; use the new building system
+    (set-strategic-number sn-enable-new-building-system 1)
     (up-assign-builders c: farm c: 1)
-    (up-assign-builders c: house c: 2)
+    (up-assign-builders c: house c: 2) ; we want to build the first house with 2 villagers, and set it to 1 after.
     (up-assign-builders c: town-center-foundation c: 5)
     (up-assign-builders c: mill c: 1)
     (up-assign-builders c: mining-camp c: 1)
@@ -28,5 +28,13 @@
     (up-assign-builders c: bombard-tower c: 1)
     (up-assign-builders c: feitoria c: 1)
     (up-assign-builders c: wonder c: 1)
+    (disable-self)
+)
+
+; assign 1 builder per house after the first two houses are done
+(defrule
+    (building-type-count house >= 2)
+    =>
+    (up-assign-builders c: house c: 1)
     (disable-self)
 )

@@ -230,17 +230,6 @@
 )
 
 (defrule
-    (true)
-    =>
-    (up-log-data 0 "setting strategy" c: 0)
-    ; (set-goal g-dark-rush no)
-    (set-goal g-fast-castle yes)
-    (set-goal g-scout-rush no)
-    ; (set-goal g-feudal-rush no)
-    (disable-self)
-)
-
-(defrule
     (goal g-train-reset yes)
     =>
     (set-goal g-train-villager yes)

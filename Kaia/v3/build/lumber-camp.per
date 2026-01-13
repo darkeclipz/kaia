@@ -4,7 +4,7 @@
 ; Place a lumber camp near the previous lumber camp.
 ; ------------------------------------------------------------------------------------
 
-; find position of previous lumber camp
+; find position of previous lumber camp and trees around it
 (defrule
     (goal g-build yes)
     (building-type-count-total mill > 0)
@@ -135,6 +135,15 @@
     (up-modify-sn sn-camp-max-distance c:+ 1)
 )
 
+; didnt find any trees, even at max map size
+(defrule
+    (goal g-rule-split 1)
+    (up-compare-goal g-i g:>= g-n)
+    (up-compare-sn sn-camp-max-distance g:>= g-arg0) ; stay within the map
+    =>
+    (chat-local-to-self "warning: can't detect any tree!")
+)
+
 ; found a good tree, place a lumber camp
 (defrule
     (goal g-rule-split 1)
@@ -143,6 +152,6 @@
     (up-set-target-point g-x1)
     (set-strategic-number sn-placement-zone-size 1)
     (up-build place-point 0 c: lumber-camp)
-    ; (up-chat-data-to-self "placed lumber camp (v2)" c: 0)
     (set-goal g-build-lumber-camp-v2 no)
+    ; (up-chat-data-to-self "placed lumber camp" c: 0)
 )
