@@ -1,0 +1,537 @@
+(defconst g-x 6000)
+(defconst g-y 6001)
+(defconst g-count 6002)
+
+(defconst g-current-priority-score 999)
+
+(defconst g-min-house 300)
+(defconst g-min-mill 301)
+(defconst g-min-farm 302)
+(defconst g-min-lumber-camp 303)
+(defconst g-min-mining-camp-gold 304)
+(defconst g-min-mining-camp-stone 304)
+(defconst g-min-barracks 305)
+(defconst g-min-archery-range 306)
+(defconst g-min-stable 307)
+(defconst g-min-blacksmith 308)
+(defconst g-min-market 309)
+(defconst g-min-watch-tower-line 310)
+(defconst g-min-siege-workshop 311)
+(defconst g-min-monastery 312)
+(defconst g-min-university 313)
+(defconst g-min-castle 314)
+
+(defconst g-build-order-house1 10001)
+(defconst g-build-order-house2 10002)
+(defconst g-build-order-house3 10003)
+(defconst g-build-order-house4 10004)
+(defconst g-build-order-house5 10005)
+(defconst g-build-order-mill 10006)
+(defconst g-build-order-lumber-camp 10007)
+(defconst g-build-order-mining-camp-gold 10008)
+(defconst g-build-order-mining-camp-stone 10009)
+(defconst g-build-order-barracks1 10010)
+(defconst g-build-order-barracks2 10011)
+(defconst g-build-order-barracks3 10012)
+(defconst g-build-order-archery-range1 10013)
+(defconst g-build-order-archery-range2 10014)
+(defconst g-build-order-archery-range3 10015)
+(defconst g-build-order-stable1 10016)
+(defconst g-build-order-stable2 10017)
+(defconst g-build-order-stable3 10018)
+(defconst g-build-order-blacksmith 10019)
+(defconst g-build-order-market 10020)
+(defconst g-build-order-watch-tower1 10021)
+(defconst g-build-order-watch-tower2 10022)
+(defconst g-build-order-siege-workshop1 10023)
+(defconst g-build-order-siege-workshop2 10024)
+(defconst g-build-order-monastery 10025)
+(defconst g-build-order-university 10026)
+(defconst g-build-order-castle 10027)
+; keep 10001-10050 free
+
+
+(defrule
+    (true)
+    =>
+    (set-strategic-number sn-enable-new-building-system 1)
+    (up-assign-builders c: farm c: 1)
+    (up-assign-builders c: house c: 2) ; we want to build the first house with 2 villagers, and set it to 1 after.
+    (up-assign-builders c: town-center-foundation c: 5)
+    (up-assign-builders c: mill c: 1)
+    (up-assign-builders c: mining-camp c: 1)
+    (up-assign-builders c: lumber-camp c: 1)
+    (up-assign-builders c: dock c: 1)
+    (up-assign-builders c: barracks c: 1)
+    (up-assign-builders c: archery-range c: 1)
+    (up-assign-builders c: stable c: 1)
+    (up-assign-builders c: blacksmith c: 1)
+    (up-assign-builders c: market c: 2)
+    (up-assign-builders c: stone-wall-line c: 1)
+    (up-assign-builders c: watch-tower c: 1)
+    (up-assign-builders c: watch-tower c: 1)
+    (up-assign-builders c: keep c: 1)
+    (up-assign-builders c: donjon c: 1)
+    (up-assign-builders c: gate c: 1)
+    (up-assign-builders c: monastery c: 1)
+    (up-assign-builders c: university c: 1)
+    (up-assign-builders c: siege-workshop c: 1)
+    (up-assign-builders c: castle c: 5)
+    (up-assign-builders c: krepost c: 1)
+    (up-assign-builders c: bombard-tower c: 1)
+    (up-assign-builders c: feitoria c: 1)
+    (up-assign-builders c: wonder c: 1)
+    (disable-self)
+)
+
+(defrule
+    (true)
+    =>
+	(set-strategic-number sn-cap-civilian-builders 200)
+	(set-strategic-number sn-consecutive-idle-unit-limit 1)
+	(set-strategic-number sn-do-not-scale-for-difficulty-level 1)
+	(set-strategic-number sn-enable-boar-hunting 1)
+	(set-strategic-number sn-enable-offensive-priority 1)
+	(set-strategic-number sn-enable-patrol-attack 1)
+	(set-strategic-number sn-initial-exploration-required 0)
+	(set-strategic-number sn-maximum-fish-boat-drop-distance 30)
+	(set-strategic-number sn-maximum-food-drop-distance 20)
+	(set-strategic-number sn-maximum-gold-drop-distance 20)
+	(set-strategic-number sn-maximum-hunt-drop-distance 30)
+	(set-strategic-number sn-maximum-stone-drop-distance 20)
+	(set-strategic-number sn-scale-minimum-attack-group-size 0)
+	(set-strategic-number sn-task-ungrouped-soldiers 0)
+    (set-strategic-number sn-disable-builder-assistance 1)
+    (set-strategic-number sn-consecutive-idle-unit-limit 1)
+    (set-strategic-number sn-cap-civilian-explorers 0) ; no civ explorers
+    (set-strategic-number sn-minimum-civilian-explorers 0) ; no civ explorers
+    (set-strategic-number sn-total-number-explorers 1)
+	(set-strategic-number sn-number-explore-groups 1)
+    (set-strategic-number sn-enable-training-queue 15)
+    (set-strategic-number sn-enable-research-queue 1)
+    (disable-self)
+)
+
+; set build order
+(defrule
+    (true)
+    =>
+    (set-goal g-build-order-house1 4)
+    (set-goal g-build-order-house2 4)
+    (set-goal g-build-order-house3 4)
+    (set-goal g-build-order-house4 4)
+    (set-goal g-build-order-house5 9999)
+    (set-goal g-build-order-mill 3)
+    (set-goal g-build-order-lumber-camp 3)
+    (set-goal g-build-order-mining-camp-gold 9999)
+    (set-goal g-build-order-mining-camp-stone 9999)
+    (set-goal g-build-order-barracks1 500)
+    (set-goal g-build-order-barracks2 9999)
+    (set-goal g-build-order-barracks3 9999)
+    (set-goal g-build-order-archery-range1 9999)
+    (set-goal g-build-order-archery-range2 9999)
+    (set-goal g-build-order-archery-range3 9999)
+    (set-goal g-build-order-stable1 1000)
+    (set-goal g-build-order-stable2 1006)
+    (set-goal g-build-order-stable3 1006)
+    (set-goal g-build-order-blacksmith 1000)
+    (set-goal g-build-order-market 9999)
+    (set-goal g-build-order-watch-tower1 9999)
+    (set-goal g-build-order-watch-tower2 9999)
+    (set-goal g-build-order-siege-workshop1 9999)
+    (set-goal g-build-order-siege-workshop2 9999)
+    (set-goal g-build-order-monastery 9999)
+    (set-goal g-build-order-university 9999)
+    (set-goal g-build-order-castle 2000)
+    (disable-self)
+)
+
+; update current priority score
+(defrule 
+    (true)
+    => 
+    (up-get-fact civilian-population 0 g-x)
+    (up-modify-goal g-current-priority-score g:= g-x)
+)
+(defrule
+    (up-research-status c: feudal-age >= research-pending)
+    =>
+    ; (up-chat-data-to-self "feudal-age >= research-pending" c: 0)
+    (up-modify-goal g-current-priority-score c:+ 500)
+)
+(defrule
+    (current-age >= feudal-age)
+    =>
+    ; (up-chat-data-to-self "feudal-age >= research-complete" c: 0)
+    (up-modify-goal g-current-priority-score c:+ 500)
+)
+(defrule
+    (up-research-status c: castle-age >= research-pending)
+    =>
+    ; (up-chat-data-to-self "castle-age >= research-pending" c: 0)
+    (up-modify-goal g-current-priority-score c:+ 500)
+)
+(defrule
+    (current-age >= castle-age)
+    =>
+    ; (up-chat-data-to-self "castle-age >= research-complete" c: 0)
+    (up-modify-goal g-current-priority-score c:+ 500)
+)
+(defrule
+    (up-research-status c: imperial-age >= research-pending)
+    =>
+    ; (up-chat-data-to-self "imperial-age >= research-pending" c: 0)
+    (up-modify-goal g-current-priority-score c:+ 500)
+)
+(defrule
+    (current-age >= imperial-age)
+    =>
+    ; (up-chat-data-to-self "imperial-age >= research-complete" c: 0)
+    (up-modify-goal g-current-priority-score c:+ 500)
+)
+(defrule
+    (true)
+    =>
+    (up-chat-data-to-self "priority score: %d" g: g-current-priority-score)
+)
+
+; set min buildings to 0
+(defrule 
+    (true) => 
+    (set-goal g-min-house 0)
+    (set-goal g-min-mill 0)
+    (set-goal g-min-farm 0)
+    (set-goal g-min-lumber-camp 0)
+    (set-goal g-min-mining-camp-gold 0)
+    (set-goal g-min-mining-camp-stone 0)
+    (set-goal g-min-barracks 0)
+    (set-goal g-min-archery-range 0)
+    (set-goal g-min-stable 0)
+    (set-goal g-min-blacksmith 0)
+    (set-goal g-min-market 0)
+    (set-goal g-min-watch-tower-line 0)
+    (set-goal g-min-siege-workshop 0)
+    (set-goal g-min-monastery 0)
+    (set-goal g-min-university 0)
+    (set-goal g-min-castle 0)
+    (disable-self)
+)
+
+; increment min buildings based on current priority score
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-house1) => (up-modify-goal g-min-house c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-house2) => (up-modify-goal g-min-house c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-house3) => (up-modify-goal g-min-house c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-house4) => (up-modify-goal g-min-house c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-house5) => (up-modify-goal g-min-house c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-mill) => (up-modify-goal g-min-mill c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-lumber-camp) => (up-modify-goal g-min-lumber-camp c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-mining-camp-gold) => (up-modify-goal g-min-mining-camp-gold c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-mining-camp-stone) => (up-modify-goal g-min-mining-camp-stone c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-barracks1) => (up-modify-goal g-min-barracks c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-barracks2) => (up-modify-goal g-min-barracks c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-barracks3) => (up-modify-goal g-min-barracks c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-archery-range1) => (up-modify-goal g-min-archery-range c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-archery-range2) => (up-modify-goal g-min-archery-range c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-archery-range3) => (up-modify-goal g-min-archery-range c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-stable1) => (up-modify-goal g-min-stable c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-stable2) => (up-modify-goal g-min-stable c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-stable3) => (up-modify-goal g-min-stable c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-blacksmith) => (up-modify-goal g-min-blacksmith c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-market) => (up-modify-goal g-min-market c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-watch-tower1) => (up-modify-goal g-min-watch-tower-line c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-watch-tower2) => (up-modify-goal g-min-watch-tower-line c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-siege-workshop1) => (up-modify-goal g-min-siege-workshop c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-siege-workshop2) => (up-modify-goal g-min-siege-workshop c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-monastery) => (up-modify-goal g-min-monastery c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-university) => (up-modify-goal g-min-university c:+ 1)(disable-self))
+(defrule (up-compare-goal g-current-priority-score g:>= g-build-order-castle) => (up-modify-goal g-min-castle c:+ 1)(disable-self))
+
+; build a house
+(defrule
+    (building-type-count house g:< g-min-house)
+    (up-modify-goal g-x g:= g-min-house)
+    (up-get-fact building-type-count house g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x c:max 0)
+    (up-pending-objects c: house g:< g-x)
+    (can-build house)
+    =>
+    (up-get-point position-self g-x)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: house)
+)
+(defrule
+    (building-type-count mill g:< g-min-mill)
+    (up-modify-goal g-x g:= g-min-mill)
+    (up-get-fact building-type-count mill g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x c:max 0)
+    (up-pending-objects c: mill g:< g-x)
+    (can-build mill)
+    =>
+    (up-get-point position-self g-x)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: mill)
+)
+(defrule
+    (building-type-count lumber-camp g:< g-min-lumber-camp)
+    (up-modify-goal g-x g:= g-min-lumber-camp)
+    (up-get-fact building-type-count lumber-camp g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x c:max 0)
+    (up-pending-objects c: lumber-camp g:< g-x)
+    (can-build lumber-camp)
+    =>
+    (up-get-point position-self g-x)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: lumber-camp)
+)
+; (defrule
+;     (building-type-count mining-camp g:< g-min-mining-camp)
+;     (up-modify-goal g-x g:= g-min-mining-camp)
+;     (up-get-fact building-type-count mining-camp g-y)
+;     (up-modify-goal g-x g:- g-y)
+;     (up-modify-goal g-x c:max 0)
+;     (up-pending-objects c: mining-camp g:< g-x)
+;     (can-build mining-camp)
+;     =>
+;     (up-get-point position-self g-x)
+;     (set-strategic-number sn-placement-zone-size 1)
+;     (up-build place-control 0 c: mining-camp)
+; )
+(defrule
+    (building-type-count barracks g:< g-min-barracks)
+    (up-modify-goal g-x g:= g-min-barracks)
+    (up-get-fact building-type-count barracks g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x c:max 0)
+    (up-pending-objects c: barracks g:< g-x)
+    (can-build barracks)
+    =>
+    (up-get-point position-self g-x)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: barracks)
+)
+(defrule
+    (building-type-count archery-range g:< g-min-archery-range)
+    (up-modify-goal g-x g:= g-min-archery-range)
+    (up-get-fact building-type-count archery-range g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x c:max 0)
+    (up-pending-objects c: archery-range g:< g-x)
+    (can-build archery-range)
+    =>
+    (up-get-point position-self g-x)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: archery-range)
+)
+(defrule
+    (building-type-count stable g:< g-min-stable)
+    (up-modify-goal g-x g:= g-min-stable)
+    (up-get-fact building-type-count stable g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x c:max 0)
+    (up-pending-objects c: stable g:< g-x)
+    (can-build stable)
+    =>
+    (up-get-point position-self g-x)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: stable)
+)
+(defrule
+    (building-type-count blacksmith g:< g-min-blacksmith)
+    (up-modify-goal g-x g:= g-min-blacksmith)
+    (up-get-fact building-type-count blacksmith g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x c:max 0)
+    (up-pending-objects c: blacksmith g:< g-x)
+    (can-build blacksmith)
+    =>
+    (up-get-point position-self g-x)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: blacksmith)
+)
+(defrule
+    (building-type-count market g:< g-min-market)
+    (up-modify-goal g-x g:= g-min-market)
+    (up-get-fact building-type-count market g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x c:max 0)
+    (up-pending-objects c: market g:< g-x)
+    (can-build market)
+    =>
+    (up-get-point position-self g-x)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: market)
+)
+(defrule
+    (building-type-count watch-tower-line g:< g-min-watch-tower-line)
+    (up-modify-goal g-x g:= g-min-watch-tower-line)
+    (up-get-fact building-type-count watch-tower-line g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x c:max 0)
+    (up-pending-objects c: watch-tower-line g:< g-x)
+    (can-build watch-tower-line)
+    =>
+    (up-get-point position-self g-x)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: watch-tower-line)
+)
+(defrule
+    (building-type-count siege-workshop g:< g-min-siege-workshop)
+    (up-modify-goal g-x g:= g-min-siege-workshop)
+    (up-get-fact building-type-count siege-workshop g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x c:max 0)
+    (up-pending-objects c: siege-workshop g:< g-x)
+    (can-build siege-workshop)
+    =>
+    (up-get-point position-self g-x)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: siege-workshop)
+)
+(defrule
+    (building-type-count monastery g:< g-min-monastery)
+    (up-modify-goal g-x g:= g-min-monastery)
+    (up-get-fact building-type-count monastery g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x c:max 0)
+    (up-pending-objects c: monastery g:< g-x)
+    (can-build monastery)
+    =>
+    (up-get-point position-self g-x)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: monastery)
+)
+(defrule
+    (building-type-count university g:< g-min-university)
+    (up-modify-goal g-x g:= g-min-university)
+    (up-get-fact building-type-count university g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x c:max 0)
+    (up-pending-objects c: university g:< g-x)
+    (can-build university)
+    =>
+    (up-get-point position-self g-x)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: university)
+)
+(defrule
+    (building-type-count castle g:< g-min-castle)
+    (up-modify-goal g-x g:= g-min-castle)
+    (up-get-fact building-type-count castle g-y)
+    (up-modify-goal g-x g:- g-y)
+    (up-modify-goal g-x c:max 0)
+    (up-pending-objects c: castle g:< g-x)
+    (can-build castle)
+    =>
+    (up-get-point position-self g-x)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: castle)
+)
+
+(defrule
+    (taunt-detected my-player-number 10)
+    =>
+    (acknowledge-taunt my-player-number 10)
+    (up-modify-goal g-min-house c:+ 1)
+    (up-chat-data-to-self "incremented min house: %d" g: g-min-house)
+)
+
+; (defrule
+;     (true)
+;     =>
+;     (up-chat-data-to-self "current priority score: %d" g: g-current-priority-score)
+;     (up-chat-data-to-self "build order house 0: %d" g: g-build-order-house0)
+;     (up-chat-data-to-self "min houses: %d" g: g-min-house)
+;     (up-get-fact building-type-count house g-x)
+;     (up-chat-data-to-self "building type count house: %d" g: g-x)
+;     (up-chat-data-to-self "maximum town size: %d" s: sn-maximum-town-size)
+; )
+
+(defrule (can-research feudal-age) => (research feudal-age))
+(defrule (can-research castle-age) => (research castle-age))
+(defrule (can-research imperial-age) => (research imperial-age))
+
+(defrule
+    (up-pending-objects c: villager == 0)
+    (can-train villager)
+    =>
+    (train villager)
+)
+
+(defrule
+    (up-compare-goal g-current-priority-score >= 500)
+    =>
+    (up-modify-goal g-min-house c:+ 10)
+    (disable-self)
+)
+
+(defrule
+    (up-compare-goal g-current-priority-score >= 1500)
+    =>
+    (up-modify-goal g-min-house c:+ 10)
+    (disable-self)
+)
+
+(defrule
+    (up-compare-goal g-current-priority-score >= 2500)
+    =>
+    (up-modify-goal g-min-house c:+ 15)
+    (disable-self)
+)
+
+(defrule
+    (up-compare-goal g-current-priority-score >= 1500)
+    =>
+    (up-modify-goal g-min-stable c:+ 9)
+    (disable-self)
+)
+
+(defrule
+    (up-compare-goal g-current-priority-score >= 2500)
+    =>
+    (up-modify-goal g-min-stable c:+ 9)
+    (disable-self)
+)
+
+(defrule
+    (can-train scout-cavalry-line)
+    (not(can-train knight-line))
+    (up-get-fact building-type-count stable g-count)
+    (up-pending-objects c: scout-cavalry-line g:< g-count)
+    =>
+    (train scout-cavalry-line)
+)
+
+(defrule
+    (can-train knight-line)
+    (up-get-fact building-type-count stable g-count)
+    (up-pending-objects c: knight-line g:< g-count)
+    =>
+    (train knight-line)
+)
+
+(defrule
+    (up-timer-status 1 == timer-disabled) 
+    => 
+    (enable-timer 1 5)
+)
+
+(defrule
+    (timer-triggered 1)
+    =>
+    (disable-timer 1)
+    (up-full-reset-search)
+    (up-find-local c: scout-cavalry-line c: 240)
+    (up-find-local c: knight-line c: 240)
+    (up-get-point position-enemy g-x)
+    (up-set-target-point g-x)
+    (up-target-point 0 action-move -1 -1)
+)
+
+(defrule
+    (can-research ri-conscription)
+    =>
+    (research ri-conscription)
+)

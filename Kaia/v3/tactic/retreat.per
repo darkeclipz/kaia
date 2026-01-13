@@ -127,26 +127,28 @@
 ; We do not want to chase the enemy all the way into, or near, their base!
 ; ------------------------------------------------------------------------------------
 
-; find any units outside of our town
-(defrule
-    (goal g-attacking no)
-    =>
-    (up-full-reset-search)
-    (up-get-point position-map-size g-x0)
-    (up-filter-distance g: g-town-size g: g-x0)
-    (up-find-local c: infantry-class c: 240)
-    (up-find-local c: cavalry-class c: 240)
-    (up-find-local c: archery-class c: 240)
-    (up-remove-objects search-local object-data-action == actionid-explore) ; except scouts
-    (up-get-search-state g-s)
-    (set-goal g-rule-split 1)
-)
-; retreat them
-(defrule
-    (goal g-attacking no)
-    (goal g-rule-split 1)
-    (up-compare-goal g-lt > 0)
-    =>
-    (disable-timer t-retreat)
-    (up-set-timer c: t-retreat g: 1)
-)
+; WARNING: this currently happens so fast that the aggressive stance is never turned back on!
+
+; ; find any units outside of our town
+; (defrule
+;     (goal g-attacking no)
+;     =>
+;     (up-full-reset-search)
+;     (up-get-point position-map-size g-x0)
+;     (up-filter-distance s: sn-maximum-town-size g: g-x0)
+;     (up-find-local c: infantry-class c: 240)
+;     (up-find-local c: cavalry-class c: 240)
+;     (up-find-local c: archery-class c: 240)
+;     (up-remove-objects search-local object-data-action == actionid-explore) ; except scouts
+;     (up-get-search-state g-s)
+;     (set-goal g-rule-split 1)
+; )
+; ; retreat them
+; (defrule
+;     (goal g-attacking no)
+;     (goal g-rule-split 1)
+;     (up-compare-goal g-lt > 0)
+;     =>
+;     (disable-timer t-retreat)
+;     (up-set-timer c: t-retreat g: 1)
+; )

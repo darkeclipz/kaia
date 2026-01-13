@@ -2,7 +2,7 @@
 
 Kaia is a custom AOE2 bot that should close the difficulty gap a bit vs. the default AI. The default AI tends to be really boring on lower settings and quickly ramps up and becomes overwhelming. Kaia aims to be fun opponent to play against, while also keeping the game chill to play!
 
-## TODO
+## Todo
  * Research missing tech.
  * ~~Research unit upgrades only when there are a mininum number of units of it (e.g. 8).~~
  * Research last tech at university.
@@ -35,11 +35,22 @@ Kaia is a custom AOE2 bot that should close the difficulty gap a bit vs. the def
 
 ## Game parameters
 
-Note that the game should be started with the following parameters: `SKIPINTRO DEBUGSPEEDS AIDEBUGGING LOGSYSTEMS=AIScript VERBOSELOGGING AISCRIPTPROFILING CONSTANTLOGGING`.
+Note that the game should be started with the following parameters: 
+
+```
+SKIPINTRO DEBUGSPEEDS AIDEBUGGING LOGSYSTEMS=AIScript VERBOSELOGGING AISCRIPTPROFILING CONSTANTLOGGING
+```
+
+ * Use `+` and `-` to change the game speed, or whatever hotkeys have been set up.
+ * Set a breakpoint with `(fe-break-point 1 == 1 -1)`.
 
 ## Logs
 
-Logs produced by the game can be found here: `~/.steam/debian-installation/steamapps/compatdata/813780/pfx/drive_c/users/steamuser/Games/Age of Empires 2 DE/logs` on Linux.
+Logs produced by the game can be found here (Linux): 
+
+```
+~/.steam/debian-installation/steamapps/compatdata/813780/pfx/drive_c/users/steamuser/Games/Age of Empires 2 DE/logs`
+```
 
 ## Resources
  
@@ -54,7 +65,7 @@ Logs produced by the game can be found here: `~/.steam/debian-installation/steam
    * Specifically the time it takes to train a villager on easy is 33 seconds vs. only 25 seconds when the difficulty is set to extreme.
  * **Object data:** https://airef.github.io/parameters/parameters-details.html#ObjectData
 
-## UserPatch commands
+## UP commands
 
  * Send units to a specific point: https://airef.github.io/commands/commands-details.html#up-target-point
  * Find a resource on the map: https://airef.github.io/commands/commands-details.html#up-find-resource
@@ -66,7 +77,9 @@ Logs produced by the game can be found here: `~/.steam/debian-installation/steam
  * Only select units within 10 tiles from target point: https://airef.github.io/commands/commands-details.html#up-filter-distance
 
 
-### Boar hunting
+## Boar hunting
+
+A list of useful strategic numbers used for boar hunting:
 
  * https://airef.github.io/strategic-numbers/sn-details.html#sn-boar-lure-destination
  * https://airef.github.io/strategic-numbers/sn-details.html#sn-enable-boar-hunting
@@ -75,149 +88,30 @@ Logs produced by the game can be found here: `~/.steam/debian-installation/steam
  * https://airef.github.io/strategic-numbers/sn-details.html#sn-minimum-boar-lure-group-size
  * https://airef.github.io/strategic-numbers/sn-details.html#sn-maximum-hunt-drop-distance
 
-### Find the closest object
+## Villager task scheduling system
+
+We need a system that assigns tasks to villagers based on how many villagers we have instead of setting resource percentages.
+This is currently being handled by setting resource percentages, which works for the time being. This means that this system doesn't have a really high priority for now.
+
+### Task plan
 
 ```
-(defrule
-	(goal SPLIT 1)
-	(goal gl-Phosphoru-castle 1)
-	(up-compare-goal lt c:> 0)
-=>
-	(up-set-target-point point-enemy-fort)
-	; Find the one closest to the enemy
-	(up-clean-search search-local object-data-full-distance search-order-asc)
-	(up-set-target-object search-local c: 0)
-
-	; Get the position of the targeted gold:
-	(up-get-object-target-data object-data-point-x point1-x)
-	(up-get-object-target-data object-data-point-y point1-y)
-	(up-set-target-point point1)
-	
-	(up-filter-distance c: -1 c: 10)
-	(up-find-resource c: wood c: 40)
-
-	(up-set-target-point point-home-build)
-	(up-remove-objects search-remote object-data-distance c:< 10)
-	(up-remove-objects search-remote object-data-distance c:> 24)
-	
-	(up-set-target-point point1)
-	(up-clean-search search-remote object-data-distance search-order-asc)
-	(up-remove-objects search-remote -1 c:< 5) ; Remove 5 closest trees, since a few may be stragglers.
-	(up-get-search-state lt)
-	
-	(up-copy-point point2 point-home-build) ; fallback point in case no valid wood is found
-)
-
-### Find gold on the map and send a villager to it
-
-```
-    ; ; find gold sorted by distance from town center in remote object
-    ; (defrule 
-    ;     (taunt-detected my-player-number 19)
-    ;     =>
-    ;     (acknowledge-taunt my-player-number 19)
-    ;     (chat-local-to-self "found gold")
-    ;     (up-full-reset-search)
-    ;     (up-filter-status c: status-resource c: list-active)
-    ;     (up-find-resource c: gold c: 20)
-    ;     (up-get-search-state search-state)
-    ;     ; (up-chat-data-to-self "current local search total: %d" g: current-local-search-total)
-    ;     ; (up-chat-data-to-self "last local search count: %d" g: last-local-search-count)
-    ;     ; (up-chat-data-to-self "current remote search total: %d" g: current-remote-search-total)
-    ;     ; (up-chat-data-to-self "last remote search count: %d" g: last-remote-search-count)
-    ;     (up-modify-goal g-gold-mines-found g:= current-remote-search-total)
-    ;     (up-chat-data-to-self "gold mines found: %d" g: g-gold-mines-found)
-
-    ;     ; find closest to me
-    ;     (up-get-point position-self g-my-position-x)
-    ;     (up-set-target-point g-my-position-x)
-    ;     (up-clean-search search-remote object-data-distance search-order-asc)
-    ;     (up-set-target-object search-remote c: 0)
-    ;     (up-get-object-data object-data-point-x x0)
-    ;     (up-chat-data-to-self "x: %d" g: x0)
-    ;     (up-get-object-data object-data-point-y y0)
-    ;     (up-chat-data-to-self "y: %d" g: y0)
-        
-    ;     ; find one villager a mine it
-    ;     ; (up-filter-status c: status-ready c: list-active)
-    ;     (up-reset-filters)
-    ;     (up-find-local c: villager-class c: 1)
-    ;     ; (up-target-objects 1 action-default -1 -1)
-
-    ;     (up-get-search-state search-state)
-    ;     (up-chat-data-to-self "current local search total: %d" g: current-local-search-total)
-    ;     (up-chat-data-to-self "last local search count: %d" g: last-local-search-count)
-    ;     (up-chat-data-to-self "current remote search total: %d" g: current-remote-search-total)
-    ;     (up-chat-data-to-self "last remote search count: %d" g: last-remote-search-count)
-
-    ;     (up-target-objects 1 action-default -1 -1)
-    ; )
-
-    ; ; assign villager to first thing in remote objects
-    ; (defrule 
-    ;     (taunt-detected my-player-number 20)
-    ;     =>
-    ;     (acknowledge-taunt my-player-number 20)
-    ;     (up-full-reset-search)
-    ;     (up-get-point position-self g-my-position-x)
-    ;     (up-set-target-point g-my-position-x)
-    ;     (up-reset-filters)
-    ;     (up-find-local c: villager-class c: 20)
-    ;     (up-get-search-state search-state)
-    ;     (up-chat-data-to-self "current local search total: %d" g: current-local-search-total)
-    ;     (up-chat-data-to-self "last local search count: %d" g: last-local-search-count)
-    ;     (up-chat-data-to-self "current remote search total: %d" g: current-remote-search-total)
-    ;     (up-chat-data-to-self "last remote search count: %d" g: last-remote-search-count)
-    ;     ; (up-target-objects 1 action-gather -1 -1)
-    ;     ; (up-target-point )
-    ; )
-
-### Build watch tower towards the enemey
-
-```
-; (up-set-placement-data <PlayerNumber> <ObjectId> <typeOp> <Value>)
-(up-set-placement-data my-player-number -1 c: 15)  ; 15 tiles in front of the town center
-
-; (up-build <PlacementType> <EscrowGoalId> <typeOp> <BuildingId>)
-(up-build place-control 0 c: watch-tower)
-```
-
-### Train eagles from forward most barracks
-
-```
-; Train eagles from forwardmost barracks:
-(defrule
-	(can-train eagle-warrior)
-=>
-	(up-full-reset-search)
-	(up-find-local c: barracks c: 240)
-	(up-remove-objects search-local object-data-progress-type c:!= 0)
-	(up-set-target-point point-enemy-home)
-	(up-clean-search search-local object-data-distance search-order-asc)
-	(up-get-search-state lt)
-	(set-goal gl-1 0)
-)
-(defrule
-	(can-train eagle-warrior)
-	(up-compare-goal gl-1 c:< lt)
-=>
-	(up-set-target-object search-local g: gl-1)
-	(up-target-point gl-do-not-use-escrow action-train c: eagle-warrior)
-	(up-modify-goal gl-1 c:+ 1)
-	(up-jump-rule -1)
-)
-(defrule
-	(true)
-=>
-	(up-full-reset-search)
-	(up-get-search-state lt)
-	(set-goal gl-1 -1)
-)
+1   SHEEP
+2   SHEEP
+3   SHEEP
+4   SHEEP
+5   SHEEP 
+6   SHEEP
+7   WOOD
+8   WOOD
+...
 ```
 
 ## Building priority system
 
- * There is a `g-current-building-priority` goal that represents the current priority score that we are at.
+We need a system that makes it possible to execute various build orders dynamically. To do so, the concept of a _building priority score_ is introduced:
+
+ * There is a `g-current-priority-score` goal that represents the current priority score that we are at.
  * A building is constructed once a certain priority score has been reached.
  * Every villager increases the priority score by 1.
  * The priority score is also increased for each stage of research we are in. Each stage gives 500 points, so a large population (>= 100) can't practically overflow it into the next stage (unless you train 500 villagers...).
@@ -336,5 +230,29 @@ This leads to the following design:
  * Starting research increases the order goal by 1.
  * The priority goal is the same as the building priority system: `priority = age-status + civ. pop`.
  * Any technology that doesn't depend on the number of villagers has a priority of 0.
+ * A technology can be forced to be researched by settings its priority to `g-current-priority-score`.
 
 ## Enemy unit estimation
+
+Estimate enemy forces so we can train counter units and attack/retreat more aggressively instead of relying on a timer.
+
+
+### Data limits
+
+The AI scripting engine of AOE2 DE has the following data limitations:
+
+ * Rules: 10,000
+ * Elements per rule: 16 in UP, 32 in DE
+ * Goals: 1 to 16,000
+ * Strategic Numbers: 0 to 511
+ * Timers: 1 to 50
+ * Defconst values: -32768 to 32767 or a text string
+ * Goal and SN values: -2,147,483,648 to 2,147,483,647
+ * Flag values: powers of 2 from 1 to 2,147,483,648
+ * DUC Local Search list length: 240
+ * DUC Remote Search list length: 40
+ * Taunts: 255
+ * Characters per line: 255
+ * Nested File Load Commands: 10 files deep
+ * Nested #load-if Commands: 50 (might be lower, somewhere in the 30s)
+ * Doctrine: 1

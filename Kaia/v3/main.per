@@ -45,6 +45,7 @@
 (defconst g-train-counter-units 41) ; enable to train counter units (and buildings + upgrades)
 (defconst g-headroom-remaining-before-attacking 42) ; attack if mil. pop is > this
 (defconst g-headroom-remaining-before-defending 43) ; defend if mil. pop is < this.
+(defconst g-num-relic-monks-trained 44) ; number of monks we trained to grab relics (this is to prevent sending monks forever if they get killed)
 
 (defconst tsa-step-size 3)
 (defconst tsa-state-none 0)
@@ -53,10 +54,7 @@
 (defconst tsa-state-attack 3)
 (defconst tsa-state-end 4)
 
-; (defconst g-dark-rush 70)
-; (defconst g-feudal-rush 71)
 (defconst g-fast-castle 72)
-; (defconst g-knight-rush 73)
 (defconst g-scout-rush 74)
 
 (defconst g-train-militiaman-line 100)
@@ -85,7 +83,7 @@
 (defconst g-has-siege 205)
 (defconst g-has-ships 206)
 
-(defconst g-num-relic-monks-trained 300)
+; use 300-998 for the new build, research and villager task systems.
 
 (defconst g-true 999)
 (defconst g-use-escrow 999)
@@ -224,19 +222,12 @@
     (set-goal g-aggressive-delay 8)
     (set-goal g-train-counter-units no)
     (set-goal g-build-mill 0)
+    (set-goal g-max-villagers-dark-age 25)
+    (set-goal g-max-villagers-feudal-age 30)
+    (set-goal g-max-villagers-castle-age 65)
+    (set-goal g-max-villagers-imperial-age 100)
     (set-goal g-headroom-remaining-before-attacking 0)
     (set-goal g-headroom-remaining-before-attacking 50)
-    (disable-self)
-)
-
-(defrule
-    (true)
-    =>
-    (up-log-data 0 "setting strategy" c: 0)
-    ; (set-goal g-dark-rush no)
-    (set-goal g-fast-castle yes)
-    (set-goal g-scout-rush no)
-    ; (set-goal g-feudal-rush no)
     (disable-self)
 )
 
@@ -328,3 +319,4 @@
 (load "Kaia\v3\build\wall")
 (load "Kaia\v3\timer")
 (load "Kaia\v3\debug")
+

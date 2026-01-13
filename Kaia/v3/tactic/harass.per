@@ -38,6 +38,7 @@
 (defconst harass-run 7)
 
 (defrule
+    (false)
     (goal g-harass yes)
     (players-building-type-count any-enemy town-center == 1) ; found town center
     (players-building-type-count any-enemy mill == 1) ; found mill
