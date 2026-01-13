@@ -1,0 +1,8 @@
+; defend
+(defrule
+    (up-get-fact population-cap 0 g-count)
+    (up-modify-goal g-count g:- g-headroom-remaining-before-defending)
+    (population g:< g-count)
+    =>
+    (set-goal g-attacking no)
+)

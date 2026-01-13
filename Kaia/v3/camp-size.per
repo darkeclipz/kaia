@@ -1,0 +1,90 @@
+; find the closest gold and stone mine, and set the distance
+; based on which of the two is the furthest away.
+
+(defrule
+    (true)
+    =>
+    (set-strategic-number sn-camp-max-distance 20)
+    (set-strategic-number sn-lumber-camp-max-distance 8)
+    (set-strategic-number sn-allow-adjacent-dropsites 1)
+    (disable-self)
+)
+
+; camp size mining (gold)
+(defrule
+    (goal g-auto-camp-size yes)
+    =>
+    (set-goal g-rt 0) ; clear remote total
+    (up-full-reset-search)
+    (up-filter-status c: status-resource c: list-active)
+	(up-find-resource c: gold c: 40)
+    (up-get-search-state g-s)
+)
+
+(defrule
+    (goal g-auto-camp-size yes)
+    (up-compare-goal g-rt > 0) ; found gold
+    =>
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (up-clean-search search-remote object-data-distance search-order-asc)
+    (up-set-target-object search-remote c: 0)
+    (up-get-object-data object-data-distance g-x)
+    (up-modify-goal g-x c:+ 6)
+    (up-modify-sn sn-mining-camp-max-distance g:max g-x)
+)
+
+; camp size mining (stone)
+(defrule
+    (goal g-auto-camp-size yes)
+    =>
+    (set-goal g-rt 0) ; clear remote total
+    (up-full-reset-search)
+    (up-filter-status c: status-resource c: list-active)
+	(up-find-resource c: stone c: 40)
+    (up-get-search-state g-s)
+)
+
+(defrule
+    (goal g-auto-camp-size yes)
+    (up-compare-goal g-rt > 0) ; found stone
+    =>
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (up-clean-search search-remote object-data-distance search-order-asc)
+    (up-set-target-object search-remote c: 0)
+    (up-get-object-data object-data-distance g-x)
+    (up-modify-goal g-x c:+ 6)
+    (up-modify-sn sn-mining-camp-max-distance g:max g-x)
+)
+
+; camp size wood
+(defrule
+    (goal g-auto-camp-size yes)
+    =>
+    (set-goal g-rt 0) ; clear remote total
+    (up-full-reset-search)
+    (up-filter-status c: status-ready c: list-active)
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+	(up-find-resource c: wood c: 40)
+    (up-get-search-state g-s)
+)
+
+(defrule
+    (goal g-auto-camp-size yes)
+    (up-compare-goal g-rt > 0) ; found wood
+    =>
+    (up-clean-search search-remote object-data-distance search-order-asc)
+    (up-set-target-object search-remote c: 5) ; skip stragglers
+    (up-get-object-data object-data-distance g-x)
+    (up-modify-goal g-x c:+ 6)
+    (up-modify-sn sn-lumber-camp-max-distance g:max g-x)
+)
+
+
+; find trees around camp?
+; filter on distance
+; throw first 6 trash trees away
+; find nearest tree
+; set lumber camp size to that

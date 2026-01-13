@@ -1,0 +1,99 @@
+; research man-at-arms
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total militiaman-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-man-at-arms)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-man-at-arms)
+)
+
+; research long swordsman
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total militiaman-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-long-swordsman)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-long-swordsman)
+)
+
+; research two handed swordsman
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total militiaman-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-two-handed-swordsman)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-two-handed-swordsman)
+)
+
+; research champion
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total militiaman-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-champion)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-champion)
+)
+
+; research pikeman
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total spearman-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-pikeman)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-pikeman)
+)
+
+; research halberdier
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total spearman-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-halberdier)
+    (up-research-status c: ri-paladin >= research-complete) ; either if halberdier > cavalry or cavelry is completed
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-halberdier)
+)
+
+; research arson
+(defrule
+    (goal g-research yes)
+    (goal g-has-infantry yes)
+    (can-research-with-escrow ri-arson)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-arson)
+)
+
+; research squires
+(defrule
+    (goal g-research yes)
+    (goal g-has-infantry yes)
+    (can-research-with-escrow ri-squires)
+    =>
+    (release-escrow food)
+    (research ri-squires)
+)
+
+; research gambesons
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total militiaman-line >= min-units-required-for-upgrade)
+    ; TODO: also applies to fire lancers
+    (can-research-with-escrow ri-gambesons)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-gambesons)
+)

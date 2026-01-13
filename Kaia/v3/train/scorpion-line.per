@@ -1,0 +1,16 @@
+(defrule
+    (goal g-train yes)
+    (goal g-train-scorpion-line yes)
+    (wood-amount >= min-wood-needed-for-training)
+    (gold-amount >= min-gold-needed-for-training)
+    (housing-headroom >= 5)
+    (or
+        (and (current-age == castle-age)(unit-type-count-total scorpion-line < 4))
+        (and (current-age >= imperial-age)(unit-type-count-total scorpion-line < 12))
+    )
+    (up-get-fact building-type-count-total siege-workshop g-count)
+    (up-pending-objects c: scorpion-line g:< g-count)
+    (can-train scorpion-line)
+    =>
+    (train scorpion-line)
+)

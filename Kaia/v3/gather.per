@@ -1,0 +1,102 @@
+(defrule
+    (civilian-population >= 4)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 100)
+    (set-strategic-number sn-wood-gatherer-percentage 0)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (civilian-population >= 5)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 100)
+    (set-strategic-number sn-wood-gatherer-percentage 0)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (civilian-population >= 6)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 100)
+    (set-strategic-number sn-wood-gatherer-percentage 0)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (civilian-population >= 10)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 60)
+    (set-strategic-number sn-wood-gatherer-percentage 40)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (civilian-population >= 15)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 73)
+    (set-strategic-number sn-wood-gatherer-percentage 27)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (civilian-population >= 20)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 60)
+    (set-strategic-number sn-wood-gatherer-percentage 40)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (civilian-population >= 26)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 61)
+    (set-strategic-number sn-wood-gatherer-percentage 30)
+    (set-strategic-number sn-gold-gatherer-percentage 9)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (civilian-population >= 28)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 42)
+    (set-strategic-number sn-wood-gatherer-percentage 46)
+    (set-strategic-number sn-gold-gatherer-percentage 12)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+
+(defrule
+    (civilian-population >= 32)
+    =>
+    (set-strategic-number sn-wood-gatherer-percentage 32)
+    (set-strategic-number sn-food-gatherer-percentage 40)
+    (set-strategic-number sn-gold-gatherer-percentage 28)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+
+(defrule
+    (civilian-population >= 60)
+    =>
+    (set-strategic-number sn-wood-gatherer-percentage 28)
+    (set-strategic-number sn-food-gatherer-percentage 38)
+    (set-strategic-number sn-gold-gatherer-percentage 25)
+    (set-strategic-number sn-stone-gatherer-percentage 9)
+    (disable-self)
+)
+
+(defrule
+    (civilian-population >= 80)
+    =>
+    (set-strategic-number sn-wood-gatherer-percentage 28)
+    (set-strategic-number sn-food-gatherer-percentage 35)
+    (set-strategic-number sn-gold-gatherer-percentage 28)
+    (set-strategic-number sn-stone-gatherer-percentage 9)
+    (disable-self)
+)

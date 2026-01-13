@@ -1,0 +1,12 @@
+(defrule
+    (goal g-build yes)
+    (can-build market)
+    (building-type-count-total market == 0)
+    (building-type-count-total archery-range > 0)
+    (up-pending-objects c: market == 0)
+    =>
+    (up-set-placement-data my-player-number town-center c: -4) ; bias to the back
+    (set-strategic-number sn-placement-zone-size 3)
+    (set-strategic-number sn-placement-to-center 1)
+    (up-build place-control 0 c: market)
+)

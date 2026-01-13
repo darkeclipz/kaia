@@ -1,0 +1,13 @@
+; first one in the castle age
+(defrule
+    (goal g-build yes)
+    (can-build-with-escrow monastery)
+    (building-type-count-total monastery == 0)
+    (up-pending-objects c: monastery == 0)
+    =>
+    (release-escrow wood)
+    (up-set-placement-data my-player-number town-center c: -8) ; bias to back
+    (set-strategic-number sn-placement-zone-size 6)
+    (set-strategic-number sn-placement-to-center 1)
+    (up-build place-control 0 c: monastery)
+)

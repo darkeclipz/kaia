@@ -1,0 +1,70 @@
+; after 5 minutes
+; find our scout and remove it from the attack-group forming
+; move scout to enemy base
+; attack house near town center
+; walk back for 10 seconds
+; attack house again
+
+
+; check how many villagers are near the town center
+    ; many -> keep some distance
+    ; few -> attack house to lure them in
+
+
+; at 8 min they are farming berries
+; stand between mill and berries
+; attack villager
+; wait to go into TC
+; wait to get back to berries
+
+; if getting attacked, move away
+
+; keep doing this until they dont move to TC
+
+; move to house near tc
+    ; attack
+    ; run
+    ; repeat until dead
+
+(defconst HARASS_GROUP 1)
+(defconst g-harass-state 8000)
+
+(defconst harass-state-explore-point1 1)
+(defconst harass-state-explore-point2 2)
+(defconst harass-state-explore-point3 3)
+(defconst harass-state-explore-point4 4)
+(defconst harass-state-mill 5)
+(defconst harass-attack-villager 6)
+(defconst harass-run 7)
+
+(defrule
+    (goal g-harass yes)
+    (players-building-type-count any-enemy town-center == 1) ; found town center
+    (players-building-type-count any-enemy mill == 1) ; found mill
+    (players-building-type-count any-enemy house >= 4) ; found houses
+    =>
+    (set-goal g-scout no)
+    (set-strategic-number sn-number-explore-groups 0) ; stop scouting
+    (set-strategic-number sn-total-number-explorers 0)
+    (set-strategic-number sn-gather-defense-units 0)
+    (fe-exclude-from-attack-group c: scout-cavalry) ; exclude scout from attack group
+    (up-reset-scouts)
+    (up-full-reset-search) 
+    (up-find-local c: scout-cavalry-line c: 1) ; get scout
+    (up-create-group 0 0 c: HARASS_GROUP)
+    (up-set-attack-stance scout-cavalry-line c: stance-no-attack) ; dont attack
+    (up-set-group search-local c: 0)
+    (chat-local-to-self "created search group for scout")
+    (up-find-remote c: mill c: 1)
+    (up-set-target-object search-remote c: 0)
+    (up-get-object-data object-data-point-x g-x0) 
+    (up-get-object-data object-data-point-y g-y0)
+    (up-target-point g-x0 action-default -1 -1) 
+    (chat-local-to-self "scout found TC, harass!")
+    ;...
+)
+
+; explore a bit around the town center (move to all four points around the town center at 8 distance away)
+
+; move pattern (8, 8) -> (8, -8) -> (-8, -8) -> (8, -8) -> MILL
+

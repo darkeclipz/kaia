@@ -1,0 +1,193 @@
+; debug (13)
+(defrule
+	(taunt-detected my-player-number 13)
+=>
+    (fe-break-point 1 == 1 -1)
+	(acknowledge-taunt my-player-number 13)
+)
+
+; get map center and my position (14)
+(defrule
+    (taunt-detected my-player-number 14)
+    =>
+    (acknowledge-taunt my-player-number 14)
+    (up-get-point position-center g-x0)
+    (up-get-point position-self g-x1)
+    (up-chat-data-to-self "map-center-x: %d" g: g-x0)
+    (up-chat-data-to-self "map-center-y: %d" g: g-y0)
+    (up-chat-data-to-self "self-position-x: %d" g: g-x1)
+    (up-chat-data-to-self "self-position-y: %d" g: g-y1)
+)
+
+; find closest enemy (15)
+(defrule
+    (taunt-detected my-player-number 15)
+    =>
+    (acknowledge-taunt my-player-number 15)
+    (up-find-player enemy find-closest g-x)
+    (up-chat-data-to-self "closest enemy: %d" g: g-x)
+    (up-modify-sn sn-focus-player-number g:= g-x)
+)
+
+; display found resources (16)
+(defrule
+    (taunt-detected my-player-number 16)
+    =>
+    (acknowledge-taunt my-player-number 16)
+    (chat-local-to-self "nearby resources:")
+    (up-chat-data-to-self "wood: %d" g: g-wood-resources)
+    (up-chat-data-to-self "food: %d" g: g-food-resources)
+    (up-chat-data-to-self "gold: %d" g: g-gold-resources)
+    (up-chat-data-to-self "stone: %d" g: g-stone-resources)
+)
+
+; display stone mine info (17)
+(defrule
+    (taunt-detected my-player-number 17)
+    =>
+    (acknowledge-taunt my-player-number 17)
+	(up-full-reset-search)
+	(up-filter-status c: status-resource c: list-active)
+	(up-find-resource c: stone c: 40)
+    (up-get-search-state g-s)
+    (up-chat-data-to-self "total stone mines: %d" g: g-rt)
+    (up-clean-search search-remote object-data-distance search-order-asc)
+    (up-set-target-object search-remote c: 0)
+    (up-get-object-data object-data-distance g-x)
+    (up-chat-data-to-self "closest stone mine %d" g: g-rt)
+)
+
+; display gold mine info (18)
+(defrule
+    (taunt-detected my-player-number 18)
+    =>
+    (acknowledge-taunt my-player-number 18)
+	(up-full-reset-search)
+	(up-filter-status c: status-resource c: list-active)
+	(up-find-resource c: gold c: 40)
+    (up-get-search-state g-s)
+    (up-chat-data-to-self "total gold mines: %d" g: g-rt)
+    (up-clean-search search-remote object-data-distance search-order-asc)
+    (up-set-target-object search-remote c: 0)
+    (up-get-object-data object-data-distance g-x)
+    (up-chat-data-to-self "closest gold mine %d" g: g-rt)
+)
+
+; display trees around town center info (19)
+(defrule
+    (taunt-detected my-player-number 19)
+    =>
+    (acknowledge-taunt my-player-number 19)
+	(up-full-reset-search)
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (up-filter-distance c: -1 c: 6)
+	(up-filter-status c: 2 c: 0)
+	(up-find-resource c: wood c: 240)
+    (up-get-search-state g-s)
+    (up-chat-data-to-self "total trees around town center: %d" g: g-rt)
+    (up-chat-data-to-self "g-stragglers: %d" g: g-stragglers)
+)
+
+; display escrow (21)
+(defrule
+    (taunt-detected my-player-number 21)
+    =>
+    (acknowledge-taunt my-player-number 21)
+    (up-get-fact escrow-amount wood g-x)
+    (up-chat-data-to-self "wood escrow: %d" g: g-x)
+    (up-get-fact escrow-amount food g-x)
+    (up-chat-data-to-self "food escrow: %d" g: g-x)
+    (up-get-fact escrow-amount gold g-x)
+    (up-chat-data-to-self "gold escrow: %d" g: g-x)
+    (up-get-fact escrow-amount stone g-x)
+    (up-chat-data-to-self "stone escrow: %d" g: g-x)
+)
+
+; town size debug info (23)
+(defrule
+    (taunt-detected my-player-number 23)
+    =>
+    (acknowledge-taunt my-player-number 23)
+    (up-chat-data-to-self "g-town-size: %d" g: g-town-size)
+    (up-chat-data-to-self "sn-minimum-town-size: %d" s: sn-minimum-town-size)
+    (up-chat-data-to-self "sn-maximum-town-size: %d" s: sn-maximum-town-size)
+    ; find all objects in my town
+    (up-full-reset-search)
+    (up-find-local c: building-class c: 240)
+    (up-clean-search search-local object-data-distance search-order-desc)
+    (up-set-target-object search-local c: 0)
+    (up-get-object-data object-data-distance g-x)
+    (up-chat-data-to-self "furthest camp: %d" g: g-x)
+    (up-remove-objects search-local object-data-type == mill)
+    (up-remove-objects search-local object-data-type == mining-camp)
+    (up-remove-objects search-local object-data-type == lumber-camp)
+    (up-set-target-object search-local c: 0)
+    (up-get-object-data object-data-distance g-x)
+    (up-chat-data-to-self "furthest building: %d" g: g-x)
+    (up-chat-data-to-self "sn-camp-max-dist: %d" s: sn-camp-max-distance)
+    (up-chat-data-to-self "sn-lumber-camp-max-dist: %d" s: sn-lumber-camp-max-distance)
+    (up-chat-data-to-self "sn-mining-camp-max-dist: %d" s: sn-mining-camp-max-distance)
+)
+
+; military debug info (24)
+(defrule
+    (taunt-detected my-player-number 24)
+    =>
+    (acknowledge-taunt my-player-number 24)
+    (up-chat-data-to-self "max-unit-size: %d" g: g-max-unit-size)
+    (up-chat-data-to-self "attack: %d" g: g-attack)
+    (up-chat-data-to-self "attacking: %d" g: g-attacking)
+    (up-chat-data-to-self "enable-tsa: %d" g: g-enable-tsa)
+    (up-chat-data-to-self "tsa-state: %d" g: g-tsa-state)
+)
+
+; train debug info (25)
+(defrule
+    (taunt-detected my-player-number 25)
+    =>
+    (acknowledge-taunt my-player-number 25)
+    (up-chat-data-to-self "militiaman: %d" g: g-train-militiaman-line)
+    (up-chat-data-to-self "spearman: %d" g: g-train-spearman-line)
+    (up-chat-data-to-self "archer: %d" g: g-train-archer-line)
+    (up-chat-data-to-self "scout: %d" g: g-train-scout-cavalry-line)
+    (up-chat-data-to-self "knight: %d" g: g-train-knight-line)
+    (up-chat-data-to-self "battering ram: %d" g: g-train-battering-ram-line)
+    (up-chat-data-to-self "trebuchet: %d" g: g-train-trebuchet)
+    (up-chat-data-to-self "scorpion: %d" g: g-train-scorpion-line)
+    (up-chat-data-to-self "mangonel: %d" g: g-train-mangonel-line)
+    (up-chat-data-to-self "skirmisher: %d" g: g-train-skirmisher-line)
+    (up-chat-data-to-self "cavalry archer: %d" g: g-train-cavalry-archer-line)
+    ; max chat reached
+)
+
+; TSA attack (26)
+(defrule
+    (taunt-detected my-player-number 26)
+    =>
+    (acknowledge-taunt my-player-number 26)
+    (set-goal g-enable-tsa yes)
+)
+
+(defrule (true) => (up-full-reset-search))
+
+; spam message if TC is idle
+(defrule
+    (up-find-local c: town-center c: 1)
+    (up-set-target-object search-local c: 0)
+    (up-get-object-data 60 g-x) ; object-data-progress-type
+    (up-compare-goal g-x == 0)
+    (up-compare-goal civilian-population g:>= g-max-villagers)
+    =>
+    (chat-local-to-self "warning: town center idle!")
+)
+
+; spam message if housed
+(defrule
+    (population-headroom == 0)
+    (up-get-fact population 0 g-x)
+    (up-get-fact population-cap 0 g-y)
+    (up-compare-goal population g:< population-cap)
+    =>
+    (chat-local-to-self "warning: housed!")
+)

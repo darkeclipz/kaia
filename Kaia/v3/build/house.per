@@ -1,0 +1,13 @@
+(defrule
+    (goal g-build yes)
+(or (and (current-age <= feudal-age)(housing-headroom < 5))
+    (and (current-age >= castle-age)(housing-headroom < 10))) ; = current-housing-capacity - population
+    (population-headroom > 3) ; = population-cap - current-housing-capacity
+    (up-pending-objects c: house == 0)
+    (can-build house)
+    =>
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 5)
+    (up-build place-point 0 c: house)
+)

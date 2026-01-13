@@ -1,0 +1,12 @@
+(defrule
+    (goal g-train yes)
+    (goal g-train-cavalry-archer-line yes)
+    (food-amount >= min-wood-needed-for-training)
+    (gold-amount >= min-gold-needed-for-training)
+    (housing-headroom >= 5)
+    (can-train cavalry-archer-line)
+    (up-get-fact building-type-count-total archery-range g-count)
+    (up-pending-objects c: cavalry-archer-line g:< g-count)
+    =>
+    (train cavalry-archer-line)
+)

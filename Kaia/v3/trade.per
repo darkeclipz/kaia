@@ -1,0 +1,96 @@
+; buy resources for a town center if it is destroyed
+(defrule
+    (building-type-count-total town-center == 0)
+    (up-pending-objects c: town-center == 0)
+    (civilian-population >= 1)
+    (gold-amount > 1000)
+    (can-sell-commodity gold)
+    =>
+    (buy-commodity stone)
+    (buy-commodity wood)
+    (buy-commodity wood)
+    (buy-commodity wood)
+    (up-release-escrow)
+)
+
+; buy wood if it is very low
+(defrule
+    (goal g-trade yes)
+    (gold-amount > 2500)
+    (wood-amount < 200)
+    (can-buy-commodity wood)
+    =>
+    (buy-commodity wood)
+)
+
+; sell excessive wood
+(defrule
+    (goal g-trade yes)
+    (gold-amount < min-gold-needed-for-trading-excess-resources)
+    (wood-amount > 5000)
+    (can-sell-commodity wood)
+    =>
+    (sell-commodity wood)
+)
+
+; sell excessive wood more aggressively later
+(defrule
+    (goal g-trade yes)
+    (game-time > 3600)
+    (wood-amount > 5000)
+    (can-sell-commodity wood)
+    =>
+    (sell-commodity wood)
+)
+
+; buy food if it is very low
+(defrule
+    (goal g-trade yes)
+    (gold-amount > 2000)
+    (food-amount < 200)
+    (can-buy-commodity food)
+    =>
+    (buy-commodity food)
+)
+
+; sell excessive food
+(defrule
+    (goal g-trade yes)
+    (gold-amount < min-gold-needed-for-trading-excess-resources)
+    (food-amount > 5000)
+    (can-sell-commodity food)
+    =>
+    (sell-commodity food)
+)
+
+; sell excessive food more aggressively later
+(defrule
+    (goal g-trade yes)
+    (game-time > 3600)
+    (food-amount > 5000)
+    (can-sell-commodity food)
+    =>
+    (sell-commodity food)
+)
+
+; buy stone if it is very low
+(defrule
+    (goal g-trade yes)
+    (gold-amount > 2500)
+    (wood-amount > 1000)
+    (food-amount > 1000)
+    (stone-amount < 200)
+    (can-buy-commodity stone)
+    =>
+    (buy-commodity stone)
+)
+
+; sell excessive stone
+(defrule
+    (goal g-trade yes)
+    (gold-amount < min-gold-needed-for-trading-excess-resources)
+    (stone-amount > 2500)
+    (can-sell-commodity stone)
+    =>
+    (sell-commodity stone)
+)

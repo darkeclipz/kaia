@@ -1,0 +1,25 @@
+(defrule
+    (true)
+    =>
+    (up-full-reset-search)
+    (up-find-local c: building-class c: 240)
+    ; (up-remove-objects search-local object-data-type == mill)
+    (up-remove-objects search-local object-data-type == mining-camp)
+    (up-remove-objects search-local object-data-type == lumber-camp)
+    (up-clean-search search-local object-data-distance search-order-desc)
+    (up-set-target-object search-local c: 0)
+    (up-get-object-data object-data-distance g-x)
+    (up-modify-goal g-town-size g:= g-x)
+)
+
+(defrule
+    (goal g-auto-town-size yes)
+    (up-compare-goal g-town-size >= 0)
+    =>
+    (up-modify-sn sn-minimum-town-size g:= g-town-size)
+    (up-modify-sn sn-minimum-town-size c:max 6)
+    (up-modify-goal g-x g:= g-town-size)
+    (up-modify-goal g-x c:+ 8)
+    (up-modify-sn sn-maximum-town-size g:= g-x)
+    (up-modify-sn sn-maximum-town-size c:max 8)
+)

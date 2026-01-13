@@ -1,0 +1,59 @@
+; dont scout if we dont have any, dont use other units for this
+(defrule
+(or (unit-type-count-total scout-cavalry-line == 0)
+    (goal g-scout no))
+    =>
+    (up-log-data 0 "stop scouting, no cavalry scout unit available" c: 0)
+    (up-modify-goal sn-total-number-explorers c: 0)
+    (up-modify-goal sn-number-explore-groups c: 0)
+    (up-reset-scouts)
+)
+
+; start scouting if we have a scout
+(defrule
+    (goal g-scout yes)
+    (unit-type-count-total scout-cavalry-line > 0)
+    =>
+    (up-log-data 0 "start scouting" c: 0)
+    (up-modify-goal sn-total-number-explorers c: 1)
+    (up-modify-goal sn-number-explore-groups c: 1)
+)
+
+; find and get gaia sheep
+(defrule
+    (game-time < 120)
+    =>
+    (up-full-reset-search)
+    (set-goal g-rt 0) ; reset
+    (set-strategic-number sn-target-player-number 0) ; gaia
+    (up-filter-status c: status-ready c: list-active) ; live animals
+    (up-find-remote c: livestock-class c: 1)
+    (up-get-search-state g-s)
+)
+(defrule
+    (up-compare-goal g-rt > 0) ; found gaia animal
+    (game-time < 120)
+    =>
+    ; get sheep pos
+    (up-set-target-object search-remote c: 0)
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-modify-goal g-x0 c:+ 1)
+    ; get scout
+    (set-strategic-number sn-target-player-number my-player-number)
+    (up-find-local c: scout-cavalry-class c: 1)
+    (up-get-search-state g-s)
+    ; send scout
+    (up-target-point g-x0 action-move -1 -1)
+)
+
+; scout enemy position after some time
+(defrule
+    (goal g-scout yes)
+    (game-time s:> sn-home-exploration-time)
+    (up-compare-sn sn-total-number-explorers c:> 0)
+    =>
+    (up-log-data 0 "scout enemy %d once" s: sn-target-player-number)
+    (up-send-scout group-type-land-explore scout-enemy)
+    (disable-self)
+)

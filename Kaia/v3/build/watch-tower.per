@@ -1,0 +1,46 @@
+(defrule
+    (goal g-build yes)
+    (current-age >= feudal-age)
+    (building-type-count-total watch-tower < 1)
+    (unit-type-count-total villager >= 20)
+    (can-build watch-tower)
+    =>
+    (up-get-point position-self g-x0) ; my pos
+    (up-get-point position-center g-x1) ; center
+    (up-lerp-tiles g-x0 g-x1 g: g-town-size) ; lerp my pos some tiles towards the center
+    (up-set-target-point g-x0) ; try place at that pos
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: watch-tower-line)
+)
+
+(defrule
+    (goal g-build yes)
+    (current-age >= castle-age)
+    (building-type-count-total watch-tower < 2)
+    (unit-type-count-total villager >= 40)
+    (stone-amount > 900)
+    (can-build watch-tower)
+    =>
+    (up-get-point position-self g-x0) ; my pos
+    (up-get-point position-center g-x1) ; center
+    (up-lerp-tiles g-x0 g-x1 g: g-town-size) ; lerp my pos some tiles towards the center
+    (up-set-target-point g-x0) ; try place at that pos
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: watch-tower-line)
+)
+
+(defrule
+    (goal g-build yes)
+    (current-age >= imperial-age)
+    (building-type-count-total watch-tower < 3)
+    (unit-type-count-total villager >= 60)
+    (stone-amount > 900)
+    (can-build watch-tower)
+    =>
+    (up-get-point position-self g-x0) ; my pos
+    (up-get-point position-center g-x1) ; center
+    (up-lerp-tiles g-x0 g-x1 g: g-town-size) ; lerp my pos some tiles towards the center
+    (up-set-target-point g-x0) ; try place at that pos
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: watch-tower-line)
+)

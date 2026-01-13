@@ -1,0 +1,26 @@
+(defrule
+    (true)
+    =>
+    (set-strategic-number sn-maximum-wood-drop-distance 5) ; min distance needed for  straggler trees around TC
+    (set-strategic-number sn-maximum-food-drop-distance 8) ; min distance needed to reach the farms
+    (set-strategic-number sn-maximum-gold-drop-distance 4) 
+    (set-strategic-number sn-maximum-stone-drop-distance 4)
+    (disable-self)
+)
+
+; lumber camp destroyed and no wood to build a new one: walk further for wood
+(defrule
+    (game-time > 300)
+    (building-type-count-total lumber-camp == 0)
+    (wood-amount < 100)
+    =>
+    (set-strategic-number sn-maximum-wood-drop-distance 20)
+)
+
+; lumber camp is back: limit drop distance again
+(defrule
+    (game-time > 300)
+    (building-type-count-total lumber-camp > 0)
+    =>
+    (set-strategic-number sn-maximum-wood-drop-distance 5)
+)

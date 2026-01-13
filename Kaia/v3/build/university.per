@@ -1,0 +1,12 @@
+(defrule
+    (goal g-build yes)
+    (can-build university)
+    (building-type-count-total university == 0)
+    (up-pending-objects c: university == 0)
+    (building-type-count-total town-center >= 2)
+    =>
+    (up-set-placement-data my-player-number town-center c: -8) ; bias to back
+    (set-strategic-number sn-placement-zone-size 6)
+    (set-strategic-number sn-placement-to-center 1)
+    (up-build place-control 0 c: university)
+)

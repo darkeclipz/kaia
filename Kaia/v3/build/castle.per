@@ -1,0 +1,37 @@
+; build first castle
+(defrule
+    (goal g-build yes)
+    (can-build-with-escrow castle)
+    (building-type-count-total castle == 0)
+    (up-pending-objects c: castle == 0)
+    (building-type-count-total town-center >= 2)
+    =>
+    (release-escrow stone)
+    (up-get-point position-self g-x0)
+    (up-get-point position-center g-x1)
+    (up-lerp-tiles g-x0 g-x1 g: g-town-size)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: castle)
+)
+
+; keep building castles when there is stone
+(defrule
+    (goal g-build yes)
+    (current-age == imperial-age)
+    (up-pending-objects c: castle == 0)
+    (building-type-count-total town-center >= 2)
+    (building-type-count-total university >= 1)
+    (building-type-count-total monastery >= 1)
+    (building-type-count-total siege-workshop >= 1)
+    (unit-type-count-total villager >= 35)
+    (stone-amount > 800)
+    (can-build castle)
+    =>
+    (up-get-point position-self g-x0)
+    (up-get-point position-center g-x1)
+    (up-lerp-tiles g-x0 g-x1 g: g-town-size)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: castle)
+)

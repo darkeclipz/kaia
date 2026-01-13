@@ -1,0 +1,51 @@
+; research conscription (it is cheap) asap
+; 150 food
+; 150 gold
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow ri-conscription) ; military buildings 33% faster (except siege workshop)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-conscription)
+)
+
+; research chivalry (franks)
+; 600 wood
+; 500 gold
+(defrule
+    (goal g-research yes)
+    (current-age == imperial-age)
+    (goal g-train-knight-line yes)
+    (can-research-with-escrow ri-chivalry) ; stables 40% faster
+    =>
+    (release-escrow wood)
+    (release-escrow gold)
+    (research ri-chivalry)
+)
+
+; increases base hitpoints of a castle with 21% (+1000 hp)
+; 400 food
+; 400 wood
+(defrule
+    (false)
+    (goal g-research yes)
+    (current-age == imperial-age)
+    (can-research-with-escrow ri-hoardings) ; castle +1000hp
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-hoardings)
+)
+
+; research elite throwing axeman
+(defrule
+    (goal g-research yes)
+    (current-age == imperial-age)
+    (unit-type-count-total throwing-axeman-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-elite-throwing-axeman)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-elite-throwing-axeman)
+)

@@ -1,0 +1,148 @@
+(defrule (true) => (set-goal g-rule-split -1))
+
+; ------------------------------------------------------------------------------------
+; Place a lumber camp near the previous lumber camp.
+; ------------------------------------------------------------------------------------
+
+; find position of previous lumber camp
+(defrule
+    (goal g-build yes)
+    (building-type-count-total mill > 0)
+    (can-build-with-escrow lumber-camp)
+    (resource-found wood)
+    (dropsite-min-distance wood > 4)
+    (up-compare-goal g-wood-resources > 5)
+    (up-pending-objects c: lumber-camp == 0)
+    =>
+    (release-escrow wood)
+    (up-full-reset-search)
+    (up-find-local c: lumber-camp c: 240)
+    (up-clean-search search-local object-data-id search-order-desc)
+    (up-set-target-object search-local c: 0)
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-set-target-point g-x0)
+    (up-filter-distance c: -1 c: 8)
+    (up-filter-status c: status-ready c: list-active)
+	(up-find-resource c: wood c: 40)
+    (up-get-search-state g-s)
+    (up-clean-search search-remote object-data-full-distance search-order-asc)
+    (up-get-search-state g-s)
+    (set-goal g-rule-split 1)
+)
+
+; there are still trees, place a new camp closer
+(defrule
+    (goal g-rule-split 1)
+    (up-compare-goal g-rt >= 3)
+    =>
+    (up-set-target-object search-remote c: 0)
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (set-strategic-number sn-focus-player-number 0)
+    (up-build place-point 0 c: lumber-camp)
+)
+
+; there are no trees, build a new camp
+(defrule
+    (goal g-rule-split 1)
+    (up-compare-goal g-rt < 3)
+    =>
+    (set-goal g-build-lumber-camp-v2 yes)
+)
+
+; ------------------------------------------------------------------------------------
+; Find a good tree line and build the lumber camp against it.
+; ------------------------------------------------------------------------------------
+(defconst local-trees-needed 7)
+
+; find the nearest berries
+(defrule
+    (goal g-build-lumber-camp-v2 yes)
+    =>
+    (up-full-reset-search)
+    (set-strategic-number sn-target-player-number 0)
+    (up-find-remote c: forage-class c: 1)
+    (up-set-target-object search-remote c: 0)
+    (up-get-object-data object-data-point-x g-x2)
+    (up-get-object-data object-data-point-y g-y2)
+    (up-get-search-state g-s)
+)
+
+; set to town center if there are no berries
+(defrule
+    (goal g-build-lumber-camp-v2 yes)
+    (up-compare-goal g-rt == 0)
+    =>
+    (up-get-point position-self g-x2)
+)
+
+; find trees near target location
+(defrule
+    (goal g-build-lumber-camp-v2 yes)
+    (can-build lumber-camp)
+    =>
+    (up-full-reset-search)
+    (up-set-target-point g-x2)
+    (up-filter-distance c: -1 s: sn-camp-max-distance)
+    (up-find-remote c: tree-class c: 40)
+    (up-clean-search search-remote object-data-full-distance search-order-asc)
+    (up-get-search-state g-s)
+    (set-goal g-i 0)
+    (set-goal g-n 0)
+    (set-goal g-x 0) ; tree ID
+    (set-goal g-y 0) ; local tree count
+    (up-modify-goal g-n g:= g-rt)
+    (up-get-point position-map-size g-arg0) ; map size
+    (set-goal g-rule-split 1)
+)
+
+; check how many trees are around each tree
+(defrule
+    (goal g-rule-split 1)
+    (up-compare-goal g-i g:< g-n)
+    (up-compare-goal g-y < local-trees-needed)
+    =>
+    (up-full-reset-search)
+    (up-set-target-point g-x2)
+    (up-filter-distance c: -1 s: sn-camp-max-distance)
+    (up-find-remote c: tree-class c: 40)
+    (up-clean-search search-remote object-data-full-distance search-order-asc)
+    (up-set-target-object search-remote g: g-i)
+    (up-get-object-data object-data-full-distance g-arg0)
+    (up-get-object-data object-data-point-x g-x1)
+    (up-get-object-data object-data-point-y g-y1)
+    (up-get-object-data object-data-id g-x)
+    (up-full-reset-search)
+    (up-set-target-point g-x1)
+    (up-filter-distance c: -1 c: 3)
+    (up-find-remote c: tree-class c: 9)
+    (up-get-search-state g-s)
+    ; (up-chat-data-to-self "neighbours: %d" g: g-rt)
+    (up-modify-goal g-y g:= g-rt)
+    (up-modify-goal g-i c:+ 1)
+    (up-jump-rule -1)
+)
+
+; didnt find a suitable location, increase max distance of trees and try again
+(defrule
+    (goal g-rule-split 1)
+    (up-compare-goal g-i g:>= g-n)
+    (up-compare-sn sn-camp-max-distance g:< g-arg0) ; stay within the map
+    =>
+    (up-modify-sn sn-camp-max-distance c:+ 1)
+)
+
+; found a good tree, place a lumber camp
+(defrule
+    (goal g-rule-split 1)
+    (up-compare-goal g-y >= local-trees-needed)
+    =>
+    (up-set-target-point g-x1)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: lumber-camp)
+    ; (up-chat-data-to-self "placed lumber camp (v2)" c: 0)
+    (set-goal g-build-lumber-camp-v2 no)
+)

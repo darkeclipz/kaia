@@ -1,0 +1,33 @@
+(defrule
+    (goal g-build yes)
+    (building-type-count-total archery-range == 0)
+    (up-pending-objects c: archery-range == 0)
+    (building-type-count-total mill > 0)
+(or (building-type-count-total lumber-camp > 0)
+    (wood-amount > 2000))
+    (can-build archery-range)
+    =>
+    (up-set-placement-data my-player-number town-center c: 0)
+    (set-strategic-number sn-placement-zone-size 6)
+    (set-strategic-number sn-placement-to-center 1)
+    (up-build place-control 0 c: archery-range)
+)
+
+(defrule
+    (goal g-build yes)
+(or (goal g-train-archer-line yes)
+(or (goal g-train-cavalry-archer-line yes)
+    (goal g-train-skirmisher-line yes)))
+    (can-build archery-range)
+    (building-type-count-total archery-range < num-archery-range-imperial-age)
+    (up-pending-objects c: archery-range < 2)
+    (or
+        (current-age >= imperial-age)
+        (wood-amount > 185)
+    )
+    =>
+    (up-set-placement-data my-player-number town-center c: 6) ; bias to center
+    (set-strategic-number sn-placement-to-center 1)
+    (set-strategic-number sn-placement-zone-size 6)
+    (up-build place-control 0 c: archery-range)
+)

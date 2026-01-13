@@ -1,0 +1,12 @@
+(defrule
+    (goal g-build yes)
+    (can-build blacksmith)
+    (building-type-count-total blacksmith == 0)
+    (building-type-count-total archery-range >= 2)
+    (up-pending-objects c: blacksmith == 0)
+    =>
+    (up-set-placement-data my-player-number town-center c: -4) ; bias to back
+    (set-strategic-number sn-placement-zone-size 6)
+    (set-strategic-number sn-placement-to-center 1)
+    (up-build place-control 0 c: blacksmith)
+)

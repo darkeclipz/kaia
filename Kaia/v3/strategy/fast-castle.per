@@ -1,0 +1,660 @@
+; https://www.youtube.com/watch?v=JsTNM7j6fs4
+
+(defrule
+    (goal g-fast-castle yes)
+    =>
+    (set-goal g-build no)
+    (set-goal g-research no)
+    (set-goal g-train no)
+    (set-goal g-trade no)
+    (set-goal g-attack no)
+    (set-goal g-escrow no)
+    (set-goal g-harass no)
+    (set-goal g-build-order 0)
+    (set-goal g-max-villagers-dark-age 23) ; max in dark age
+    (set-goal g-max-villagers-feudal-age 25) ; max in feudal age
+    (set-goal g-max-villagers-castle-age 120) ; max in castle age
+    (set-goal g-max-villagers-imperial-age 120) ; max in imperial age
+    (set-goal g-min-villagers-dark-age 23) ; needed before researching feudal age
+    (set-goal g-min-villagers-feudal-age 25) ; needed before researching castle age
+    (set-goal g-min-villagers-castle-age 50) ; needed before researching imperial age
+    (set-strategic-number sn-home-exploration-time 300)
+    (set-strategic-number sn-maximum-hunt-drop-distance 20)
+    (set-strategic-number sn-disable-builder-assistance 0)
+    (set-strategic-number sn-object-repair-level 0) ; dont waste stone
+    (chat-local-to-self "fast castle: enabled")
+    (disable-self)
+)
+
+; ------------------------------------------------------------------------------------
+; Gathering percentages.
+; ------------------------------------------------------------------------------------
+
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 4)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 100)
+    (set-strategic-number sn-wood-gatherer-percentage 0)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 5)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 100)
+    (set-strategic-number sn-wood-gatherer-percentage 0)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 6)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 100)
+    (set-strategic-number sn-wood-gatherer-percentage 0)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 10)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 60)
+    (set-strategic-number sn-wood-gatherer-percentage 40)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 15)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 73)
+    (set-strategic-number sn-wood-gatherer-percentage 27)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 20)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 60)
+    (set-strategic-number sn-wood-gatherer-percentage 40)
+    (set-strategic-number sn-gold-gatherer-percentage 0)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 22)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 61)
+    (set-strategic-number sn-wood-gatherer-percentage 30)
+    (set-strategic-number sn-gold-gatherer-percentage 9)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+(defrule
+    (goal g-fast-castle yes)    
+    (civilian-population >= 28)
+    =>
+    (set-strategic-number sn-food-gatherer-percentage 42)
+    (set-strategic-number sn-wood-gatherer-percentage 46)
+    (set-strategic-number sn-gold-gatherer-percentage 12)
+    (set-strategic-number sn-stone-gatherer-percentage 0)
+    (disable-self)
+)
+
+; ------------------------------------------------------------------------------------
+; Buildings, following a build order.
+; ------------------------------------------------------------------------------------
+
+; build the first house with 2 villagers
+(defrule
+    (goal g-fast-castle yes)
+    (goal g-build-order 0)
+    (can-build house)
+    =>
+    (up-full-reset-search)
+    (up-find-local c: villager-class c: 3)
+    (up-clean-search search-local object-data-id search-order-asc)
+    (up-set-target-object search-local c: 0) ; select first villager
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-assign-builders c: house c: 2)
+    (up-build place-point 0 c: house)
+    (up-modify-goal g-build-order c:+ 1)
+    ; (chat-local-to-self "build first house")
+)
+
+; assign 1 builder per house (it starts with 2)
+(defrule
+    (building-type-count house > 0)
+    =>
+    (up-assign-builders c: house c: 1)
+)
+
+; build the second house with the 3rd villager
+(defrule
+    (goal g-fast-castle yes)    
+    (goal g-build-order 1)
+    (can-build house)
+    =>
+    (up-full-reset-search)
+    (up-find-local c: villager-class c: 3)
+    (up-clean-search search-local object-data-id search-order-asc)
+    (up-set-target-object search-local c: 2) ; select 3rd villager
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: house)
+    (up-modify-goal g-build-order c:+ 1)
+)
+
+; build a lumber camp near the berries
+(defrule
+    (goal g-fast-castle yes)
+    (goal g-build-order 2)
+    (civilian-population >= 10) ; 7
+    (can-build lumber-camp)
+    =>
+    (set-goal g-build-lumber-camp-v2 yes)
+    (up-modify-goal g-build-order c:+ 1)
+)
+
+; build the 3rd house
+(defrule
+    (goal g-fast-castle yes)    
+    (goal g-build-order 3)
+    (civilian-population >= 13)
+    (can-build house)
+    =>
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 5)
+    (up-build place-point 0 c: house)
+    (up-modify-goal g-build-order c:+ 1)
+)
+
+; build a mill near the berries
+(defrule
+    (goal g-fast-castle yes)
+    (goal g-build-order 4)
+    (civilian-population >= 13)
+    (building-type-count house >= 3)
+    (building-type-count-total mill == 0)
+    (up-compare-goal g-build-mill == 0)
+    (can-build mill)
+    =>
+    (up-full-reset-search)
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (up-filter-status c: status-resource c: list-active) ; berries
+    (up-find-resource c: food c: 40)
+    (up-clean-search search-remote object-data-distance search-order-asc)
+    (up-set-target-object search-remote c: 0)
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: mill) ; near berries!
+    (up-modify-goal g-build-order c:+ 2)
+
+    (set-goal g-rt 0)
+    (up-get-search-state g-s)
+)
+(defrule
+    (goal g-build-order 4)
+    (up-compare-goal g-rt == 0)
+    =>
+    (chat-local-to-self "warning: no berries to place a mill near!")
+)
+
+; build the 4th house
+(defrule
+    (goal g-fast-castle yes)    
+    (goal g-build-order 6)
+    (building-type-count lumber-camp == 1)
+    (can-build house)
+    =>
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 5)
+    (up-build place-point 0 c: house)
+    (up-modify-goal g-build-order c:+ 1)
+)
+
+; build farms once feudal age research started
+(defrule
+    (goal g-fast-castle yes)    
+    (up-compare-goal g-build-order > 6)
+    (up-research-status c: feudal-age >= research-pending)
+    (building-type-count-total farm < 6)
+    (idle-farm-count == 0)
+    (can-build farm)
+    =>
+    (build farm)
+)
+
+; build farms once castle age research started
+(defrule
+    (goal g-fast-castle yes)    
+    (up-compare-goal g-build-order > 6)
+    (up-research-status c: castle-age >= research-pending)
+    (building-type-count-total farm < 10)
+    (up-pending-objects c: farm < 3)
+    (can-build farm)
+    =>
+    (build farm)
+)
+
+; build a mining camp
+(defrule
+    (goal g-fast-castle yes)
+    (goal g-build-order 7)
+    (up-compare-goal g-gold-resources > 0)
+    (civilian-population >= 22)
+    (can-build mining-camp)
+    =>
+    (up-full-reset-search)
+    (up-filter-status c: status-resource c: list-active)
+	(up-find-resource c: gold c: 40)
+    (up-get-search-state g-s)
+    (up-modify-goal g-gold-resources g:= g-rt)
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (up-clean-search search-remote object-data-distance search-order-asc)
+    (up-set-target-object search-remote c: 0)
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: mining-camp)
+    (up-modify-goal g-build-order c:+ 2)
+)
+
+; build the first feudal building: blacksmith
+(defrule
+    (goal g-fast-castle yes)    
+    (goal g-build-order 9)
+    (can-build blacksmith)
+    =>
+    (up-set-placement-data my-player-number town-center c: 4) ; bias to front
+    (set-strategic-number sn-placement-zone-size 6)
+    (set-strategic-number sn-placement-to-center 1)
+    (up-build place-control 0 c: blacksmith)
+    (up-modify-goal g-build-order c:+ 1)
+)
+
+; build the second feudal building: market
+(defrule
+    (goal g-fast-castle yes)    
+    (goal g-build-order 10)
+    (can-build market)
+    =>
+    (up-set-placement-data my-player-number town-center c: -4) ; bias to back
+    (set-strategic-number sn-placement-zone-size 6)
+    (set-strategic-number sn-placement-to-center 1)
+    (up-build place-control 0 c: market)
+    (up-modify-goal g-build-order c:+ 1)
+)
+
+; build town center 1
+(defrule
+    (goal g-fast-castle yes)    
+    (up-compare-goal g-build-order >= 11)
+    (building-type-count-total town-center < 2)
+    (up-pending-objects c: town-center == 0)
+    (can-build town-center)
+    =>
+    (set-strategic-number sn-town-center-placement lumber-camp)
+    (up-build place-normal 0 c: town-center)
+    (up-modify-goal g-build-order c:+ 1)
+)
+
+; build town center 2
+(defrule
+    (goal g-fast-castle yes)
+    (up-compare-goal g-build-order >= 12)
+    (building-type-count-total town-center >= 2)
+    (building-type-count-total town-center < 3)
+    (up-pending-objects c: town-center < 2)
+    (can-build town-center)
+    =>
+    (set-strategic-number sn-town-center-placement mining-camp)
+    (up-build place-normal 0 c: town-center)
+    (up-modify-goal g-build-order c:+ 1)
+)
+
+; build town center 3
+(defrule
+    (up-compare-goal g-build-order >= 12)
+    (building-type-count-total town-center >= 3)
+    (building-type-count-total town-center < 4)
+    (up-pending-objects c: town-center == 0)
+    (civilian-population > 65)
+    (can-build town-center)
+    =>
+    (set-strategic-number sn-town-center-placement mining-camp)
+    (up-build place-normal 0 c: town-center)
+    (up-modify-goal g-build-order c:+ 1)
+)
+
+; build houses when needed
+(defrule
+    (goal g-fast-castle yes)
+    (housing-headroom < 5)
+    (population-headroom > 3)
+    (up-compare-goal g-build-order >= 7)
+    (up-pending-objects c: house == 0)
+    (can-build house)
+    =>
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 5)
+    (up-build place-point 0 c: house)
+)
+
+; spam houses when we reached the castle age
+(defrule
+    (goal g-fast-castle yes)
+    (current-age >= castle-age)
+    (housing-headroom < 5)
+    (up-pending-objects c: house == 0)
+    (can-build house)
+    =>
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 5)
+    (up-build place-point 0 c: house)
+)
+
+; ------------------------------------------------------------------------------------
+; Units.
+; ------------------------------------------------------------------------------------
+
+; train scouts to defend
+; (defrule
+;     (goal g-fast-castle yes)
+;     (food-amount > 85)
+;     (unit-type-count-total scout-cavalry-line < 8)
+;     (up-pending-objects c: scout-cavalry-line == 0)
+;     (up-research-status c: castle-age >= research-pending)
+;     (can-train scout-cavalry-line)
+;     =>
+;     (train scout-cavalry-line)
+; )
+
+; ------------------------------------------------------------------------------------
+; Trade.
+; ------------------------------------------------------------------------------------
+
+; buy 100 food to reach castle faster if food is going very slow and we have extra gold
+(defrule
+    (up-compare-goal g-build-order >= 11)
+    (food-amount < 800)
+    (food-amount > 600)
+    (gold-amount > 350)
+    (up-research-status c: feudal-age == research-available)
+    (civilian-population g:>= g-max-villagers)
+    (current-age == feudal-age)
+    (can-buy-commodity food)
+    =>
+    (buy-commodity food)
+    (chat-local-to-self "buy 100 food")
+    ; (disable-self)
+)
+
+; buy wood for town centers
+(defrule
+    (up-compare-goal g-build-order >= 11)
+    (current-age == castle-age)
+    (can-buy-commodity wood)
+    (building-type-count-total town-center < 3)
+    (wood-amount < 275)
+    =>
+    (buy-commodity wood)
+    (chat-local-to-self "buy 100 wood")
+    ; (disable-self)
+)
+
+; buy food to research imperial age
+(defrule
+    (civilian-population > 65)
+    (food-amount < 1000)
+    (gold-amount > 800)
+    (up-research-status c: imperial-age == research-available)
+    (can-buy-commodity food)
+    =>
+    (buy-commodity food)
+    (chat-local-to-self "buy 100 food")
+)
+
+; ; sell some wood if we dont have enough gold to keep TC busy producing villagers
+; (defrule
+;     (goal g-fast-castle yes)
+;     (civilian-population g:>= g-max-villagers)
+;     (gold-amount < 180)
+;     (can-sell-commodity wood)
+;     =>
+;     (sell-commodity wood)
+;     ; (disable-self)
+; )
+
+; ------------------------------------------------------------------------------------
+; Research.
+; ------------------------------------------------------------------------------------
+(defconst fast-castle-min-town-center-needed-for-economy-upgrades 3)
+
+; research feudal age
+(defrule
+    (civilian-population g:>= g-max-villagers)
+    (can-research feudal-age)
+    =>
+    (research feudal-age)
+)
+
+; research castle age
+(defrule
+    (civilian-population g:>= g-max-villagers)
+    (can-research castle-age)
+    =>
+    (research castle-age)
+)
+
+; research imperial age
+(defrule
+    (can-research-with-escrow imperial-age)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (set-escrow-percentage food 30)
+    (set-escrow-percentage gold 30)
+    (research imperial-age)
+)
+
+; set a small escrow for cheap economy upgrades
+(defrule 
+    (up-research-status c: castle-age >= research-pending)
+    =>
+    (set-goal g-escrow no)
+
+    ; (set-escrow-percentage food 15)
+    ; (set-escrow-percentage wood 10)
+    ; (set-escrow-percentage gold 0)
+    ; (set-escrow-percentage stone 0)
+
+    (set-escrow-percentage food 0)
+    (set-escrow-percentage wood 0)
+    (set-escrow-percentage gold 0)
+    (set-escrow-percentage stone 0)
+
+    (disable-self)
+)
+
+; research heavy plow
+(defrule
+    (building-type-count-total town-center >= fast-castle-min-town-center-needed-for-economy-upgrades)
+    (up-research-status c: castle-age >= research-pending)
+    (can-research-with-escrow ri-heavy-plow)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-heavy-plow)
+)
+
+; research double bit axe
+(defrule
+    (building-type-count-total town-center >= fast-castle-min-town-center-needed-for-economy-upgrades)
+    (up-research-status c: castle-age >= research-pending)
+    (can-research-with-escrow ri-double-bit-axe)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-double-bit-axe)
+    (disable-self)
+)
+
+; research bow saw
+(defrule
+    (building-type-count-total town-center >= fast-castle-min-town-center-needed-for-economy-upgrades)
+    (can-research-with-escrow ri-bow-saw)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-bow-saw)
+    (disable-self)
+)
+
+; research gold mining
+(defrule
+    (building-type-count-total town-center >= fast-castle-min-town-center-needed-for-economy-upgrades)
+    (up-research-status c: castle-age >= research-pending)
+    (can-research-with-escrow ri-gold-mining)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-gold-mining)
+    (disable-self)
+)
+
+; research gold shaft mining
+(defrule
+    (building-type-count-total town-center >= fast-castle-min-town-center-needed-for-economy-upgrades)
+    (up-research-status c: castle-age >= research-pending)
+    (can-research-with-escrow ri-gold-shaft-mining)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-gold-shaft-mining)
+    (disable-self)
+)
+
+; research wheel barrow
+(defrule
+    (civilian-population > 60)
+    (building-type-count-total town-center >= fast-castle-min-town-center-needed-for-economy-upgrades)
+    (can-research-with-escrow ri-wheel-barrow)
+    =>
+    (release-escrow wood)
+    (release-escrow food)
+    (research ri-wheel-barrow)
+)
+
+; remove escrow after castle age economy upgrades
+(defrule
+    (up-research-status c: ri-bow-saw >= research-pending)
+    (up-research-status c: ri-gold-shaft-mining >= research-pending)
+    (up-research-status c: ri-wheel-barrow >= research-pending)
+    =>
+    (set-escrow-percentage food 0)
+    (set-escrow-percentage wood 0)
+    (set-escrow-percentage gold 0)
+    (set-escrow-percentage stone 0)
+    (up-release-escrow)
+    (disable-self)
+)
+
+; research cavelier
+(defrule
+    (unit-type-count-total knight-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-cavalier)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (up-research g-use-escrow c: ri-cavalier)
+    (disable-self)
+)
+
+; research paladin
+(defrule
+    (unit-type-count-total knight-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-paladin)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (up-research g-use-escrow c: ri-paladin)
+    (disable-self)
+)
+
+; ------------------------------------------------------------------------------------
+; Other
+; ------------------------------------------------------------------------------------
+
+; send scout back to help defend against rush
+(defrule
+    (goal g-fast-castle yes)
+    (current-age == feudal-age)
+    =>
+	(set-strategic-number sn-number-explore-groups 0)
+	(set-strategic-number sn-total-number-explorers 0)
+    (up-reset-scouts)
+    (disable-self)
+)
+
+; castle age and 3 town center completed
+(defrule
+    (goal g-fast-castle yes)
+    (current-age >= castle-age)
+    (building-type-count-total town-center >= 3)
+    =>
+    (set-goal g-build yes)
+    (set-goal g-train yes)
+    (set-goal g-train-reset yes)
+    (set-goal g-trade yes)
+    (set-goal g-scout yes)
+	(set-strategic-number sn-number-explore-groups 1)
+	(set-strategic-number sn-total-number-explorers 1)
+    (disable-self)
+)
+
+; paladin research pending, done with fast castle into knights
+(defrule
+    (goal g-fast-castle yes)
+    (up-research-status c: ri-paladin >= research-pending)
+    =>
+    (set-goal g-research yes)
+    (set-goal g-escrow yes)
+    (set-goal g-release-escrow yes)
+    (set-goal g-train-counter-units yes)
+    (set-strategic-number sn-object-repair-level 14335)
+    (disable-self)
+)
+
+; allow attacking once paladin research is done
+(defrule
+    (up-research-status c: ri-paladin >= research-complete)
+    =>
+    (set-goal g-attack yes)
+    (set-goal g-fast-castle no)
+    (disable-self)
+)

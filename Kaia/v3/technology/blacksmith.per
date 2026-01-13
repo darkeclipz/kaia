@@ -1,0 +1,171 @@
+; categories: general, melee units, cavalry, infantry, ranged units, archers, siege, ships, buildings, monks, villagers
+
+; forging -> iron casting -> blast furnace (increases melee attack of infantry and cavalry)
+; fletching -> bodkin arrrow -> bracer (increases range, attack, LOS of units and buildings that attack with arrows)
+; scale mail armor -> (increases infantry armor and pierce armor)
+; padded archer armor -> leather archer armor -> ring archer armor (increases armor and pierce armor of all archers)
+; scale barding armor -> chain barding armor -> plate barding armor (increases melee and pierce armor of cavalry units)
+
+; forging
+(defrule
+    (goal g-research yes)
+(or (goal g-has-melee-units yes)
+    (goal g-has-cavalry yes))
+    (can-research-with-escrow ri-forging)
+    =>
+    (release-escrow food)
+    (research ri-forging)
+)
+
+; iron casting
+(defrule
+    (goal g-research yes)
+(or (goal g-has-melee-units yes)
+    (goal g-has-cavalry yes))
+    (can-research-with-escrow ri-iron-casting)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-iron-casting)
+)
+
+; blast furnace
+(defrule
+    (goal g-research yes)
+(or (goal g-has-melee-units yes)
+    (goal g-has-cavalry yes))
+    (can-research-with-escrow ri-blast-furnace)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-blast-furnace)
+)
+
+; fletching
+(defrule
+    (goal g-research yes)
+    (goal g-has-ranged-units yes)
+    (can-research-with-escrow ri-fletching)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-fletching)
+)
+
+; bodkin arrow
+(defrule
+    (goal g-research yes)
+    (goal g-has-ranged-units yes)
+    (can-research-with-escrow ri-bodkin-arrow)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-bodkin-arrow)
+)
+
+; bracer
+(defrule
+    (goal g-research yes)
+    (goal g-has-ranged-units yes)
+    (can-research-with-escrow ri-bracer)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-bracer)
+)
+
+; scale mail
+(defrule
+    (goal g-research yes)
+    (goal g-has-infantry yes)
+    (can-research-with-escrow ri-scale-mail)
+    =>
+    (release-escrow food)
+    (research ri-scale-mail)
+)
+
+; chain mail
+(defrule
+    (goal g-research yes)
+    (goal g-has-infantry yes)
+    (can-research-with-escrow ri-chain-mail)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-chain-mail)
+)
+
+; plate mail
+(defrule
+    (goal g-research yes)
+    (goal g-has-infantry yes)
+    (can-research-with-escrow ri-plate-mail)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-plate-mail)
+)
+
+; padded archer armor
+(defrule
+    (goal g-research yes)
+    (goal g-has-archers yes)
+    (can-research-with-escrow ri-padded-archer-armor)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-padded-archer-armor)
+)
+
+; leather archer armor
+(defrule
+    (goal g-research yes)
+    (goal g-has-archers yes)
+    (can-research-with-escrow ri-leather-archer-armor)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-leather-archer-armor)
+)
+
+; ring archer armor
+(defrule
+    (goal g-research yes)
+    (goal g-has-archers yes)
+    (can-research-with-escrow ri-ring-archer-armor)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-ring-archer-armor)
+)
+
+; scale barding
+(defrule
+    (goal g-research yes)
+    (goal g-has-cavalry yes)
+    (can-research-with-escrow ri-scale-barding)
+    =>
+    (release-escrow food)
+    (research ri-scale-barding)
+)
+
+; chain barding
+(defrule
+    (goal g-research yes)
+    (goal g-has-cavalry yes)
+    (can-research-with-escrow ri-chain-barding)
+    =>
+    (release-escrow food)
+    (research ri-chain-barding)
+)
+
+; plate barding
+(defrule
+    (goal g-research yes)
+    (goal g-has-cavalry yes)
+    (can-research-with-escrow ri-plate-barding)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-plate-barding)
+)

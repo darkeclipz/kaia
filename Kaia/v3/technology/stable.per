@@ -1,0 +1,63 @@
+; increases the hitpoints of all mounted units by +20
+; 150 food
+; 120 gold
+(defrule
+    (goal g-research yes)
+    (goal g-has-cavalry yes)
+    (can-research-with-escrow ri-bloodlines)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-bloodlines)
+)
+
+; increases the movement speed of missionaries, cavalry and mounted archers by 10%
+; 150 food
+(defrule
+    (goal g-research yes)
+    (goal g-has-cavalry yes)
+    (can-research-with-escrow ri-husbandry)
+    (up-research-status c: imperial-age >= research-pending)
+    =>
+    (release-escrow food)
+    (research ri-husbandry)
+)
+
+; upgrade knights; increases attack and hit points by 20%
+; 300 food
+; 300 gold
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total knight-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-cavalier)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-cavalier)
+)
+
+; upgrade cavalier; increases attack and hit points by another 20%?
+; 1300 food
+; 750 gold
+(defrule
+    (goal g-research yes)
+    (unit-type-count-total knight-line >= min-units-required-for-upgrade)
+    (can-research-with-escrow ri-paladin)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-paladin)
+)
+
+; upgrade scouts
+; 150 food
+; 50 gold
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow ri-light-cavalry)
+    (unit-type-count-total scout-cavalry-line >= min-units-required-for-upgrade)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-light-cavalry)
+)

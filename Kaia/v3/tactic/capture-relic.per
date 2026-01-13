@@ -1,0 +1,20 @@
+(defconst relic-class 942)
+(defrule
+    (true)
+    =>
+	(set-strategic-number sn-focus-player-number 0) ; focus gaia
+    (up-full-reset-search)
+	(up-find-remote c: relic-class c: 1) ; find relic
+    (set-goal g-rt 0) ; make sure it's false before checking
+    (up-get-search-state g-s) ; rt >= 1 if a relic is found
+)
+(defrule
+    (goal g-rt 1)
+    =>
+    ; (chat-local-to-self "found relic!")
+    (up-modify-goal g-uncaptured-relics g:= g-rt)
+    ; TODO: send a unit to the relic to "guard" it
+        ; set relic point as target
+        ; find nearest scout or archer
+        ; move to relic
+)

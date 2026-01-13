@@ -1,0 +1,47 @@
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow ri-capped-ram)
+    (unit-type-count-total battering-ram-line >= min-siege-required-for-upgrade)
+    =>
+    (release-escrow food)
+    (research ri-capped-ram)
+)
+
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow ri-siege-ram)
+    (unit-type-count-total battering-ram-line >= min-siege-required-for-upgrade)
+    =>
+    (release-escrow food)
+    (research ri-siege-ram)
+)
+
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow ri-onager)
+    (unit-type-count-total mangonel-line >= min-siege-required-for-upgrade)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-onager)
+)
+
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow ri-siege-onager)
+    (unit-type-count-total mangonel-line >= min-siege-required-for-upgrade)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research ri-siege-onager)
+)
+
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow ri-heavy-scorpion)
+    (unit-type-count-total scorpion-line >= min-siege-required-for-upgrade)
+    =>
+    (release-escrow food)
+    (release-escrow wood)
+    (research ri-heavy-scorpion)
+)

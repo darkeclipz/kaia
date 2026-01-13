@@ -1,0 +1,40 @@
+; always train villagers, idle TC is bad!
+(defrule
+    (current-age == dark-age)
+    =>
+    (up-modify-goal g-max-villagers g:= g-max-villagers-dark-age)
+    (disable-self)
+)
+
+(defrule
+    (current-age == feudal-age)
+    =>
+    (up-modify-goal g-max-villagers g:= g-max-villagers-feudal-age)
+    (disable-self)
+)
+
+(defrule
+    (current-age == castle-age)
+    =>
+    (up-modify-goal g-max-villagers g:= g-max-villagers-castle-age)
+    (disable-self)
+)
+
+(defrule
+    (up-research-status c: imperial-age >= research-pending)
+    =>
+    (up-modify-goal g-max-villagers g:= g-max-villagers-imperial-age)
+    (disable-self)
+)
+
+(defrule
+    (goal g-train-villager yes)
+    (civilian-population g:< g-max-villagers)
+    (up-get-fact building-type-count town-center g-count)
+    (up-pending-objects c: villager g:< g-count)
+    (can-train villager)
+    =>
+    (train villager)
+    (up-get-fact civilian-population 0 g-x)
+    ; (up-chat-data-to-self "train villager %d" g: g-x)
+)

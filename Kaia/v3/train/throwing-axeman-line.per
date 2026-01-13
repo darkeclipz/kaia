@@ -1,0 +1,13 @@
+(defrule
+    (goal g-train yes)
+    (goal g-train-throwing-axeman-line yes)
+    (food-amount >= min-food-needed-for-training)
+    (gold-amount >= min-gold-needed-for-training)
+    ; (gold-amount < 2000)
+    (housing-headroom >= 5)
+    (can-train throwing-axeman-line)
+    (up-get-fact building-type-count-total castle g-count)
+    (up-pending-objects c: throwing-axeman-line g:< g-count)
+    =>
+    (train throwing-axeman-line)
+)

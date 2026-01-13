@@ -1,0 +1,29 @@
+(defrule
+    (goal g-build yes)
+    (can-build siege-workshop)
+    (building-type-count-total siege-workshop == 0)
+    (building-type-count-total town-center >= 2)
+    (up-pending-objects c: siege-workshop == 0)
+    =>
+    (up-set-placement-data my-player-number town-center c: 0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: siege-workshop)
+)
+
+(defrule
+    (goal g-build yes)
+(or (goal g-train-battering-ram-line yes)
+(or (goal g-train-mangonel-line yes)
+    (goal g-train-scorpion-line yes)))
+    (can-build siege-workshop)
+    (building-type-count-total siege-workshop < num-siege-workshop-imperial-age)
+    (up-pending-objects c: siege-workshop < 2)
+    (or
+        (current-age >= imperial-age)
+        (wood-amount > 2500)
+    )
+    =>
+    (up-set-placement-data my-player-number town-center c: 0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-control 0 c: siege-workshop)
+)

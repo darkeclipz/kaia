@@ -1,0 +1,22 @@
+; (defrule
+;     (goal g-research yes)
+;     (can-research-with-escrow ri-fervor)
+;     (current-age == imperial-age)
+;     (unit-type-count-total monk > 0) ; train monk first so we can start walking
+;     =>
+;     (release-escrow gold)
+;     (research ri-fervor)
+; )
+
+; increase movement speed of monk and missionary by 15%
+; 140 gold
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow ri-fervor)
+    (current-age == imperial-age)
+    (unit-type-count-total monk c:== max-monks) ; if max monks
+    (gold-amount > 2000) ; and gold to spare
+    =>
+    (release-escrow gold)
+    (research ri-fervor)
+)

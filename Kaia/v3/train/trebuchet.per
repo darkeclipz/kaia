@@ -1,0 +1,17 @@
+(defrule
+    (goal g-train yes)
+    (goal g-train-trebuchet yes)
+    (wood-amount >= min-wood-needed-for-training)
+    (gold-amount >= min-gold-needed-for-training)
+    (housing-headroom >= 3)
+    (or
+        (and (current-age == castle-age)(unit-type-count-total trebuchet < 0))
+        (and (current-age >= imperial-age)(unit-type-count-total trebuchet < 6))
+    )
+    (up-get-fact building-type-count-total castle g-count)
+    (up-pending-objects c: trebuchet g:< g-count)
+    (up-research-status c: ri-paladin >= research-pending)
+    (can-train trebuchet)
+    =>
+    (train trebuchet)
+)

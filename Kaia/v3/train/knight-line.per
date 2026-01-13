@@ -1,0 +1,13 @@
+(defrule
+    (goal g-train yes)
+    (goal g-train-knight-line yes)
+    (food-amount >= min-food-needed-for-training)
+    (gold-amount >= min-gold-needed-for-training)
+    ; (housing-headroom >= 5)
+    (can-train knight-line)
+    (up-get-fact building-type-count-total stable g-count)
+    (up-pending-objects c: knight-line g:< g-count)
+    (up-research-status c: imperial-age >= research-pending)
+    =>
+    (train knight-line)
+)

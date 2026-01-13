@@ -1,0 +1,14 @@
+(defrule
+    (goal g-train yes)
+    (goal g-train-skirmisher-line yes)
+    (wood-amount >= min-wood-needed-for-training)
+    (food-amount >= min-food-needed-for-training)
+    ; (gold-amount < 2000)
+    (unit-type-count-total skirmisher-line g:< g-max-unit-size)
+    (housing-headroom >= 5)
+    (can-train skirmisher-line)
+    (up-get-fact building-type-count-total archery-range g-count)
+    (up-pending-objects c: skirmisher-line g:< g-count)
+    =>
+    (train skirmisher-line)
+)

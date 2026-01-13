@@ -1,0 +1,75 @@
+; food
+(defrule
+    (true)
+    =>
+    (set-goal g-rt 0)
+    (up-full-reset-search)
+    (up-filter-status c: status-resource c: list-active) ; berries
+	(up-find-resource c: food c: 40)
+    (up-filter-status c: status-ready c: list-active) ; live animals
+    (up-find-resource c: food c: 40)
+    (up-get-search-state g-s)
+    (up-modify-goal g-food-resources g:= g-rt)
+)
+
+; wood
+(defrule
+    (true)
+    =>
+    (set-goal g-rt 0)
+    (up-full-reset-search)
+    (up-filter-status c: status-ready c: list-active)
+	(up-find-resource c: wood c: 40)
+    (up-get-search-state g-s)
+    (up-modify-goal g-wood-resources g:= g-rt)
+)
+
+; stragglers
+(defrule
+    (true)
+    =>
+	(set-goal g-rt 0)
+    (up-full-reset-search)
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (up-filter-distance c: -1 c: 6)
+	(up-filter-status c: 2 c: 0)
+	(up-find-resource c: wood c: 240)
+    (up-get-search-state g-s)
+    (up-modify-goal g-stragglers g:= g-rt)
+)
+
+; gold
+(defrule
+    (true)
+    =>
+    (set-goal g-rt 0)
+    (up-full-reset-search)
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (up-get-point position-map-size g-x1)
+    (up-modify-goal g-x1 c:z/ 2)
+    (up-filter-distance c: -1 g: g-x1)
+    (up-filter-status c: status-resource c: list-active)
+	(up-find-resource c: gold c: 40)
+    (up-get-search-state g-s)
+    (up-modify-goal g-gold-resources g:= g-rt)
+)
+
+; stone
+(defrule
+    (true)
+    =>
+    (set-goal g-rt 0)
+    (up-full-reset-search)
+    (up-get-point position-self g-x0)
+    (up-set-target-point g-x0)
+    (up-filter-status c: status-resource c: list-active)
+    (up-get-point position-map-size g-x1)
+    (up-modify-goal g-x1 c:z/ 2)
+    (up-filter-distance c: -1 g: g-x1)
+    (up-filter-status c: status-resource c: list-active)
+	(up-find-resource c: stone c: 40)
+    (up-get-search-state g-s)
+    (up-modify-goal g-stone-resources g:= g-rt)
+)

@@ -1,0 +1,31 @@
+; research feudal age
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow feudal-age)
+    (unit-type-count-total villager g:>= g-min-villagers-dark-age)
+    =>
+    (release-escrow food)
+    (research feudal-age)
+)
+
+; research castle age
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow castle-age)
+    (unit-type-count-total villager g:>= g-min-villagers-feudal-age)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research castle-age)
+)
+
+; research imperial age
+(defrule
+    (goal g-research yes)
+    (can-research-with-escrow imperial-age)
+    (unit-type-count-total villager g:>= g-min-villagers-castle-age)
+    =>
+    (release-escrow food)
+    (release-escrow gold)
+    (research imperial-age)
+)

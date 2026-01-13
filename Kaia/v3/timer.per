@@ -1,0 +1,21 @@
+(defrule
+    (true)
+    =>
+    (enable-timer t-one-minute 60)
+    (enable-timer t-five-minutes 300)
+    (disable-self)
+)
+
+(defrule
+    (timer-triggered t-one-minute)
+    =>
+    (disable-timer t-one-minute)
+    (enable-timer t-one-minute 60)
+)
+
+(defrule
+    (timer-triggered t-five-minutes)
+    =>
+    (disable-timer t-five-minutes)
+    (enable-timer t-five-minutes 300)
+)
