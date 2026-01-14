@@ -161,12 +161,63 @@
     ; max chat reached
 )
 
-; TSA attack (26)
+; system debug info 1 (26)
 (defrule
     (taunt-detected my-player-number 26)
     =>
     (acknowledge-taunt my-player-number 26)
-    (set-goal g-enable-tsa yes)
+    (up-chat-data-to-self "build: %d" g: g-build)
+    (up-chat-data-to-self "train: %d" g: g-train)
+    (up-chat-data-to-self "research: %d" g: g-research)
+    (up-chat-data-to-self "wall: %d" g: g-wall)
+    (up-chat-data-to-self "scout: %d" g: g-scout)
+    (up-chat-data-to-self "harass: %d" g: g-harass)
+    (up-chat-data-to-self "attack: %d" g: g-attack)
+    (up-chat-data-to-self "train counter units: %d" g: g-train-counter-units)
+    (up-chat-data-to-self "retreat: %d" g: g-retreat)
+    ; max chat reached
+)
+
+; system debug info 2 (27)
+(defrule
+    (taunt-detected my-player-number 27)
+    =>
+    (acknowledge-taunt my-player-number 27)
+    (up-chat-data-to-self "trade: %d" g: g-trade)
+    (up-chat-data-to-self "escrow: %d" g: g-escrow)
+    (up-chat-data-to-self "release-escrow: %d" g: g-release-escrow)
+    (up-chat-data-to-self "resign: %d" g: g-resign)
+    (up-chat-data-to-self "auto town size: %d" g: g-auto-town-size)
+    (up-chat-data-to-self "auto camp size: %d" g: g-auto-camp-size)
+    ; max chat reached
+)
+
+; scout info (28)
+(defrule
+    (taunt-detected my-player-number 28)
+    =>
+    (acknowledge-taunt my-player-number 28)
+    (up-chat-data-to-self "sn-total-number-explorers: %d" s: sn-total-number-explorers)
+    (up-chat-data-to-self "sn-number-explore-groups: %d" s: sn-number-explore-groups)
+    (up-chat-data-to-self "sn-home-exploration-time: %d" g: sn-home-exploration-time)
+    (up-chat-data-to-self "sn-cap-civilian-explorers: %d" s: sn-cap-civilian-explorers)
+    (up-chat-data-to-self "sn-minimum-number-civilian-explorers: %d" s: sn-minimum-civilian-explorers)
+    (up-chat-data-to-self "sn-initial-exploration-required: %d" s: sn-initial-exploration-required)
+)
+
+; villager training info (29)
+(defrule
+    (taunt-detected my-player-number 29)
+    =>
+    (acknowledge-taunt my-player-number 29)
+    (up-chat-data-to-self "g-max-villagers: %d" g: g-max-villagers)
+    (up-chat-data-to-self "g-max-villagers-dark-age: %d" g: g-max-villagers-dark-age)
+    (up-chat-data-to-self "g-max-villagers-feudal-age: %d" g: g-max-villagers-feudal-age)
+    (up-chat-data-to-self "g-max-villagers-castle-age: %d" g: g-max-villagers-castle-age)
+    (up-chat-data-to-self "g-max-villagers-imperial-age: %d" g: g-max-villagers-imperial-age)
+    (up-chat-data-to-self "g-min-villagers-dark-age: %d" g: g-min-villagers-dark-age)
+    (up-chat-data-to-self "g-min-villagers-feudal-age: %d" g: g-min-villagers-feudal-age)
+    (up-chat-data-to-self "g-min-villagers-castle-age: %d" g: g-min-villagers-castle-age)
 )
 
 (defrule (true) => (up-full-reset-search))
@@ -191,3 +242,4 @@
     =>
     (chat-local-to-self "warning: housed!")
 )
+

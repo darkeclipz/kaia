@@ -18,7 +18,6 @@
     (set-goal g-min-villagers-dark-age 23) ; needed before researching feudal age
     (set-goal g-min-villagers-feudal-age 25) ; needed before researching castle age
     (set-goal g-min-villagers-castle-age 50) ; needed before researching imperial age
-    (set-strategic-number sn-home-exploration-time 300)
     (set-strategic-number sn-maximum-hunt-drop-distance 20)
     (set-strategic-number sn-disable-builder-assistance 0)
     (set-strategic-number sn-object-repair-level 0) ; dont waste stone
@@ -192,7 +191,6 @@
     (civilian-population >= 13)
     (building-type-count house >= 3)
     (building-type-count-total mill == 0)
-    (up-compare-goal g-build-mill == 0)
     (can-build mill)
     =>
     (up-full-reset-search)
@@ -389,7 +387,6 @@
     (goal g-fast-castle yes)
     (up-compare-goal g-build-order >= 11)
     (food-amount < 800)
-    (food-amount > 600)
     (gold-amount > 350)
     (up-research-status c: feudal-age == research-available)
     (civilian-population g:>= g-max-villagers)
@@ -398,7 +395,21 @@
     =>
     (buy-commodity food)
     (chat-local-to-self "buy 100 food")
-    ; (disable-self)
+    (disable-self)
+)
+
+; sell 100 wood if we dont have enough gold to start castle age research
+(defrule
+    (goal g-fast-castle yes)
+    (up-compare-goal g-build-order >= 11)
+    (wood-amount > 100)
+    (gold-amount < 200)
+    (up-research-status c: feudal-age == research-available)
+    (civilian-population g:>= g-max-villagers)
+    (can-sell-commodity wood)
+    =>
+    (sell-commodity wood)
+    (disable-self)
 )
 
 ; buy wood for town centers
@@ -631,7 +642,7 @@
     =>
     (set-goal g-build yes)
     (set-goal g-train yes)
-    (set-goal g-train-reset yes)
+    (set-goal g-train-knight-line yes)
     (set-goal g-scout yes)
 	(set-strategic-number sn-number-explore-groups 1)
 	(set-strategic-number sn-total-number-explorers 1)
@@ -658,5 +669,6 @@
     (set-goal g-attack yes)
     (set-goal g-fast-castle no)
     (set-goal g-research yes)
+    (set-goal g-train-trebuchet yes)
     (disable-self)
 )

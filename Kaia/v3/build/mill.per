@@ -5,7 +5,6 @@
     (building-type-count-total mill == 0)
     (civilian-population >= 14)
     (up-pending-objects c: mill == 0)
-    (up-compare-goal g-build-mill == 0)
     (or (resource-found food) ; ensure we found berries
     (or (game-time > 90) ; in case none found
         (food-amount > 2000)))

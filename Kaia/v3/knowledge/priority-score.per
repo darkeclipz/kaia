@@ -8,28 +8,28 @@
     (up-modify-goal g-priority-score g:= g-x)
 )
 (defrule
-    (up-research-status c: feudal-age >= research-pending)
+    (up-research-status c: feudal-age == research-pending)
     =>
     ; (up-chat-data-to-self "feudal-age >= research-pending" c: 0)
     (up-modify-goal g-priority-score c:+ 500)
 )
 (defrule
-    (current-age >= feudal-age)
+    (up-research-status c: feudal-age == research-complete)
     =>
     ; (up-chat-data-to-self "feudal-age >= research-complete" c: 0)
-    (up-modify-goal g-priority-score c:+ 500)
+    (up-modify-goal g-priority-score c:+ 1000)
 )
 (defrule
-    (up-research-status c: castle-age >= research-pending)
+    (up-research-status c: castle-age == research-pending)
     =>
     ; (up-chat-data-to-self "castle-age >= research-pending" c: 0)
     (up-modify-goal g-priority-score c:+ 500)
 )
 (defrule
-    (current-age >= castle-age)
+    (up-research-status c: castle-age == research-complete)
     =>
     ; (up-chat-data-to-self "castle-age >= research-complete" c: 0)
-    (up-modify-goal g-priority-score c:+ 500)
+    (up-modify-goal g-priority-score c:+ 1000)
 )
 (defrule
     (up-research-status c: imperial-age >= research-pending)
@@ -38,10 +38,10 @@
     (up-modify-goal g-priority-score c:+ 500)
 )
 (defrule
-    (current-age >= imperial-age)
+    (up-research-status c: imperial-age >= research-complete)
     =>
     ; (up-chat-data-to-self "imperial-age >= research-complete" c: 0)
-    (up-modify-goal g-priority-score c:+ 500)
+    (up-modify-goal g-priority-score c:+ 1000)
 )
 ; (defrule
 ;     (true)

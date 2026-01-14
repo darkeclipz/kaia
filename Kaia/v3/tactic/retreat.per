@@ -1,28 +1,8 @@
 (defrule (true) => (set-goal g-rule-split -1))
 
-; ; retreat a bit every minute to pull them into our town
-; (defrule
-;     (timer-triggered t-one-minute)
-;     (current-age == imperial-age)
-;     =>
-;     (set-goal g-auto-town-size no)
-;     (set-goal g-attack no)
-;     (set-strategic-number sn-minimum-town-size 1)
-;     (set-strategic-number sn-maximum-town-size 15)
-;     (enable-timer t-retreat 3)
-; )
-; (defrule
-;     (timer-triggered t-retreat)
-;     =>
-;     (set-goal g-attack yes)
-;     (set-goal g-auto-town-size yes)
-;     (disable-timer t-retreat)
-; )
 (defrule
     (goal g-retreat yes)
     (up-enemy-units-in-town > 0) ; only retreat if we saw enemy units
-; (or 
-;     (up-enemy-buildings-in-town > 0))
 (or (building-type-count castle > 0)
     (building-type-count town-center > 0))
     (up-timer-status t-retreat == timer-disabled)
@@ -33,13 +13,11 @@
 
 (defrule    
     (timer-triggered t-retreat)
-    ; check if castle is still valid
     =>
     (disable-timer t-retreat)
     ; set target to town center
     (up-get-point position-self g-x0)
     (up-set-target-point g-x0)
-
     ; find furthest castle position
     (up-full-reset-search)
     (up-modify-goal g-x s:= sn-focus-player-number)
@@ -55,22 +33,15 @@
     (up-set-target-object search-remote c: 0)
     (up-get-object-data object-data-point-x g-x0)
     (up-get-object-data object-data-point-y g-y0)
-
     ; select all troops
     (up-find-local c: infantry-class c: 240)
     (up-find-local c: cavalry-class c: 240)
     (up-find-local c: archery-class c: 240)
     ; (up-find-local c: monk c: 240) ; monks too?
-    
-    ; skip one scout
-    ; (up-get-fact unit-type-count-total scout-cavalry-line g-count)
-    ; (up-modify-goal g-count s:- sn-total-number-explorers)
     (up-find-local c: 947 g: 240) ; scout class
     (up-remove-objects search-local object-data-action == actionid-explore) ; remove scouts
-
     ; move to castle
-    (set-strategic-number sn-enable-patrol-attack 0)
-    ; (up-set-attack-stance)
+    ; (set-strategic-number sn-enable-patrol-attack 0)
     (up-set-attack-stance infantry-class c: stance-no-attack)
     (up-set-attack-stance cavalry-class c: stance-no-attack)
     (up-set-attack-stance scout-cavalry-class c: stance-no-attack) ; scout
@@ -100,6 +71,13 @@
     =>
     (set-goal g-retreat-delay 35)
 )
+(defrule
+    (current-age == imperial-age)
+    (unit-type-count-total trebuchet > 0)
+    (goal g-attacking yes)
+    =>
+    (set-goal g-retreat-delay 60)
+)
 
 ; ; reset aggro if they are idle
 ; (defrule
@@ -114,13 +92,7 @@
 ;     (up-set-timer c: t-reset-stance g: g-aggressive-delay) ; time we retreat before we attack them with aggresive stance (on sight) (5)
 ; )
 
-(defrule
-    (current-age == imperial-age)
-    (unit-type-count-total trebuchet > 0)
-    (goal g-attacking yes)
-    =>
-    (set-goal g-retreat-delay 60)
-)
+
 
 ; ------------------------------------------------------------------------------------
 ; If we are defending, find any units outside of our town and force a retreat.

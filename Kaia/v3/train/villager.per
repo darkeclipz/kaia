@@ -21,7 +21,7 @@
 )
 
 (defrule
-    (up-research-status c: imperial-age >= research-pending)
+    (current-age == imperial-age)
     =>
     (up-modify-goal g-max-villagers g:= g-max-villagers-imperial-age)
     ; (disable-self)

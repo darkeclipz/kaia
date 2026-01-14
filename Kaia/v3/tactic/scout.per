@@ -3,9 +3,9 @@
 (or (unit-type-count-total scout-cavalry-line == 0)
     (goal g-scout no))
     =>
-    (up-log-data 0 "stop scouting, no cavalry scout unit available" c: 0)
-    (up-modify-goal sn-total-number-explorers c: 0)
-    (up-modify-goal sn-number-explore-groups c: 0)
+    ; (up-chat-data-to-self "scouting: stop" c: 0)
+    (set-strategic-number sn-total-number-explorers 0)
+    (set-strategic-number sn-number-explore-groups 0)
     (up-reset-scouts)
 )
 
@@ -14,9 +14,9 @@
     (goal g-scout yes)
     (unit-type-count-total scout-cavalry-line > 0)
     =>
-    (up-log-data 0 "start scouting" c: 0)
-    (up-modify-goal sn-total-number-explorers c: 1)
-    (up-modify-goal sn-number-explore-groups c: 1)
+    ; (up-chat-data-to-self "scouting: start" c: 0)
+    (set-strategic-number sn-total-number-explorers 1)
+    (set-strategic-number sn-number-explore-groups 1)
 )
 
 ; find and get gaia sheep
@@ -25,7 +25,7 @@
     =>
     (up-full-reset-search)
     (set-goal g-rt 0) ; reset
-    (set-strategic-number sn-target-player-number 0) ; gaia
+    (set-strategic-number sn-target-player-number gaia)
     (up-filter-status c: status-ready c: list-active) ; live animals
     (up-find-remote c: livestock-class c: 1)
     (up-get-search-state g-s)
