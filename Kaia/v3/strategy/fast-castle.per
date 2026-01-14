@@ -115,6 +115,42 @@
 ; Buildings, following a build order.
 ; ------------------------------------------------------------------------------------
 
+; build the first house with two villagers
+(defrule
+    (can-build house)
+    (building-type-count-total house == 0)
+    (unit-type-count-total villager >= 3)
+    =>
+    ; find and place house next to villager
+    (up-full-reset-search)
+    (up-find-local c: villager-class c: 3)
+    (up-clean-search search-local object-data-id search-order-asc)
+    (up-set-target-object search-local c: 0) ; select first villager
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 1)
+    (up-build place-point 0 c: house)
+)
+
+; build the second house with one villager
+(defrule
+    (can-build house)
+    (building-type-count-total house == 1)
+    (unit-type-count-total villager >= 3)
+    =>
+    ; find and place house next to villager
+    (up-full-reset-search)
+    (up-find-local c: villager-class c: 3)
+    (up-clean-search search-local object-data-id search-order-asc)
+    (up-set-target-object search-local c: 2) ; select 3rd villager
+    (up-get-object-data object-data-point-x g-x0)
+    (up-get-object-data object-data-point-y g-y0)
+    (up-set-target-point g-x0)
+    (set-strategic-number sn-placement-zone-size 5)
+    (up-build place-point 0 c: house)
+)
+
 ; wait for first 2 houses.
 (defrule
     (goal g-fast-castle yes)
@@ -177,6 +213,7 @@
     (up-get-search-state g-s)
 )
 (defrule
+    (goal g-fast-castle yes)
     (goal g-build-order 4)
     (up-compare-goal g-rt == 0)
     =>
@@ -301,6 +338,7 @@
 
 ; build town center 3
 (defrule
+    (goal g-fast-castle yes)
     (up-compare-goal g-build-order >= 12)
     (building-type-count-total town-center >= 3)
     (building-type-count-total town-center < 4)
@@ -348,6 +386,7 @@
 
 ; buy 100 food to reach castle faster if food is going very slow and we have extra gold
 (defrule
+    (goal g-fast-castle yes)
     (up-compare-goal g-build-order >= 11)
     (food-amount < 800)
     (food-amount > 600)
@@ -364,6 +403,7 @@
 
 ; buy wood for town centers
 (defrule
+    (goal g-fast-castle yes)
     (up-compare-goal g-build-order >= 11)
     (current-age == castle-age)
     (can-buy-commodity wood)
@@ -377,6 +417,7 @@
 
 ; buy food to research imperial age
 (defrule
+    (goal g-fast-castle yes)
     (civilian-population > 65)
     (food-amount < 1000)
     (gold-amount > 800)
@@ -405,6 +446,7 @@
 
 ; research feudal age
 (defrule
+    (goal g-fast-castle yes)
     (civilian-population g:>= g-max-villagers)
     (can-research feudal-age)
     =>
@@ -413,6 +455,7 @@
 
 ; research castle age
 (defrule
+    (goal g-fast-castle yes)
     (civilian-population g:>= g-max-villagers)
     (can-research castle-age)
     =>
@@ -421,6 +464,7 @@
 
 ; research imperial age
 (defrule
+    (goal g-fast-castle yes)
     (can-research-with-escrow imperial-age)
     =>
     (release-escrow food)
@@ -432,6 +476,7 @@
 
 ; set a small escrow for cheap economy upgrades
 (defrule 
+    (goal g-fast-castle yes)
     (up-research-status c: castle-age >= research-pending)
     =>
     (set-goal g-escrow no)
@@ -451,6 +496,7 @@
 
 ; research heavy plow
 (defrule
+    (goal g-fast-castle yes)
     (building-type-count-total town-center >= fast-castle-min-town-center-needed-for-economy-upgrades)
     (up-research-status c: castle-age >= research-pending)
     (can-research-with-escrow ri-heavy-plow)
@@ -462,6 +508,7 @@
 
 ; research double bit axe
 (defrule
+    (goal g-fast-castle yes)
     (building-type-count-total town-center >= fast-castle-min-town-center-needed-for-economy-upgrades)
     (up-research-status c: castle-age >= research-pending)
     (can-research-with-escrow ri-double-bit-axe)
@@ -474,6 +521,7 @@
 
 ; research bow saw
 (defrule
+    (goal g-fast-castle yes)
     (building-type-count-total town-center >= fast-castle-min-town-center-needed-for-economy-upgrades)
     (can-research-with-escrow ri-bow-saw)
     =>
@@ -485,6 +533,7 @@
 
 ; research gold mining
 (defrule
+    (goal g-fast-castle yes)
     (building-type-count-total town-center >= fast-castle-min-town-center-needed-for-economy-upgrades)
     (up-research-status c: castle-age >= research-pending)
     (can-research-with-escrow ri-gold-mining)
@@ -497,6 +546,7 @@
 
 ; research gold shaft mining
 (defrule
+    (goal g-fast-castle yes)
     (building-type-count-total town-center >= fast-castle-min-town-center-needed-for-economy-upgrades)
     (up-research-status c: castle-age >= research-pending)
     (can-research-with-escrow ri-gold-shaft-mining)
@@ -509,6 +559,7 @@
 
 ; research wheel barrow
 (defrule
+    (goal g-fast-castle yes)
     (civilian-population > 60)
     (building-type-count-total town-center >= fast-castle-min-town-center-needed-for-economy-upgrades)
     (can-research-with-escrow ri-wheel-barrow)
@@ -520,6 +571,7 @@
 
 ; remove escrow after castle age economy upgrades
 (defrule
+    (goal g-fast-castle yes)
     (up-research-status c: ri-bow-saw >= research-pending)
     (up-research-status c: ri-gold-shaft-mining >= research-pending)
     (up-research-status c: ri-wheel-barrow >= research-pending)
@@ -534,6 +586,7 @@
 
 ; research cavelier
 (defrule
+    (goal g-fast-castle yes)
     (unit-type-count-total knight-line >= min-units-required-for-upgrade)
     (can-research-with-escrow ri-cavalier)
     =>
@@ -545,6 +598,7 @@
 
 ; research paladin
 (defrule
+    (goal g-fast-castle yes)
     (unit-type-count-total knight-line >= min-units-required-for-upgrade)
     (can-research-with-escrow ri-paladin)
     =>
@@ -578,7 +632,6 @@
     (set-goal g-build yes)
     (set-goal g-train yes)
     (set-goal g-train-reset yes)
-    (set-goal g-trade yes)
     (set-goal g-scout yes)
 	(set-strategic-number sn-number-explore-groups 1)
 	(set-strategic-number sn-total-number-explorers 1)
@@ -590,8 +643,8 @@
     (goal g-fast-castle yes)
     (up-research-status c: ri-paladin >= research-pending)
     =>
-    (set-goal g-research yes)
     (set-goal g-escrow yes)
+    (set-goal g-trade yes)
     (set-goal g-release-escrow yes)
     (set-goal g-train-counter-units yes)
     (set-strategic-number sn-object-repair-level 14335)
@@ -604,5 +657,6 @@
     =>
     (set-goal g-attack yes)
     (set-goal g-fast-castle no)
+    (set-goal g-research yes)
     (disable-self)
 )

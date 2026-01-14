@@ -1,0 +1,149 @@
+; settings
+(defrule
+    (true)
+    =>
+    (set-strategic-number sn-do-not-scale-for-difficulty-level 1) ; stop scaling
+    (set-strategic-number sn-consecutive-idle-unit-limit 1) ; gives a new task faster
+    (set-strategic-number sn-enable-patrol-attack 1) ; retarget against nearby sighted units
+    (set-strategic-number sn-maximum-patrol-distance 5) ; don't walk too far off
+    (set-strategic-number sn-wall-targeting-mode 1) ; attack walls
+    (set-strategic-number sn-gather-defense-units 0) ; gather soldiers near town center
+    ; (set-strategic-number sn-task-ungrouped-soldiers 0) ; spread soldiers; terrible
+    (set-strategic-number sn-enable-training-queue 15) ; number of units that can be queued at a building
+    (set-strategic-number sn-enable-research-queue 1) ; allows technologies to be queued too
+    (set-strategic-number sn-cap-civilian-builders 200) ; allow all civilians to build at the same time
+    (set-strategic-number sn-scale-minimum-attack-group-size 0) ; fixes that min > max, which breaks attack groups
+    (set-strategic-number sn-dropsite-separation-distance 3) ; prevent tons of mining camps
+    (set-strategic-number sn-initial-exploration-required 0) ; can build immediately
+    (set-strategic-number sn-cap-civilian-explorers 0) ; no civ explorers
+    (set-strategic-number sn-minimum-civilian-explorers 0) ; no civ explorers
+    (set-strategic-number sn-total-number-explorers 1)
+	(set-strategic-number sn-number-explore-groups 1)
+    (set-strategic-number sn-object-repair-level 14335) ; https://airef.github.io/strategic-numbers/sn-details.html#sn-object-repair-level
+    (set-strategic-number sn-defer-dropsite-update 1) ; if camp is build at enemy; only "sacrafice" one villager    (set-strategic-number sn-group-commander-selection-method 2)
+    (set-strategic-number sn-percent-attack-soldiers 100)
+    (set-strategic-number sn-number-attack-groups 0)
+    (set-strategic-number sn-attack-group-gather-spacing 2)
+    (set-strategic-number sn-group-form-distance 8)
+    (set-strategic-number sn-enable-offensive-priority 1)
+    (set-strategic-number sn-disable-builder-assistance 1) ; prevent builders from assisting on nearby foundations after their work is complete (0=assist,1=dont assist)
+    (set-strategic-number sn-attack-intelligence 1) ; tries to avoid enemy units and attack from different sides
+    (set-strategic-number sn-disable-tower-priority 1)
+    (set-strategic-number sn-sentry-distance 0) ; extends the defend area above max-town-size, we dont want this
+    ; (set-strategic-number sn-allow-civilian-offense 1) ; perhaps do this early game
+
+    ; (up-set-placement-data my-player-number -1 c: -0) ; build around town center
+    ; (set-strategic-number sn-placement-zone-size 6) ; start with size 6?
+    (disable-self)
+)
+
+; init
+(defrule
+    (true)
+    =>
+    (up-log-data 0 "init" c: 0)
+    (set-goal g-true 1)
+    (set-goal g-build no)
+    (set-goal g-train no)
+    (set-goal g-train-reset yes)
+    (set-goal g-research no)
+    (set-goal g-trade no)
+    (set-goal g-resign yes)
+    (set-goal g-wall no)
+    (set-goal g-attack yes)
+    (set-goal g-auto-town-size yes)
+    (set-goal g-auto-camp-size yes)
+    (set-goal g-scout yes)
+    (set-goal g-escrow no)
+    (set-goal g-harass yes)
+    (set-goal g-retreat yes)
+    (set-goal g-release-escrow yes)
+    (set-goal g-attack-delay 20)
+    (set-goal g-retreat-delay 60)
+    (set-goal g-aggressive-delay 8)
+    (set-goal g-train-counter-units no)
+    (set-goal g-build-mill 0)
+    (set-goal g-max-villagers-dark-age 25)
+    (set-goal g-max-villagers-feudal-age 30)
+    (set-goal g-max-villagers-castle-age 65)
+    (set-goal g-max-villagers-imperial-age 100)
+    (set-goal g-headroom-remaining-before-attacking 0)
+    (set-goal g-headroom-remaining-before-attacking 50)
+    (disable-self)
+)
+
+; set build order
+(defrule
+    (true)
+    =>
+    (set-goal g-build-order-house1 9999)
+    (set-goal g-build-order-house2 9999)
+    (set-goal g-build-order-house3 9999)
+    (set-goal g-build-order-house4 9999)
+    (set-goal g-build-order-house5 9999)
+    (set-goal g-build-order-mill 9999)
+    (set-goal g-build-order-lumber-camp 9999)
+    (set-goal g-build-order-mining-camp-gold 9999)
+    (set-goal g-build-order-mining-camp-stone 9999)
+    (set-goal g-build-order-barracks1 9999)
+    (set-goal g-build-order-barracks2 9999)
+    (set-goal g-build-order-barracks3 9999)
+    (set-goal g-build-order-archery-range1 9999)
+    (set-goal g-build-order-archery-range2 9999)
+    (set-goal g-build-order-archery-range3 9999)
+    (set-goal g-build-order-stable1 9999)
+    (set-goal g-build-order-stable2 9999)
+    (set-goal g-build-order-stable3 9999)
+    (set-goal g-build-order-blacksmith 9999)
+    (set-goal g-build-order-market 9999)
+    (set-goal g-build-order-watch-tower1 9999)
+    (set-goal g-build-order-watch-tower2 9999)
+    (set-goal g-build-order-siege-workshop1 9999)
+    (set-goal g-build-order-siege-workshop2 9999)
+    (set-goal g-build-order-monastery 9999)
+    (set-goal g-build-order-university 9999)
+    (set-goal g-build-order-castle 9999)
+    (disable-self)
+)
+
+; set min buildings to 0
+(defrule 
+    (true) => 
+    (set-goal g-min-house 0)
+    (set-goal g-min-mill 0)
+    (set-goal g-min-farm 0)
+    (set-goal g-min-lumber-camp 0)
+    (set-goal g-min-mining-camp-gold 0)
+    (set-goal g-min-mining-camp-stone 0)
+    (set-goal g-min-barracks 0)
+    (set-goal g-min-archery-range 0)
+    (set-goal g-min-stable 0)
+    (set-goal g-min-blacksmith 0)
+    (set-goal g-min-market 0)
+    (set-goal g-min-watch-tower-line 0)
+    (set-goal g-min-siege-workshop 0)
+    (set-goal g-min-monastery 0)
+    (set-goal g-min-university 0)
+    (set-goal g-min-castle 0)
+    (disable-self)
+)
+
+(defrule
+    (goal g-train-reset yes)
+    =>
+    (set-goal g-train-villager yes)
+    (set-goal g-train-militiaman-line no)
+    (set-goal g-train-spearman-line no)
+    (set-goal g-train-archer-line no)
+    (set-goal g-train-scout-cavalry-line no)
+    (set-goal g-train-knight-line yes)
+    (set-goal g-train-battering-ram-line no)
+    (set-goal g-train-trebuchet yes)
+    (set-goal g-train-scorpion-line no)
+    (set-goal g-train-mangonel-line no)
+    (set-goal g-train-skirmisher-line no)
+    (set-goal g-train-cavalry-archer-line no)
+    (set-goal g-train-monk no)
+    (set-goal g-train-reset no)
+    (up-log-data 0 "training goals resetted" c: 0)
+)

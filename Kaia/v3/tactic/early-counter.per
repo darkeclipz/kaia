@@ -42,30 +42,30 @@
     (train spearman-line)
 )
 
-; train a few spearman
-(defrule
-    (current-age <= castle-age)
-    (unit-type-count-total spearman-line < 4)
-    (up-pending-objects c: spearman-line == 0)
-    (can-train spearman-line)
-    =>
-    (train spearman-line)
-)
+; ; train a few spearman
+; (defrule
+;     (current-age <= castle-age)
+;     (unit-type-count-total spearman-line < 4)
+;     (up-pending-objects c: spearman-line == 0)
+;     (can-train spearman-line)
+;     =>
+;     (train spearman-line)
+; )
 
-; train a few archers to defend
-(defrule
-    (current-age <= castle-age)
-    (unit-type-count-total archer-line < 4)
-    (can-train archer-line)
-    =>
-    (train archer-line)
-)
+; ; train a few archers to defend
+; (defrule
+;     (current-age <= castle-age)
+;     (unit-type-count-total archer-line < 4)
+;     (can-train archer-line)
+;     =>
+;     (train archer-line)
+; )
 
-; train a few scouts to defend
-(defrule
-    (current-age <= castle-age)
-    (unit-type-count-total scout-cavalry-line < 4)
-    (can-train scout-cavalry)
-    =>
-    (train scout-cavalry)
-)
+; ; train a few scouts to defend
+; (defrule
+;     (current-age <= castle-age)
+;     (unit-type-count-total scout-cavalry-line < 4)
+;     (can-train scout-cavalry)
+;     =>
+;     (train scout-cavalry)
+; )

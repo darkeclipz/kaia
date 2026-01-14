@@ -1,0 +1,154 @@
+; goals
+(defconst g-build 1) ; enable building
+(defconst g-train 2) ; enable training (excl. villagers, use g-train-villagers)
+(defconst g-train-reset 3) ; request to reset what units to train
+(defconst g-research 4) ; enable researching
+(defconst g-trade 5) ; enable buying and selling of resources if needed
+(defconst g-resign 6) ; enable resignation
+(defconst g-resigning 7) ; indicates that we are resigning
+(defconst g-wall 8) ; builds a wall
+; (defconst g-auto-stop-attack 9) ; not used
+(defconst g-attack 10) ; enable attacking
+(defconst g-attacking 11) ; not used
+(defconst g-auto-town-size 12) ; enable automatic town size (furthest building)
+(defconst g-auto-camp-size 13) ; enable automatic camp sizing (nearest mine/tree)
+(defconst g-max-villagers 14) ; max villagers to train
+(defconst g-wood-resources 15) ; count of wood resources on the map
+(defconst g-food-resources 16) ; count of food resources on the map (berries and sheep)
+(defconst g-gold-resources 17) ; count of gold resources on the map
+(defconst g-stone-resources 18) ; count of stone resources on the map
+(defconst g-town-size 19) ; size of the town used for sn-maximum-town-size
+(defconst g-uncaptured-relics 20) ; total uncaptured relics on the map
+(defconst g-max-unit-size 21) ; max unit count for trash units
+(defconst g-enable-tsa 22) ; request a TSA attack
+(defconst g-tsa-state 23) ; state the TSA attack is in
+(defconst g-scout 24) ; enables scouting
+(defconst g-build-order 25) ; order in which buildings are constructed in a strategy
+(defconst g-escrow 26) ; enables escrow
+(defconst g-harass 27) ; scout harasses the enemy early game
+(defconst g-stragglers 28) ; number of straggler trees around the TC
+(defconst g-retreat 29) ; enable retreating
+(defconst g-release-escrow 30) ; enable to release screw after a threshold
+(defconst g-min-villagers-dark-age 31)
+(defconst g-min-villagers-feudal-age 32)
+(defconst g-min-villagers-castle-age 33)
+(defconst g-max-villagers-dark-age 34)
+(defconst g-max-villagers-feudal-age 35)
+(defconst g-max-villagers-castle-age 36)
+(defconst g-max-villagers-imperial-age 37)
+(defconst g-attack-delay 38) ; attack interval with TSA if conditions to attack are satisfied
+(defconst g-retreat-delay 39) ; time it takes to retreat after a unit has been sighted
+(defconst g-aggressive-delay 40) ; time it takes after retreating to become aggressive again
+(defconst g-train-counter-units 41) ; enable to train counter units (and buildings + upgrades)
+(defconst g-headroom-remaining-before-attacking 42) ; attack if mil. pop is > this
+(defconst g-headroom-remaining-before-defending 43) ; defend if mil. pop is < this.
+(defconst g-num-relic-monks-trained 44) ; number of monks we trained to grab relics (this is to prevent sending monks forever if they get killed)
+
+(defconst g-strategy-test 71) ; hard-coded in Test.per
+(defconst g-fast-castle 72)
+(defconst g-scout-rush 74)
+
+(defconst g-train-militiaman-line 100)
+(defconst g-train-archer-line 101)
+(defconst g-train-knight-line 102)
+(defconst g-train-battering-ram-line 103)
+(defconst g-train-trebuchet 104)
+(defconst g-train-scorpion-line 105)
+(defconst g-train-mangonel-line 106)
+(defconst g-train-skirmisher-line 107)
+(defconst g-train-spearman-line 108)
+(defconst g-train-monk 109)
+(defconst g-train-scout-cavalry-line 110)
+(defconst g-train-cavalry-archer-line 111)
+(defconst g-train-throwing-axeman-line 112)
+(defconst g-train-villager 113)
+
+(defconst g-build-mill 150) ; number of mills queued for building
+(defconst g-build-lumber-camp-v2 151)
+
+(defconst g-has-melee-units 200)
+(defconst g-has-cavalry 201)
+(defconst g-has-infantry 202)
+(defconst g-has-ranged-units 203)
+(defconst g-has-archers 204)
+(defconst g-has-siege 205)
+(defconst g-has-ships 206)
+
+; use 300-998 for the new build, research and villager task systems.
+(defconst g-priority-score 299)
+
+(defconst g-min-house 300)
+(defconst g-min-mill 301)
+(defconst g-min-farm 302)
+(defconst g-min-lumber-camp 303)
+(defconst g-min-mining-camp-gold 304)
+(defconst g-min-mining-camp-stone 304)
+(defconst g-min-barracks 305)
+(defconst g-min-archery-range 306)
+(defconst g-min-stable 307)
+(defconst g-min-blacksmith 308)
+(defconst g-min-market 309)
+(defconst g-min-watch-tower-line 310)
+(defconst g-min-siege-workshop 311)
+(defconst g-min-monastery 312)
+(defconst g-min-university 313)
+(defconst g-min-castle 314)
+
+(defconst g-build-order-house1 350)
+(defconst g-build-order-house2 351)
+(defconst g-build-order-house3 352)
+(defconst g-build-order-house4 353)
+(defconst g-build-order-house5 354)
+(defconst g-build-order-mill 355)
+(defconst g-build-order-lumber-camp 356)
+(defconst g-build-order-mining-camp-gold 357)
+(defconst g-build-order-mining-camp-stone 358)
+(defconst g-build-order-barracks1 359)
+(defconst g-build-order-barracks2 360)
+(defconst g-build-order-barracks3 361)
+(defconst g-build-order-archery-range1 362)
+(defconst g-build-order-archery-range2 363)
+(defconst g-build-order-archery-range3 364)
+(defconst g-build-order-stable1 365)
+(defconst g-build-order-stable2 366)
+(defconst g-build-order-stable3 367)
+(defconst g-build-order-blacksmith 368)
+(defconst g-build-order-market 369)
+(defconst g-build-order-watch-tower1 370)
+(defconst g-build-order-watch-tower2 371)
+(defconst g-build-order-siege-workshop1 372)
+(defconst g-build-order-siege-workshop2 373)
+(defconst g-build-order-monastery 374)
+(defconst g-build-order-university 375)
+(defconst g-build-order-castle 376)
+
+(defconst g-true 999)
+(defconst g-use-escrow 999)
+(defconst g-x 1000)
+(defconst g-y 1001)
+(defconst g-i 1002)
+(defconst g-j 1003)
+(defconst g-k 1004)
+(defconst g-n 1005)
+(defconst g-m 1006)
+(defconst g-count 1007)
+(defconst g-x0 1016)
+(defconst g-y0 1017)
+(defconst g-x1 1018)
+(defconst g-y1 1019)
+(defconst g-x2 1020)
+(defconst g-y2 1021)
+(defconst g-arg0 1022)
+(defconst g-arg1 1023)
+(defconst g-arg2 1024)
+(defconst g-arg3 1025)
+(defconst g-arg4 1026)
+(defconst g-search-state 1027)
+(defconst g-current-local-search-total 1027)
+(defconst g-last-local-search-count 1028)
+(defconst g-current-remote-search-total 1029)
+(defconst g-last-remote-search-count 1030)
+(defconst g-s 1027)
+(defconst g-lt 1027)
+(defconst g-rt 1029)
+(defconst g-rule-split 1031)

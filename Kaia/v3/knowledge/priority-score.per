@@ -1,0 +1,50 @@
+; up-research status has a bug where castle-age research is completed when its queued...
+
+; update current priority score
+(defrule 
+    (true)
+    => 
+    (up-get-fact civilian-population 0 g-x)
+    (up-modify-goal g-priority-score g:= g-x)
+)
+(defrule
+    (up-research-status c: feudal-age >= research-pending)
+    =>
+    ; (up-chat-data-to-self "feudal-age >= research-pending" c: 0)
+    (up-modify-goal g-priority-score c:+ 500)
+)
+(defrule
+    (current-age >= feudal-age)
+    =>
+    ; (up-chat-data-to-self "feudal-age >= research-complete" c: 0)
+    (up-modify-goal g-priority-score c:+ 500)
+)
+(defrule
+    (up-research-status c: castle-age >= research-pending)
+    =>
+    ; (up-chat-data-to-self "castle-age >= research-pending" c: 0)
+    (up-modify-goal g-priority-score c:+ 500)
+)
+(defrule
+    (current-age >= castle-age)
+    =>
+    ; (up-chat-data-to-self "castle-age >= research-complete" c: 0)
+    (up-modify-goal g-priority-score c:+ 500)
+)
+(defrule
+    (up-research-status c: imperial-age >= research-pending)
+    =>
+    ; (up-chat-data-to-self "imperial-age >= research-pending" c: 0)
+    (up-modify-goal g-priority-score c:+ 500)
+)
+(defrule
+    (current-age >= imperial-age)
+    =>
+    ; (up-chat-data-to-self "imperial-age >= research-complete" c: 0)
+    (up-modify-goal g-priority-score c:+ 500)
+)
+; (defrule
+;     (true)
+;     =>
+;     (up-chat-data-to-self "priority score: %d" g: g-priority-score)
+; )

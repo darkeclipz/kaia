@@ -111,7 +111,7 @@ This is currently being handled by setting resource percentages, which works for
 
 We need a system that makes it possible to execute various build orders dynamically. To do so, the concept of a _building priority score_ is introduced:
 
- * There is a `g-current-priority-score` goal that represents the current priority score that we are at.
+ * There is a `g-priority-score` goal that represents the current priority score that we are at.
  * A building is constructed once a certain priority score has been reached.
  * Every villager increases the priority score by 1.
  * The priority score is also increased for each stage of research we are in. Each stage gives 500 points, so a large population (>= 100) can't practically overflow it into the next stage (unless you train 500 villagers...).
@@ -230,7 +230,7 @@ This leads to the following design:
  * Starting research increases the order goal by 1.
  * The priority goal is the same as the building priority system: `priority = age-status + civ. pop`.
  * Any technology that doesn't depend on the number of villagers has a priority of 0.
- * A technology can be forced to be researched by settings its priority to `g-current-priority-score`.
+ * A technology can be forced to be researched by settings its priority to `g-priority-score`.
 
 ## Enemy unit estimation
 

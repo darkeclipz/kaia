@@ -1,0 +1,84 @@
+(defrule
+    (goal g-strategy-test yes)
+    =>
+    (set-goal g-build no)
+    (set-goal g-research no)
+    (set-goal g-train no)
+    (set-goal g-trade no)
+    (set-goal g-attack yes)
+    (set-goal g-escrow no)
+    (set-goal g-harass no)
+    (set-goal g-max-villagers-dark-age 23) ; max in dark age
+    (set-goal g-max-villagers-feudal-age 25) ; max in feudal age
+    (set-goal g-max-villagers-castle-age 120) ; max in castle age
+    (set-goal g-max-villagers-imperial-age 120) ; max in imperial age
+    (set-goal g-min-villagers-dark-age 23) ; needed before researching feudal age
+    (set-goal g-min-villagers-feudal-age 25) ; needed before researching castle age
+    (set-goal g-min-villagers-castle-age 50) ; needed before researching imperial age
+    (chat-local-to-self "strategy: test")
+    (disable-self)
+)
+
+(defrule
+    (goal g-strategy-test yes)
+    =>
+    (set-goal g-build-order-house1 4)
+    (set-goal g-build-order-house2 4)
+    (set-goal g-build-order-house3 4)
+    (set-goal g-build-order-house4 4)
+    (set-goal g-build-order-house5 9999)
+    (set-goal g-build-order-mill 3)
+    ; TODO: add farm!
+    (set-goal g-build-order-lumber-camp 3)
+    (set-goal g-build-order-mining-camp-gold 9999)
+    (set-goal g-build-order-mining-camp-stone 9999)
+    (set-goal g-build-order-barracks1 500)
+    (set-goal g-build-order-barracks2 9999)
+    (set-goal g-build-order-barracks3 9999)
+    (set-goal g-build-order-archery-range1 9999)
+    (set-goal g-build-order-archery-range2 9999)
+    (set-goal g-build-order-archery-range3 9999)
+    (set-goal g-build-order-stable1 1000)
+    (set-goal g-build-order-stable2 1006)
+    (set-goal g-build-order-stable3 1006)
+    (set-goal g-build-order-blacksmith 1000)
+    (set-goal g-build-order-market 9999)
+    (set-goal g-build-order-watch-tower1 9999)
+    (set-goal g-build-order-watch-tower2 9999)
+    (set-goal g-build-order-siege-workshop1 9999)
+    (set-goal g-build-order-siege-workshop2 9999)
+    (set-goal g-build-order-monastery 9999)
+    (set-goal g-build-order-university 9999)
+    (set-goal g-build-order-castle 2000)
+    (disable-self)
+)
+
+(defrule (goal g-strategy-test yes)(can-research feudal-age) => (research feudal-age)(chat-local-to-self "FA"))
+(defrule (goal g-strategy-test yes)(can-research castle-age) => (research castle-age))
+(defrule (goal g-strategy-test yes)(can-research imperial-age) => (research imperial-age))
+(defrule (goal g-strategy-test yes)(can-research ri-conscription) => (research ri-conscription))
+(defrule (goal g-strategy-test yes)(up-pending-objects c: villager == 0)(can-train villager) => (train villager))
+(defrule (goal g-strategy-test yes)(up-compare-goal g-priority-score >= 500) => (up-modify-goal g-min-house c:+ 10)(disable-self))
+(defrule (goal g-strategy-test yes)(up-compare-goal g-priority-score >= 1500) => (up-modify-goal g-min-house c:+ 10)(disable-self))
+(defrule (goal g-strategy-test yes)(up-compare-goal g-priority-score >= 2500) => (up-modify-goal g-min-house c:+ 15)(disable-self))
+(defrule (goal g-strategy-test yes)(up-compare-goal g-priority-score >= 1500) => (up-modify-goal g-min-stable c:+ 9)(disable-self))
+(defrule (goal g-strategy-test yes)(up-compare-goal g-priority-score >= 2500) => (up-modify-goal g-min-stable c:+ 9) (disable-self))
+
+(defrule
+    (goal g-strategy-test yes)
+    (can-train scout-cavalry-line)
+    (not(can-train knight-line))
+    (up-get-fact building-type-count stable g-count)
+    (up-pending-objects c: scout-cavalry-line g:< g-count)
+    =>
+    (train scout-cavalry-line)
+)
+
+(defrule    
+    (goal g-strategy-test yes)
+    (can-train knight-line)
+    (up-get-fact building-type-count stable g-count)
+    (up-pending-objects c: knight-line g:< g-count)
+    =>
+    (train knight-line)
+)
