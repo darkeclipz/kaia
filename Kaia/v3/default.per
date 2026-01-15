@@ -32,7 +32,7 @@
     (set-strategic-number sn-disable-tower-priority 1)
     (set-strategic-number sn-sentry-distance 0) ; extends the defend area above max-town-size, we dont want this
     (set-strategic-number sn-home-exploration-time 420)
-    ; (set-strategic-number sn-allow-civilian-offense 1) ; perhaps do this early game
+    (set-strategic-number sn-allow-civilian-offense 1) ; perhaps do this early game
     (disable-self)
 )
 
@@ -45,6 +45,12 @@
     (set-goal g-max-villagers-feudal-age 30)
     (set-goal g-max-villagers-castle-age 65)
     (set-goal g-max-villagers-imperial-age 100)
+
+    ; max stockpiles
+    (set-goal g-max-wood-stockpile 1050)
+    (set-goal g-max-food-stockpile 1500)
+    (set-goal g-max-gold-stockpile 650)
+    (set-goal g-max-stone-stockpile 650)
 
     ; attack
     (set-goal g-headroom-remaining-before-attacking 0)
@@ -60,22 +66,24 @@
     (true)
     =>
     (set-goal g-true 1)
-
-    (set-goal g-build no)
-    (set-goal g-train no)
-    (set-goal g-research no)
-    (set-goal g-wall no)
+    
+    (set-goal g-build yes)
+    (set-goal g-train yes)
+    (set-goal g-research yes)
     (set-goal g-scout yes)
     (set-goal g-harass yes)
     (set-goal g-attack yes)
-    (set-goal g-train-counter-units no)
+    (set-goal g-train-counter-units yes)
     (set-goal g-retreat yes)
-    (set-goal g-trade no)
-    (set-goal g-escrow no)
+    (set-goal g-trade yes)
+    (set-goal g-escrow yes)
     (set-goal g-release-escrow yes)
     (set-goal g-resign yes)
     (set-goal g-auto-town-size yes)
     (set-goal g-auto-camp-size yes)
+
+    (set-goal g-wall no)
+
     (disable-self)
 )
 

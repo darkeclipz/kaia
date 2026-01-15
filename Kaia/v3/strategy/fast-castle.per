@@ -10,11 +10,12 @@
     (set-goal g-attack no)
     (set-goal g-escrow no)
     (set-goal g-harass no)
+    (set-goal g-train-counter-units no)
     (set-goal g-build-order 0)
     (set-goal g-max-villagers-dark-age 23) ; max in dark age
     (set-goal g-max-villagers-feudal-age 25) ; max in feudal age
-    (set-goal g-max-villagers-castle-age 120) ; max in castle age
-    (set-goal g-max-villagers-imperial-age 120) ; max in imperial age
+    (set-goal g-max-villagers-castle-age 135) ; max in castle age
+    (set-goal g-max-villagers-imperial-age 135) ; max in imperial age
     (set-goal g-min-villagers-dark-age 23) ; needed before researching feudal age
     (set-goal g-min-villagers-feudal-age 25) ; needed before researching castle age
     (set-goal g-min-villagers-castle-age 50) ; needed before researching imperial age
@@ -29,86 +30,122 @@
 ; Gathering percentages.
 ; ------------------------------------------------------------------------------------
 
-(defrule
-    (goal g-fast-castle yes)    
-    (civilian-population >= 4)
-    =>
-    (set-strategic-number sn-food-gatherer-percentage 100)
-    (set-strategic-number sn-wood-gatherer-percentage 0)
-    (set-strategic-number sn-gold-gatherer-percentage 0)
-    (set-strategic-number sn-stone-gatherer-percentage 0)
-    (disable-self)
-)
-(defrule
-    (goal g-fast-castle yes)    
-    (civilian-population >= 5)
-    =>
-    (set-strategic-number sn-food-gatherer-percentage 100)
-    (set-strategic-number sn-wood-gatherer-percentage 0)
-    (set-strategic-number sn-gold-gatherer-percentage 0)
-    (set-strategic-number sn-stone-gatherer-percentage 0)
-    (disable-self)
-)
-(defrule
-    (goal g-fast-castle yes)    
-    (civilian-population >= 6)
-    =>
-    (set-strategic-number sn-food-gatherer-percentage 100)
-    (set-strategic-number sn-wood-gatherer-percentage 0)
-    (set-strategic-number sn-gold-gatherer-percentage 0)
-    (set-strategic-number sn-stone-gatherer-percentage 0)
-    (disable-self)
-)
-(defrule
-    (goal g-fast-castle yes)    
-    (civilian-population >= 10)
-    =>
-    (set-strategic-number sn-food-gatherer-percentage 60)
-    (set-strategic-number sn-wood-gatherer-percentage 40)
-    (set-strategic-number sn-gold-gatherer-percentage 0)
-    (set-strategic-number sn-stone-gatherer-percentage 0)
-    (disable-self)
-)
-(defrule
-    (goal g-fast-castle yes)    
-    (civilian-population >= 15)
-    =>
-    (set-strategic-number sn-food-gatherer-percentage 73)
-    (set-strategic-number sn-wood-gatherer-percentage 27)
-    (set-strategic-number sn-gold-gatherer-percentage 0)
-    (set-strategic-number sn-stone-gatherer-percentage 0)
-    (disable-self)
-)
-(defrule
-    (goal g-fast-castle yes)    
-    (civilian-population >= 20)
-    =>
-    (set-strategic-number sn-food-gatherer-percentage 60)
-    (set-strategic-number sn-wood-gatherer-percentage 40)
-    (set-strategic-number sn-gold-gatherer-percentage 0)
-    (set-strategic-number sn-stone-gatherer-percentage 0)
-    (disable-self)
-)
-(defrule
-    (goal g-fast-castle yes)    
-    (civilian-population >= 22)
-    =>
-    (set-strategic-number sn-food-gatherer-percentage 61)
-    (set-strategic-number sn-wood-gatherer-percentage 30)
-    (set-strategic-number sn-gold-gatherer-percentage 9)
-    (set-strategic-number sn-stone-gatherer-percentage 0)
-    (disable-self)
-)
-(defrule
-    (goal g-fast-castle yes)    
-    (civilian-population >= 28)
-    =>
-    (set-strategic-number sn-food-gatherer-percentage 42)
-    (set-strategic-number sn-wood-gatherer-percentage 46)
-    (set-strategic-number sn-gold-gatherer-percentage 12)
-    (set-strategic-number sn-stone-gatherer-percentage 0)
-    (disable-self)
-)
+(defrule (civilian-population >= 3)  =>                        (up-modify-sn F c:= 100)                      (disable-self))
+(defrule (civilian-population >= 7)  => (up-modify-sn W c:= 14)(up-modify-sn F c:= 86)                       (disable-self))
+(defrule (civilian-population >= 8)  => (up-modify-sn W c:= 25)(up-modify-sn F c:= 75)                       (disable-self))
+(defrule (civilian-population >= 9)  => (up-modify-sn W c:= 33)(up-modify-sn F c:= 67)                       (disable-self))
+(defrule (civilian-population >= 10) => (up-modify-sn W c:= 30)(up-modify-sn F c:= 70)                       (disable-self))
+(defrule (civilian-population >= 11) => (up-modify-sn W c:= 27)(up-modify-sn F c:= 73)                       (disable-self))
+(defrule (civilian-population >= 12) => (up-modify-sn W c:= 25)(up-modify-sn F c:= 75)                       (disable-self))
+(defrule (civilian-population >= 13) => (up-modify-sn W c:= 23)(up-modify-sn F c:= 77)                       (disable-self))
+(defrule (civilian-population >= 14) => (up-modify-sn W c:= 21)(up-modify-sn F c:= 79)                       (disable-self))
+(defrule (civilian-population >= 15) => (up-modify-sn W c:= 20)(up-modify-sn F c:= 80)                       (disable-self))
+(defrule (civilian-population >= 16) => (up-modify-sn W c:= 19)(up-modify-sn F c:= 81)                       (disable-self))
+(defrule (civilian-population >= 17) => (up-modify-sn W c:= 18)(up-modify-sn F c:= 82)                       (disable-self))
+(defrule (civilian-population >= 18) => (up-modify-sn W c:= 22)(up-modify-sn F c:= 78)                       (disable-self))
+(defrule (civilian-population >= 19) => (up-modify-sn W c:= 26)(up-modify-sn F c:= 74)                       (disable-self))
+(defrule (civilian-population >= 20) => (up-modify-sn W c:= 30)(up-modify-sn F c:= 70)                       (disable-self))
+(defrule (civilian-population >= 21) => (up-modify-sn W c:= 33)(up-modify-sn F c:= 67)                       (disable-self))
+(defrule (civilian-population >= 22) => (up-modify-sn W c:= 32)(up-modify-sn F c:= 64)(up-modify-sn G c:= 4) (disable-self))
+(defrule (civilian-population >= 23) => (up-modify-sn W c:= 30)(up-modify-sn F c:= 61)(up-modify-sn G c:= 9) (disable-self))
+(defrule (civilian-population >= 24) => (up-modify-sn W c:= 33)(up-modify-sn F c:= 58)(up-modify-sn G c:= 9) (disable-self))
+(defrule (civilian-population >= 25) => (up-modify-sn W c:= 56)(up-modify-sn F c:= 36)(up-modify-sn G c:= 8) (disable-self))
+(defrule (civilian-population >= 35) => (up-modify-sn W c:= 36)(up-modify-sn F c:= 56)(up-modify-sn G c:= 8) (disable-self))
+(defrule (civilian-population >= 40) => (up-modify-sn W c:= 26)(up-modify-sn F c:= 45)(up-modify-sn G c:= 17)(up-modify-sn S c: 12) (disable-self))
+(defrule (civilian-population >= 100) => (up-modify-sn W c:= 28)(up-modify-sn F c:= 42)(up-modify-sn G c:= 24)(up-modify-sn S c: 6) (disable-self))
+; (defrule (civilian-population > 25) => (set-goal g-auto-balance-economy yes) (disable-self))
+; (defrule
+;     (civilian-population > 25)
+;     =>
+;     (up-modify-sn S c:+ 20)
+;     (up-modify-sn F c:- 20)
+;     (set-strategic-number g-max-wood-stockpile 1050)
+;     (set-strategic-number g-max-food-stockpile 1300)
+;     (set-strategic-number g-max-gold-stockpile 800)
+;     (set-strategic-number g-max-stone-stockpile 650)
+;     (disable-self)    
+; )
+
+; (defrule
+;     (goal g-fast-castle yes)    
+;     (civilian-population >= 4)
+;     =>
+;     (set-strategic-number sn-food-gatherer-percentage 100)
+;     (set-strategic-number sn-wood-gatherer-percentage 0)
+;     (set-strategic-number sn-gold-gatherer-percentage 0)
+;     (set-strategic-number sn-stone-gatherer-percentage 0)
+;     (disable-self)
+; )
+; (defrule
+;     (goal g-fast-castle yes)    
+;     (civilian-population >= 5)
+;     =>
+;     (set-strategic-number sn-food-gatherer-percentage 100)
+;     (set-strategic-number sn-wood-gatherer-percentage 0)
+;     (set-strategic-number sn-gold-gatherer-percentage 0)
+;     (set-strategic-number sn-stone-gatherer-percentage 0)
+;     (disable-self)
+; )
+; (defrule
+;     (goal g-fast-castle yes)    
+;     (civilian-population >= 6)
+;     =>
+;     (set-strategic-number sn-food-gatherer-percentage 100)
+;     (set-strategic-number sn-wood-gatherer-percentage 0)
+;     (set-strategic-number sn-gold-gatherer-percentage 0)
+;     (set-strategic-number sn-stone-gatherer-percentage 0)
+;     (disable-self)
+; )
+; (defrule
+;     (goal g-fast-castle yes)    
+;     (civilian-population >= 10)
+;     =>
+;     (set-strategic-number sn-food-gatherer-percentage 60)
+;     (set-strategic-number sn-wood-gatherer-percentage 40)
+;     (set-strategic-number sn-gold-gatherer-percentage 0)
+;     (set-strategic-number sn-stone-gatherer-percentage 0)
+;     (disable-self)
+; )
+; (defrule
+;     (goal g-fast-castle yes)    
+;     (civilian-population >= 15)
+;     =>
+;     (set-strategic-number sn-food-gatherer-percentage 73)
+;     (set-strategic-number sn-wood-gatherer-percentage 27)
+;     (set-strategic-number sn-gold-gatherer-percentage 0)
+;     (set-strategic-number sn-stone-gatherer-percentage 0)
+;     (disable-self)
+; )
+; (defrule
+;     (goal g-fast-castle yes)    
+;     (civilian-population >= 20)
+;     =>
+;     (set-strategic-number sn-food-gatherer-percentage 60)
+;     (set-strategic-number sn-wood-gatherer-percentage 40)
+;     (set-strategic-number sn-gold-gatherer-percentage 0)
+;     (set-strategic-number sn-stone-gatherer-percentage 0)
+;     (disable-self)
+; )
+; (defrule
+;     (goal g-fast-castle yes)    
+;     (civilian-population >= 22)
+;     =>
+;     (set-strategic-number sn-food-gatherer-percentage 61)
+;     (set-strategic-number sn-wood-gatherer-percentage 30)
+;     (set-strategic-number sn-gold-gatherer-percentage 9)
+;     (set-strategic-number sn-stone-gatherer-percentage 0)
+;     (disable-self)
+; )
+; (defrule
+;     (goal g-fast-castle yes)    
+;     (civilian-population >= 28)
+;     =>
+;     (set-strategic-number sn-food-gatherer-percentage 42)
+;     (set-strategic-number sn-wood-gatherer-percentage 46)
+;     (set-strategic-number sn-gold-gatherer-percentage 12)
+;     (set-strategic-number sn-stone-gatherer-percentage 0)
+;     (disable-self)
+; )
 
 ; ------------------------------------------------------------------------------------
 ; Buildings, following a build order.
@@ -643,6 +680,7 @@
     (set-goal g-build yes)
     (set-goal g-train yes)
     (set-goal g-train-knight-line yes)
+    (set-goal g-train-spearman-line yes)
     (set-goal g-scout yes)
 	(set-strategic-number sn-number-explore-groups 1)
 	(set-strategic-number sn-total-number-explorers 1)
@@ -657,7 +695,7 @@
     (set-goal g-escrow yes)
     (set-goal g-trade yes)
     (set-goal g-release-escrow yes)
-    (set-goal g-train-counter-units yes)
+    ; (set-goal g-train-counter-units yes)
     (set-strategic-number sn-object-repair-level 14335)
     (disable-self)
 )

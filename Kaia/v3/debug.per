@@ -1,10 +1,23 @@
 ; debug (13)
 (defrule
-	(taunt-detected my-player-number 13)
+	(taunt-detected my-player-number 1)
 =>
     (fe-break-point 1 == 1 -1)
-	(acknowledge-taunt my-player-number 13)
+	(acknowledge-taunt my-player-number 1)
 )
+
+; display gathering percentages (13)
+(defrule
+    (taunt-detected my-player-number 13)
+    =>
+    (acknowledge-taunt my-player-number 13)
+    (chat-local-to-self "gathering percentages:")
+    (up-chat-data-to-self "wood: %d" s: W)
+    (up-chat-data-to-self "food: %d" s: F)
+    (up-chat-data-to-self "gold: %d" s: G)
+    (up-chat-data-to-self "stone: %d" s: S)
+)
+
 
 ; get map center and my position (14)
 (defrule
@@ -210,7 +223,6 @@
     (taunt-detected my-player-number 29)
     =>
     (acknowledge-taunt my-player-number 29)
-    (up-chat-data-to-self "g-max-villagers: %d" g: g-max-villagers)
     (up-chat-data-to-self "g-max-villagers-dark-age: %d" g: g-max-villagers-dark-age)
     (up-chat-data-to-self "g-max-villagers-feudal-age: %d" g: g-max-villagers-feudal-age)
     (up-chat-data-to-self "g-max-villagers-castle-age: %d" g: g-max-villagers-castle-age)
@@ -218,6 +230,7 @@
     (up-chat-data-to-self "g-min-villagers-dark-age: %d" g: g-min-villagers-dark-age)
     (up-chat-data-to-self "g-min-villagers-feudal-age: %d" g: g-min-villagers-feudal-age)
     (up-chat-data-to-self "g-min-villagers-castle-age: %d" g: g-min-villagers-castle-age)
+    (up-chat-data-to-self "g-max-villagers: %d" g: g-max-villagers)
 )
 
 (defrule (true) => (up-full-reset-search))

@@ -1,0 +1,161 @@
+(defrule
+    (goal g-auto-balance-economy yes)
+    (up-timer-status t-balance-economy == timer-disabled)
+    =>
+    (enable-timer t-balance-economy 15)
+)
+(defrule
+    (goal g-auto-balance-economy no)
+    (not (up-timer-status t-balance-economy == timer-disabled))
+    =>
+    (disable-timer t-balance-economy)
+)
+
+; wood
+(defrule
+    (goal g-auto-balance-economy yes)
+    (timer-triggered t-balance-economy)
+    (wood-amount g:>= g-max-wood-stockpile)
+    (food-amount g:< g-max-food-stockpile)
+    (up-compare-sn W > 20)
+    =>
+    (up-modify-sn W c:- 1)
+    (up-modify-sn F c:+ 1)
+)
+(defrule
+    (goal g-auto-balance-economy yes)
+    (timer-triggered t-balance-economy)
+    (wood-amount g:>= g-max-wood-stockpile)
+    (gold-amount g:< g-max-gold-stockpile)
+    (up-compare-sn W > 20)
+    =>
+    (up-modify-sn W c:- 1)
+    (up-modify-sn G c:+ 1)
+)
+(defrule
+    (goal g-auto-balance-economy yes)
+    (timer-triggered t-balance-economy)
+    (wood-amount g:>= g-max-wood-stockpile)
+    (stone-amount g:< g-max-stone-stockpile)
+    (up-compare-sn W > 20)
+    =>
+    (up-modify-sn W c:- 1)
+    (up-modify-sn S c:+ 1)
+)
+
+; food
+(defrule
+    (goal g-auto-balance-economy yes)
+    (timer-triggered t-balance-economy)
+    (food-amount g:>= g-max-food-stockpile)
+    (wood-amount g:< g-max-wood-stockpile)
+    (up-compare-sn F > 20)
+    =>
+    (up-modify-sn F c:- 1)
+    (up-modify-sn W c:+ 1)
+)
+(defrule
+    (goal g-auto-balance-economy yes)
+    (timer-triggered t-balance-economy)
+    (food-amount g:>= g-max-food-stockpile)
+    (gold-amount g:< g-max-gold-stockpile)
+    (up-compare-sn F > 20)
+    =>
+    (up-modify-sn F c:- 1)
+    (up-modify-sn G c:+ 1)
+)
+(defrule
+    (goal g-auto-balance-economy yes)
+    (timer-triggered t-balance-economy)
+    (food-amount g:>= g-max-food-stockpile)
+    (stone-amount g:< g-max-stone-stockpile)
+    (up-compare-sn F > 20)
+    =>
+    (up-modify-sn F c:- 1)
+    (up-modify-sn S c:+ 1)
+)
+
+; gold
+(defrule
+    (goal g-auto-balance-economy yes)
+    (timer-triggered t-balance-economy)
+    (gold-amount g:>= g-max-gold-stockpile)
+    (wood-amount g:< g-max-wood-stockpile)
+    (up-compare-sn G > 20)
+    =>
+    (up-modify-sn G c:- 1)
+    (up-modify-sn W c:+ 1)
+)
+(defrule
+    (goal g-auto-balance-economy yes)
+    (timer-triggered t-balance-economy)
+    (gold-amount g:>= g-max-gold-stockpile)
+    (food-amount g:< g-max-food-stockpile)
+    (up-compare-sn G > 20)
+    =>
+    (up-modify-sn G c:- 1)
+    (up-modify-sn F c:+ 1)
+)
+(defrule
+    (goal g-auto-balance-economy yes)
+    (timer-triggered t-balance-economy)
+    (gold-amount g:>= g-max-gold-stockpile)
+    (stone-amount g:< g-max-stone-stockpile)
+    (up-compare-sn G > 20)
+    =>
+    (up-modify-sn G c:- 1)
+    (up-modify-sn S c:+ 1)
+)
+
+; stone
+(defrule
+    (goal g-auto-balance-economy yes)
+    (timer-triggered t-balance-economy)
+    (stone-amount g:>= g-max-stone-stockpile)
+    (wood-amount g:< g-max-wood-stockpile)
+    (up-compare-sn S > 5)
+    =>
+    (up-modify-sn S c:- 1)
+    (up-modify-sn W c:+ 1)
+)
+(defrule
+    (goal g-auto-balance-economy yes)
+    (timer-triggered t-balance-economy)
+    (stone-amount g:>= g-max-stone-stockpile)
+    (food-amount g:< g-max-food-stockpile)
+    (up-compare-sn S > 5)
+    =>
+    (up-modify-sn S c:- 1)
+    (up-modify-sn F c:+ 1)
+)
+(defrule
+    (goal g-auto-balance-economy yes)
+    (timer-triggered t-balance-economy)
+    (stone-amount g:>= g-max-stone-stockpile)
+    (gold-amount g:< g-max-gold-stockpile)
+    (up-compare-sn S > 5)
+    =>
+    (up-modify-sn S c:- 1)
+    (up-modify-sn G c:+ 1)
+)
+
+(defrule
+    (goal g-auto-balance-economy yes)
+    (timer-triggered t-balance-economy)
+    =>
+    (disable-timer t-balance-economy)
+    (enable-timer t-balance-economy 15)
+
+    (up-chat-data-to-self "wood: %d" s: W)
+    (up-chat-data-to-self "food: %d" s: F)
+    (up-chat-data-to-self "gold: %d" s: G)
+    (up-chat-data-to-self "stone: %d" s: S)
+
+    (up-modify-goal g-count c:= 0)
+    (up-modify-goal g-count s:+ W)
+    (up-modify-goal g-count s:+ F)
+    (up-modify-goal g-count s:+ G)
+    (up-modify-goal g-count s:+ S)
+
+    (up-chat-data-to-self "total (sanity check): %d" g: g-count)
+)

@@ -1,0 +1,17 @@
+; reset 
+(defrule
+    (true)
+    =>
+    (set-goal g-burn-wood 0)
+    (set-goal g-burn-food 0)
+    (set-goal g-burn-gold 0)
+    (set-goal g-burn-stone 0)
+)
+
+; farms
+(defrule
+    (true)
+    =>
+    (up-get-fact building-type-count farm g-x)
+    
+)

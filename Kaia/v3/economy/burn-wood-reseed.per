@@ -1,0 +1,21 @@
+(defrule
+    (true)
+    =>
+    ; https://www.aoe2database.com/farm_mechanics/en
+    (set-goal g-farm-capacity 17500) ; 175.00
+)
+
+(defrule (research-completed ri-horse-collar) => (up-modify-goal g-farm-capacity c:+ 7500))
+(defrule (research-completed ri-heavy-plow) => (up-modify-goal g-farm-capacity c:+ 12500))
+(defrule (research-completed ri-crop-rotation) => (up-modify-goal g-farm-capacity c:+ 17500))
+
+(defrule
+    (true)
+    =>
+    ; wood burn per second per farm = 60 * food_rate / farm_capacity
+    (up-get-fact building-type-count-total farm g-x) ; F
+    (up-modify-goal g-x c:* 60)
+    (up-modify-goal g-x g:* farm-work-rate)
+    (up-modify-goal g-x g:z/ g-farm-capacity)
+    (up-modify-goal g-burn-wood-reseed-farm g:= g-x)
+)
